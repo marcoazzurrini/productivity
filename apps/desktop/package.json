@@ -12,33 +12,35 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "electron-vite build && vitest run --config vitest.e2e.config.ts"
+    "test:e2e": "electron-vite build && vitest run --config vitest.e2e.config.ts",
+    "install-app": "bun scripts/install-app.ts"
   },
-  "dependencies": {
+  "devDependencies": {
     "@productivity/db": "workspace:*",
     "@productivity/gtd": "workspace:*",
     "@productivity/ui": "workspace:*",
     "@stylexjs/stylex": "^0.19.1",
-    "@tanstack/react-query": "^5.104.5",
-    "lucide-react": "^1.61.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
-  },
-  "devDependencies": {
     "@stylexjs/unplugin": "^0.19.1",
+    "@tanstack/react-query": "^5.104.5",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.1",
+    "@types/bun": "^1.4.4",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.1.2",
     "electron": "^45.0.0",
+    "electron-builder": "^26.15.3",
     "electron-vite": "^6.0.0",
     "happy-dom": "^21.0.4",
+    "lucide-react": "^1.61.0",
     "playwright": "^1.64.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "typescript": "7.0.2",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
-  }
+  },
+  "productName": "Productivity"
 }

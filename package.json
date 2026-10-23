@@ -17,7 +17,8 @@
     "test": "bun run --filter '*' test",
     "boundaries": "depcruise --config .dependency-cruiser.cjs apps packages",
     "check": "bun run format:check && bun run lint && bun run typecheck && bun run test",
-    "test:e2e": "bun run --filter @productivity/desktop test:e2e"
+    "test:e2e": "bun run --filter @productivity/desktop test:e2e",
+    "install-app": "bun run --filter @productivity/desktop install-app"
   },
   "devDependencies": {
     "@types/node": "^24",

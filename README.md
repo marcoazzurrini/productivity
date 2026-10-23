@@ -40,6 +40,15 @@ Packages test with `bun test`. The desktop app tests with Vitest: unit tests ren
 
 Lefthook runs on every commit: oxfmt, oxlint (Ultracite presets with anti-slop) and typecheck. On push it runs boundaries, all tests and the end-to-end suite.
 
+## Installing on your Mac
+
+```sh
+bun run install-app          # build and install /Applications/Productivity.app
+bun run install-app --open   # the same, then open it
+```
+
+Run it again whenever you want the latest version. It quits the running app, backs up the database, and replaces the app. There is no installer, code signing or auto-update: the app is built for this Mac only.
+
 ## Data
 
 The packaged app stores its database in Electron's user-data folder. Development uses a separate `productivity-dev.sqlite` filled with sample data. Set `PRODUCTIVITY_DATA_DIR` to use another folder.

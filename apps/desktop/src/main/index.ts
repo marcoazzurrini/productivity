@@ -10,8 +10,15 @@ const isDev = !app.isPackaged;
 
 // Development uses its own database filled with sample data, so trying the
 // app never touches real tasks.
-// PRODUCTIVITY_DATA_DIR lets end-to-end tests use a throwaway folder.
-const dataDir = process.env.PRODUCTIVITY_DATA_DIR ?? app.getPath("userData");
+/**
+ * Where the database lives: ~/Library/Application Support/Productivity on
+ * macOS. Pinned by name, so renaming the app never moves or loses the data,
+ * and outside the app bundle, so reinstalling never touches it.
+ * PRODUCTIVITY_DATA_DIR lets end-to-end tests use a throwaway folder.
+ */
+const dataDir =
+  process.env.PRODUCTIVITY_DATA_DIR ??
+  path.join(app.getPath("appData"), "Productivity");
 
 const store = openStore({
   path: path.join(
