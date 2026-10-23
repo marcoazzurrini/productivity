@@ -514,7 +514,7 @@ export const openStore = (options: StoreOptions): Store => {
             : { id: readText(areaRow, "id"), name: readText(areaRow, "name") },
         project,
         tasks: all(
-          "select * from tasks where project_id = ? order by completed_at is not null, captured_at",
+          "select * from tasks where project_id = ? order by completed_at is not null, captured_at, rowid",
           projectId
         ).map(toTask),
       };
@@ -553,12 +553,12 @@ export const openStore = (options: StoreOptions): Store => {
 
     listInbox: () =>
       all(
-        "select * from tasks where list = 'inbox' order by captured_at desc"
+        "select * from tasks where list = 'inbox' order by captured_at desc, rowid desc"
       ).map(toTask),
 
     listNextActions: () =>
       all(
-        `select * from tasks where ${availableNext} order by captured_at`,
+        `select * from tasks where ${availableNext} order by captured_at, rowid`,
         today()
       ).map(toTask),
 
@@ -579,7 +579,7 @@ export const openStore = (options: StoreOptions): Store => {
 
     listSomeday: () =>
       all(
-        "select * from tasks where list = 'someday' and completed_at is null order by captured_at"
+        "select * from tasks where list = 'someday' and completed_at is null order by captured_at, rowid"
       ).map(toTask),
 
     listUpcoming: () => {

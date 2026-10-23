@@ -331,3 +331,19 @@ describe("calendar and review", () => {
     });
   });
 });
+
+describe("ordering", () => {
+  test("items captured in the same minute keep their capture order", () => {
+    store = memoryStore();
+
+    store.capture({ title: "First" });
+    store.capture({ title: "Second" });
+    store.capture({ title: "Third" });
+
+    expect(store.listInbox().map((task) => task.title)).toEqual([
+      "Third",
+      "Second",
+      "First",
+    ]);
+  });
+});
