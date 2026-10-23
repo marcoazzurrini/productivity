@@ -1,0 +1,14 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction" />
+
+# Productivity design system
+
+The components behind the GTD desktop app. They live in `packages/ui` and follow the design in `design/productivity.fig`.
+
+- **Look:** Notion-like. Warm greys, one blue accent, soft tag colours, Inter.
+- **Styling:** [StyleX](https://stylexjs.com). Tokens are CSS variables in `tokens.stylex.ts`.
+- **Behaviour:** [Base UI](https://base-ui.com) supplies keyboard handling, focus and ARIA for checkboxes, selects, dialogs, toasts, radios and toggles.
+- **Accessibility:** every story runs the axe checks in the Accessibility panel.
+
+Start with **Foundations** for colours, type and spacing, then browse the components. **Patterns** shows them composed the way the app uses them.
