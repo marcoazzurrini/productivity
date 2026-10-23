@@ -1,0 +1,33 @@
+/* Global baseline for apps that use the design system. Component styles live in StyleX. */
+@import "@fontsource-variable/inter";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #ffffff;
+  color: #191918;
+  font-family:
+    "Inter Variable", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.4;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
