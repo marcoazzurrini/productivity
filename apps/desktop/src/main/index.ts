@@ -1,0 +1,83 @@
+import path from "node:path";
+
+import { openStore } from "@productivity/db";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
+
+import { storeChannel } from "../shared/channel.ts";
+import { callStore } from "./store-handler.ts";
+
+const isDev = !app.isPackaged;
+
+// Development uses its own database filled with sample data, so trying the
+// app never touches real tasks.
+const store = openStore({
+  path: path.join(
+    app.getPath("userData"),
+    isDev ? "productivity-dev.sqlite" : "productivity.sqlite"
+  ),
+  sample: isDev,
+});
+
+ipcMain.handle(storeChannel, (_event, method: string, args) =>
+  callStore(store, method, args)
+);
+
+const createWindow = (): void => {
+  const window = new BrowserWindow({
+    backgroundColor: "#FFFFFF",
+    height: 1100,
+    minHeight: 700,
+    minWidth: 1100,
+    show: false,
+    title: "Productivity",
+    titleBarStyle: "hiddenInset",
+    trafficLightPosition: { x: 18, y: 18 },
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(import.meta.dirname, "../preload/index.cjs"),
+      sandbox: true,
+    },
+    width: 1920,
+  });
+
+  window.once("ready-to-show", () => {
+    window.show();
+  });
+
+  // Links open in the browser, never inside the app window.
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    void shell.openExternal(url);
+
+    return { action: "deny" };
+  });
+
+  const devServer = process.env.ELECTRON_RENDERER_URL;
+
+  if (isDev && devServer !== undefined) {
+    void window.loadURL(devServer);
+  } else {
+    void window.loadFile(
+      path.join(import.meta.dirname, "../renderer/index.html")
+    );
+  }
+};
+
+await app.whenReady();
+
+createWindow();
+
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+app.on("will-quit", () => {
+  store.close();
+});

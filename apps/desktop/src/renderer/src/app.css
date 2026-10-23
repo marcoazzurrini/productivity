@@ -1,0 +1,10 @@
+/* Window chrome that StyleX cannot express: Electron's drag regions. */
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.drag-region button,
+.drag-region input,
+.drag-region [role="button"] {
+  -webkit-app-region: no-drag;
+}

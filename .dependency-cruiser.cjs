@@ -71,7 +71,7 @@ module.exports = {
       from: { path: "^apps/desktop/src/renderer/" },
       name: "renderer-cannot-use-node",
       severity: "error",
-      to: { dependencyTypes: ["core"] },
+      to: { dependencyTypes: ["core"], pathNot: "^virtual:" },
     },
     {
       comment: "Storybook shows the design system, not the product's data.",
@@ -91,7 +91,10 @@ module.exports = {
     },
   ],
   options: {
-    builtInModules: { add: ["bun", "bun:test", "bun:sqlite"] },
+    // Bun runtime modules, and the StyleX dev runtime that Vite serves virtually.
+    builtInModules: {
+      add: ["bun", "bun:test", "bun:sqlite", "virtual:stylex:runtime"],
+    },
     doNotFollow: { path: "node_modules" },
     enhancedResolveOptions: {
       conditionNames: ["import", "require", "node", "default"],

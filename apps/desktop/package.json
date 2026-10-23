@@ -1,0 +1,42 @@
+{
+  "name": "@productivity/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A GTD task manager with a week calendar.",
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@productivity/db": "workspace:*",
+    "@productivity/gtd": "workspace:*",
+    "@productivity/ui": "workspace:*",
+    "@stylexjs/stylex": "^0.19.1",
+    "@tanstack/react-query": "^5.104.5",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@stylexjs/unplugin": "^0.19.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.0.0",
+    "electron-vite": "^6.0.0",
+    "happy-dom": "^21.0.4",
+    "typescript": "7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}
