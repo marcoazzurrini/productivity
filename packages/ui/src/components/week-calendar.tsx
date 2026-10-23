@@ -158,6 +158,7 @@ const styles = stylex.create({
     position: "absolute",
     right: 0,
     transform: "translateY(-50%)",
+    whiteSpace: "nowrap",
   },
   hourLine: {
     borderTopColor: color.borderDefault,
@@ -205,8 +206,13 @@ const styles = stylex.create({
     fontSize: font.size12,
     fontWeight: font.weightSemibold,
     gap: 4,
+    minWidth: 0,
     overflow: "hidden",
     whiteSpace: "nowrap",
+  },
+  itemTitleText: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   meeting: {},
   now: {
@@ -242,6 +248,8 @@ const styles = stylex.create({
     flexGrow: 1,
     minHeight: 0,
     overflowY: "auto",
+    // Room above the first hour so its label is not cut off.
+    paddingTop: space.s3,
   },
   subtitle: { color: color.textTertiary, fontSize: font.size13 },
   task: {
@@ -255,6 +263,7 @@ const styles = stylex.create({
     display: "grid",
     position: "relative",
   },
+
   title: {
     color: color.textPrimary,
     fontSize: font.size15,
@@ -314,6 +323,20 @@ const placeItems = (
     return placed;
   });
 
+/** The first row where each all-day item fits without overlapping another. */
+const packRows = (items: readonly AllDayItem[]): number[] => {
+  const rowEnds: number[] = [];
+
+  return items.map((item) => {
+    const free = rowEnds.findIndex((end) => end < item.startIndex);
+    const row = free === -1 ? rowEnds.length : free;
+
+    rowEnds[row] = item.endIndex;
+
+    return row;
+  });
+};
+
 /** A seven-day calendar with a time grid, like the right pane of the app. */
 export const WeekCalendar = ({
   title,
@@ -339,6 +362,7 @@ export const WeekCalendar = ({
   const height = (lastHour - firstHour + 1) * hourHeight;
   const columns = `${gutter}px repeat(${days.length}, minmax(0, 1fr))`;
   const placedByDay = placeItems(items, days.length);
+  const allDayRows = packRows(allDay);
 
   const top = (minute: number): number =>
     ((minute - firstHour * 60) / 60) * hourHeight;
@@ -436,7 +460,7 @@ export const WeekCalendar = ({
             {...stylex.props(styles.allDayItem, toneStyles[item.tone])}
             style={{
               gridColumn: `${item.startIndex + 2} / ${item.endIndex + 3}`,
-              gridRow: row + 1,
+              gridRow: (allDayRows[row] ?? 0) + 1,
             }}
           >
             {item.title}
@@ -513,7 +537,9 @@ export const WeekCalendar = ({
                         ) : (
                           <Square aria-hidden size={11} />
                         ))}
-                      {item.title}
+                      <span {...stylex.props(styles.itemTitleText)}>
+                        {item.title}
+                      </span>
                     </span>
                     {tall && item.detail !== undefined ? (
                       <span {...stylex.props(styles.detail)}>
