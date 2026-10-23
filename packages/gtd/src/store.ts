@@ -169,3 +169,42 @@ export type RemoteGtdStore = {
     ...args: Parameters<GtdStore[Method]>
   ) => Promise<ReturnType<GtdStore[Method]>>;
 };
+
+/** Sends one store call across a process boundary and resolves with its result. */
+export type StoreTransport = <Method extends GtdStoreMethod>(
+  method: Method,
+  args: Parameters<GtdStore[Method]>
+) => Promise<ReturnType<GtdStore[Method]>>;
+
+/**
+ * A GtdStore living in another process, reached through `transport`. Every
+ * method is listed so the compiler checks each signature end to end.
+ */
+export const createRemoteStore = (
+  transport: StoreTransport
+): RemoteGtdStore => ({
+  activate: (...args) => transport("activate", args),
+  capture: (...args) => transport("capture", args),
+  clarify: (...args) => transport("clarify", args),
+  createEvent: (...args) => transport("createEvent", args),
+  createProject: (...args) => transport("createProject", args),
+  deleteTask: (...args) => transport("deleteTask", args),
+  finishReview: (...args) => transport("finishReview", args),
+  followUp: (...args) => transport("followUp", args),
+  getProject: (...args) => transport("getProject", args),
+  getReview: (...args) => transport("getReview", args),
+  getWeek: (...args) => transport("getWeek", args),
+  listAreas: (...args) => transport("listAreas", args),
+  listContexts: (...args) => transport("listContexts", args),
+  listInbox: (...args) => transport("listInbox", args),
+  listNextActions: (...args) => transport("listNextActions", args),
+  listProjects: (...args) => transport("listProjects", args),
+  listSomeday: (...args) => transport("listSomeday", args),
+  listUpcoming: (...args) => transport("listUpcoming", args),
+  listWaiting: (...args) => transport("listWaiting", args),
+  overview: (...args) => transport("overview", args),
+  scheduleBlock: (...args) => transport("scheduleBlock", args),
+  setCompleted: (...args) => transport("setCompleted", args),
+  setReviewStep: (...args) => transport("setReviewStep", args),
+  updateTask: (...args) => transport("updateTask", args),
+});
