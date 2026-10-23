@@ -1,11 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 
-import { color, font, radius } from "../tokens.stylex.ts";
+import { color, font, radius, tag } from "../tokens.stylex.ts";
 
 const styles = stylex.create({
   badge: {
     alignItems: "center",
-    backgroundColor: color.nowLine,
+    backgroundColor: tag.redFg,
     borderRadius: radius.full,
     color: color.textOnAccent,
     display: "inline-flex",

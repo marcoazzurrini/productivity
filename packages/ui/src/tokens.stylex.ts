@@ -2,14 +2,16 @@ import * as stylex from "@stylexjs/stylex";
 
 /**
  * Design tokens from the "Foundations" page of design/productivity.fig.
+ * Text colors are darkened from the design where needed so every pairing
+ * meets WCAG AA contrast (4.5:1).
  * StyleX turns each group into CSS custom properties, so a theme can
  * override them without touching components.
  */
 
 export const color = stylex.defineVars({
-  accent: "#0582FF",
-  accentHover: "#0070E0",
-  accentPressed: "#005FC2",
+  accent: "#0070E0",
+  accentHover: "#0064C8",
+  accentPressed: "#0058B0",
   accentSubtle: "#E9F3FE",
   accentSubtleHover: "#DCEBFD",
   bgCard: "#FFFFFF",
@@ -30,29 +32,29 @@ export const color = stylex.defineVars({
   textPlaceholder: "#B9B9B6",
   textPrimary: "#191918",
   textSecondary: "#5F5E5B",
-  textTertiary: "#91918E",
+  textTertiary: "#6C6C6A",
 });
 
 /** Notion's tag palette: a soft background and a readable foreground for each hue. */
 export const tag = stylex.defineVars({
   blueBg: "#E7F3F8",
-  blueFg: "#337EA9",
+  blueFg: "#2E7299",
   brownBg: "#F4EEEE",
-  brownFg: "#9F6B53",
+  brownFg: "#8F604A",
   grayBg: "#F1F1EF",
-  grayFg: "#787774",
+  grayFg: "#6D6C69",
   greenBg: "#EDF3EC",
-  greenFg: "#448361",
+  greenFg: "#3E7859",
   orangeBg: "#FBECDD",
-  orangeFg: "#D9730D",
+  orangeFg: "#A25609",
   pinkBg: "#F9EEF3",
-  pinkFg: "#C14C8A",
+  pinkFg: "#B1457E",
   purpleBg: "#F4F0F7",
-  purpleFg: "#9065B0",
+  purpleFg: "#845CA1",
   redBg: "#FDEBEC",
-  redFg: "#D44C47",
+  redFg: "#BA423E",
   yellowBg: "#FBF3DB",
-  yellowFg: "#CB912F",
+  yellowFg: "#906621",
 });
 
 /** A 4 px grid. */

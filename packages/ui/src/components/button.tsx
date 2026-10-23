@@ -94,7 +94,6 @@ const styles = stylex.create({
   shortcut: {
     fontSize: font.size12,
     fontWeight: font.weightRegular,
-    opacity: 0.7,
   },
   small: {
     fontSize: font.size13,

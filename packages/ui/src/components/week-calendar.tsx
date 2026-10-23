@@ -468,7 +468,9 @@ export const WeekCalendar = ({
         ))}
       </div>
 
-      <div {...stylex.props(styles.scroll)}>
+      {/* A scrollable region must take focus so keyboard users can scroll it (WCAG 2.1.1). */}
+      {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <section aria-label="Hours" tabIndex={0} {...stylex.props(styles.scroll)}>
         <div
           {...stylex.props(styles.timeline)}
           style={{ gridTemplateColumns: columns, height }}
@@ -574,7 +576,7 @@ export const WeekCalendar = ({
             </ol>
           ))}
         </div>
-      </div>
+      </section>
     </section>
   );
 };
