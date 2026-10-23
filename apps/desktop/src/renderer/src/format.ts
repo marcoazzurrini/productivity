@@ -52,22 +52,19 @@ export const weekdayLabel = (date: LocalDate): string =>
 export const timeLabel = (value: LocalDateTime): string =>
   time.format(parseLocalDateTime(value));
 
-/** ISO week number, as calendars show it. */
+/** ISO week number, as calendars show it: week 1 holds the year's first Thursday. */
 export const weekNumber = (date: LocalDate): number => {
-  const day = parseLocalDate(date);
-  const thursday = new Date(day);
+  const thursday = parseLocalDate(date);
 
-  thursday.setDate(day.getDate() + 3 - ((day.getDay() + 6) % 7));
+  thursday.setDate(thursday.getDate() - ((thursday.getDay() + 6) % 7) + 3);
 
   const firstThursday = new Date(thursday.getFullYear(), 0, 4);
 
-  return (
-    1 +
-    Math.round(
-      (thursday.getTime() - firstThursday.getTime()) / 604_800_000 -
-        (((firstThursday.getDay() + 6) % 7) - 3) / 7
-    )
+  const days = Math.round(
+    (thursday.getTime() - firstThursday.getTime()) / 86_400_000
   );
+
+  return 1 + Math.round((days - 3 + ((firstThursday.getDay() + 6) % 7)) / 7);
 };
 
 /** "15m", "1h", "1h 30m". */
