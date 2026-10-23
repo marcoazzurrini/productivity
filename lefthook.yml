@@ -65,3 +65,8 @@ pre-push:
     # point where a failure is still cheap to fix locally.
     - name: test
       run: bun run test
+
+    # Builds the app and drives the real Electron window, which catches
+    # startup and IPC failures that unit tests cannot see.
+    - name: e2e
+      run: bun run test:e2e

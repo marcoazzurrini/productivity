@@ -10,9 +10,12 @@ const isDev = !app.isPackaged;
 
 // Development uses its own database filled with sample data, so trying the
 // app never touches real tasks.
+// PRODUCTIVITY_DATA_DIR lets end-to-end tests use a throwaway folder.
+const dataDir = process.env.PRODUCTIVITY_DATA_DIR ?? app.getPath("userData");
+
 const store = openStore({
   path: path.join(
-    app.getPath("userData"),
+    dataDir,
     isDev ? "productivity-dev.sqlite" : "productivity.sqlite"
   ),
   sample: isDev,
@@ -62,12 +65,12 @@ const createWindow = (): void => {
   }
 };
 
-await app.whenReady();
-
-createWindow();
+// An event, not a top-level await: an ES module main process would block
+// its own startup waiting for "ready".
+app.once("ready", createWindow);
 
 app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  if (app.isReady() && BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
