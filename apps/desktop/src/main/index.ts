@@ -4,6 +4,7 @@ import { openStore } from "@productivity/db";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 
 import { storeChannel } from "../shared/channel.ts";
+import { canOpenExternally } from "./external-links.ts";
 import { callStore } from "./store-handler.ts";
 
 const isDev = !app.isPackaged;
@@ -54,11 +55,20 @@ const createWindow = (): void => {
     window.show();
   });
 
-  // Links open in the browser, never inside the app window.
+  // Web and email links open in the browser or mail app, never inside the
+  // app window. Other schemes, such as file:, are dropped.
   window.webContents.setWindowOpenHandler(({ url }) => {
-    void shell.openExternal(url);
+    if (canOpenExternally(url)) {
+      void shell.openExternal(url);
+    }
 
     return { action: "deny" };
+  });
+
+  // The window only ever shows the app. Another page loaded here would
+  // keep the store bridge from the preload script.
+  window.webContents.on("will-navigate", (event) => {
+    event.preventDefault();
   });
 
   const devServer = process.env.ELECTRON_RENDERER_URL;
