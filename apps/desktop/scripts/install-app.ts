@@ -133,5 +133,9 @@ process.stdout.write(
 );
 
 if (process.argv.includes("--open")) {
-  await $`open ${installedApp}`;
+  // `open` passes this shell's environment to the app. With
+  // ELECTRON_RUN_AS_NODE set, Electron would start as plain Node and quit.
+  const { ELECTRON_RUN_AS_NODE: _, ...env } = process.env;
+
+  await $`open ${installedApp}`.env(env);
 }
