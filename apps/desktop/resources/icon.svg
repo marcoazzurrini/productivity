@@ -11,7 +11,7 @@
     </linearGradient>
   </defs>
   <rect width="1024" height="1024" fill="url(#tile)"/>
-  <!-- The mark from design/logo/inbox-zero.svg, centred on the tile. -->
+  <!-- The mark from logo.svg, centred on the tile. -->
   <g transform="translate(117 82) scale(8.2)">
     <path d="M56.23 27.63 A27 27 0 1 0 72.37 43.77" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
     <circle cx="73.2" cy="26.8" r="8" fill="#FFFFFF"/>

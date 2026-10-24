@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 
 /**
- * Design tokens from the "Foundations" page of design/productivity.fig.
+ * Design tokens from the "Foundations" page of the penna design in .penna/.
  * Text colors are darkened from the design where needed so every pairing
  * meets WCAG AA contrast (4.5:1).
  * StyleX turns each group into CSS custom properties, so a theme can

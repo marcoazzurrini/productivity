@@ -7,6 +7,6 @@ export default defineConfig({
     ...(ultracite.ignorePatterns ?? []),
     "**/out/**",
     "**/release/**",
-    "design/**",
+    ".penna/**",
   ],
 });

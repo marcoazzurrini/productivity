@@ -11,7 +11,7 @@ export default defineConfig({
     "**/out/**",
     "**/release/**",
     "**/storybook-static/**",
-    "design/**",
+    ".penna/**",
   ],
   // Only the desktop app runs Vitest; packages use Bun's test runner.
   overrides: (vitest.overrides ?? []).map((override) => ({

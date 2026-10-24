@@ -1,6 +1,6 @@
 # Productivity
 
-A desktop task manager for [Getting Things Done](https://gettingthingsdone.com), with a week calendar beside your lists. The design lives in `design/productivity.fig` (OpenPencil).
+A desktop task manager for [Getting Things Done](https://gettingthingsdone.com), with a week calendar beside your lists. The design lives in `.penna/` ([penna](https://github.com/marcoazzurrini/penna)).
 
 ## Layout
 
@@ -12,7 +12,7 @@ packages/
   gtd/       The GTD method as pure functions, plus the GtdStore contract
   db/        SQLite implementation of GtdStore, with Drizzle ORM
   ui/        Design tokens and components (StyleX on Base UI)
-design/      OpenPencil design file
+.penna/      penna design: one JSON file per page
 ```
 
 Each package is a deep module: a small public interface over the detail it hides.
@@ -40,6 +40,7 @@ bun run dev                 # the desktop app, with hot reload
 bun run --filter @productivity/demo dev   # Storybook on port 6006
 bun run check               # format, lint, boundaries, typecheck, tests
 bun run test:e2e            # build the app and drive the real window
+npx @marcoazzurrini/penna   # the design, view-only, on port 6060
 ```
 
 Packages test with `bun test`. The desktop app tests with Vitest: unit tests render the whole app on an in-memory database, and end-to-end tests drive the built Electron app through Playwright.
@@ -57,7 +58,7 @@ bun run install-app --open   # the same, then open it
 
 Run it again whenever you want the latest version. It quits the running app, backs up the database, and replaces the app. There is no installer, code signing or auto-update: the app is built for this Mac only.
 
-The app icon is `apps/desktop/resources/icon.svg`, built from the logo in `design/logo/inbox-zero.svg`. After editing it, run `bun run --filter @productivity/desktop make-icon` to rebuild `icon.icns`, then reinstall.
+The app icon is `apps/desktop/resources/icon.svg`, built from the logo in `apps/desktop/resources/logo.svg`. After editing it, run `bun run --filter @productivity/desktop make-icon` to rebuild `icon.icns`, then reinstall.
 
 ## Data
 
