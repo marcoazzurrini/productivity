@@ -1,11 +1,10 @@
 import { DatabaseSync } from "node:sqlite";
-import type { SQLInputValue } from "node:sqlite";
 
 import {
   isReviewDue,
   nextReviewOn,
   planFollowUp,
-  reviewSteps,
+  reviewSteps as allReviewSteps,
   toLocalDate,
   toLocalDateTime,
   weekDays,
@@ -24,17 +23,34 @@ import type {
   Task,
   TaskChanges,
 } from "@productivity/gtd";
-
 import {
+  and,
+  asc,
+  between,
   count,
-  readText,
-  toContext,
-  toEvent,
-  toProject,
-  toTask,
-} from "./rows.ts";
-import type { Row } from "./rows.ts";
-import { migrations } from "./schema.ts";
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  isNull,
+  lte,
+  or,
+  sql,
+} from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/node-sqlite";
+
+import { migrate } from "./migrate.ts";
+import { toEvent, toProject, toTask, toTaskRow } from "./rows.ts";
+import {
+  areas,
+  contexts,
+  events,
+  projects,
+  reviewSteps,
+  settings,
+  tasks,
+} from "./schema.ts";
 import { defaultAreas, defaultContexts, sampleData } from "./seed.ts";
 
 export interface StoreOptions {
@@ -57,114 +73,43 @@ export class NotFoundError extends Error {
   }
 }
 
-/** Applies pending migrations. Returns true when the database was brand new. */
-const migrate = (db: DatabaseSync): boolean => {
-  const version = count(
-    db.prepare("select user_version as count from pragma_user_version").get()
-  );
-
-  for (const [index, sql] of migrations.entries()) {
-    if (index < version) {
-      continue;
-    }
-
-    db.exec("begin");
-
-    try {
-      db.exec(sql);
-      db.exec(`pragma user_version = ${index + 1}`);
-      db.exec("commit");
-    } catch (error) {
-      db.exec("rollback");
-      throw error;
-    }
-  }
-
-  return version === 0;
-};
-
-const editableFields = [
-  "contextId",
-  "deadline",
-  "energy",
-  "followUpOn",
-  "minutes",
-  "notes",
-  "projectId",
-  "starred",
-  "startOn",
-  "title",
-] as const satisfies readonly (keyof TaskChanges)[];
-
 const newId = (): string => crypto.randomUUID();
 
-/** Column names for each editable task field. */
-const taskColumns: Record<(typeof editableFields)[number], string> = {
-  contextId: "context_id",
-  deadline: "deadline",
-  energy: "energy",
-  followUpOn: "follow_up_on",
-  minutes: "minutes",
-  notes: "notes",
-  projectId: "project_id",
-  starred: "starred",
-  startOn: "start_on",
-  title: "title",
-};
+/** SQLite's implicit row id. Breaks ties between items captured in the same minute. */
+const rowid = sql`rowid`;
 
-const toInput = (value: string | number | boolean | null): SQLInputValue => {
-  if (value === true) {
-    return 1;
-  }
+/** Next actions the user can do now: open, and not deferred to later. */
+const availableNext = (day: string): SQL | undefined =>
+  and(
+    eq(tasks.list, "next"),
+    isNull(tasks.completedAt),
+    or(isNull(tasks.startOn), lte(tasks.startOn, day))
+  );
 
-  return value === false ? 0 : value;
-};
+const openIn = (list: Task["list"]): SQL | undefined =>
+  and(eq(tasks.list, list), isNull(tasks.completedAt));
 
 /**
  * Opens (and if needed creates) the GTD database. Everything about SQL, IDs
  * and time stays in here; callers see only the GtdStore interface.
  */
 export const openStore = (options: StoreOptions): Store => {
-  const db = new DatabaseSync(options.path);
+  const client = new DatabaseSync(options.path);
+  const db = drizzle({ client });
   const clock = options.clock ?? (() => new Date());
   const today = (): string => toLocalDate(clock());
   const now = (): string => toLocalDateTime(clock());
 
-  db.exec("pragma foreign_keys = on");
-  db.exec("pragma journal_mode = wal");
+  client.exec("pragma foreign_keys = on");
+  client.exec("pragma journal_mode = wal");
 
-  const isNew = migrate(db);
+  const isNew = migrate(client);
 
-  const all = (sql: string, ...params: SQLInputValue[]): Row[] =>
-    db.prepare(sql).all(...params);
-
-  const one = (sql: string, ...params: SQLInputValue[]): Row | undefined =>
-    db.prepare(sql).get(...params);
-
-  const run = (sql: string, ...params: SQLInputValue[]): void => {
-    db.prepare(sql).run(...params);
-  };
-
-  const countOf = (sql: string, ...params: SQLInputValue[]): number =>
-    count(one(`select count(*) as count from tasks where ${sql}`, ...params));
-
-  const transaction = <Result>(work: () => Result): Result => {
-    db.exec("begin");
-
-    try {
-      const result = work();
-
-      db.exec("commit");
-
-      return result;
-    } catch (error) {
-      db.exec("rollback");
-      throw error;
-    }
-  };
+  const countTasks = (where: SQL | undefined): number =>
+    db.select({ count: count() }).from(tasks).where(where).get()?.count ?? 0;
 
   const findTask = (taskId: string): Task => {
-    const row = one("select * from tasks where id = ?", taskId);
+    const row = db.select().from(tasks).where(eq(tasks.id, taskId)).get();
 
     if (row === undefined) {
       throw new NotFoundError("task", taskId);
@@ -174,31 +119,7 @@ export const openStore = (options: StoreOptions): Store => {
   };
 
   const insertTask = (task: Task): Task => {
-    run(
-      `insert into tasks (
-        id, title, notes, list, source, captured_at, project_id, context_id,
-        minutes, energy, start_on, deadline, starred, waiting_on, follow_up_on,
-        block_start, block_end, completed_at
-      ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      task.id,
-      task.title,
-      task.notes,
-      task.list,
-      task.source,
-      task.capturedAt,
-      task.projectId,
-      task.contextId,
-      task.minutes,
-      task.energy,
-      task.startOn,
-      task.deadline,
-      task.starred ? 1 : 0,
-      task.waitingOn,
-      task.followUpOn,
-      task.block?.start ?? null,
-      task.block?.end ?? null,
-      task.completedAt
-    );
+    db.insert(tasks).values(toTaskRow(task)).run();
 
     return task;
   };
@@ -226,60 +147,43 @@ export const openStore = (options: StoreOptions): Store => {
   const insertProject = (project: NewProject): Project => {
     const created: Project = { ...project, id: newId(), status: "active" };
 
-    run(
-      `insert into projects (id, name, area_id, outcome, deadline, status, created_at)
-       values (?, ?, ?, ?, ?, ?, ?)`,
-      created.id,
-      created.name,
-      created.areaId,
-      created.outcome,
-      created.deadline,
-      created.status,
-      now()
-    );
+    db.insert(projects)
+      .values({ ...created, createdAt: now() })
+      .run();
 
     return created;
   };
 
-  const getSetting = (key: string): string | null => {
-    const row = one("select value from settings where key = ?", key);
+  const getSetting = (key: string): string | null =>
+    db.select().from(settings).where(eq(settings.key, key)).get()?.value ??
+    null;
 
-    return row === undefined ? null : readText(row, "value");
+  const reviewState = (): ReviewState => {
+    const checked = new Set(
+      db
+        .select()
+        .from(reviewSteps)
+        .all()
+        .map((row) => row.stepId)
+    );
+
+    return {
+      checked: allReviewSteps.flatMap((step) =>
+        checked.has(step.id) ? [step.id] : []
+      ),
+      lastReviewedOn: getSetting("last_reviewed_on"),
+    };
   };
 
-  const reviewState = (): ReviewState => ({
-    checked: all("select step_id from review_steps").flatMap((row) => {
-      const stepId = readText(row, "step_id");
-
-      return reviewSteps.flatMap((step) =>
-        step.id === stepId ? [step.id] : []
-      );
-    }),
-    lastReviewedOn: getSetting("last_reviewed_on"),
-  });
-
-  const availableNext = `list = 'next' and completed_at is null
-    and (start_on is null or start_on <= ?)`;
-
   const seed = (withSample: boolean): void => {
-    for (const [position, context] of defaultContexts.entries()) {
-      run(
-        "insert into contexts (id, name, color, position) values (?, ?, ?, ?)",
-        context.id,
-        context.name,
-        context.color,
-        position
-      );
-    }
-
-    for (const [position, area] of defaultAreas.entries()) {
-      run(
-        "insert into areas (id, name, position) values (?, ?, ?)",
-        area.id,
-        area.name,
-        position
-      );
-    }
+    db.insert(contexts)
+      .values(
+        defaultContexts.map((context, position) => ({ ...context, position }))
+      )
+      .run();
+    db.insert(areas)
+      .values(defaultAreas.map((area, position) => ({ ...area, position })))
+      .run();
 
     if (!withSample) {
       return;
@@ -287,61 +191,97 @@ export const openStore = (options: StoreOptions): Store => {
 
     const sample = sampleData(today());
 
-    for (const project of sample.projects) {
-      run(
-        `insert into projects (id, name, area_id, outcome, deadline, status, created_at)
-         values (?, ?, ?, ?, ?, 'active', ?)`,
-        project.id,
-        project.name,
-        project.areaId,
-        project.outcome,
-        project.deadline,
-        now()
-      );
-    }
+    db.insert(projects)
+      .values(
+        sample.projects.map((project) => ({
+          ...project,
+          createdAt: now(),
+          status: "active" as const,
+        }))
+      )
+      .run();
 
-    for (const task of sample.tasks) {
-      insertTask({
-        ...blankTask(task.title),
-        block: task.block ?? null,
-        contextId: task.contextId ?? null,
-        deadline: task.deadline ?? null,
-        energy: task.energy ?? null,
-        followUpOn: task.followUpOn ?? null,
-        list: task.list,
-        minutes: task.minutes ?? null,
-        notes: task.notes ?? "",
-        projectId: task.projectId ?? null,
-        source: task.source ?? "manual",
-        starred: task.starred ?? false,
-        startOn: task.startOn ?? null,
-        waitingOn: task.waitingOn ?? null,
-      });
-    }
+    db.insert(tasks)
+      .values(
+        sample.tasks.map((task) =>
+          toTaskRow({
+            ...blankTask(task.title),
+            block: task.block ?? null,
+            contextId: task.contextId ?? null,
+            deadline: task.deadline ?? null,
+            energy: task.energy ?? null,
+            followUpOn: task.followUpOn ?? null,
+            list: task.list,
+            minutes: task.minutes ?? null,
+            notes: task.notes ?? "",
+            projectId: task.projectId ?? null,
+            source: task.source ?? "manual",
+            starred: task.starred ?? false,
+            startOn: task.startOn ?? null,
+            waitingOn: task.waitingOn ?? null,
+          })
+        )
+      )
+      .run();
 
-    for (const event of sample.events) {
-      run(
-        "insert into events (id, title, kind, start, end_at, all_day) values (?, ?, ?, ?, ?, ?)",
-        newId(),
-        event.title,
-        event.kind,
-        event.start,
-        event.end,
-        event.allDay === true ? 1 : 0
-      );
-    }
+    db.insert(events)
+      .values(
+        sample.events.map((event) => ({
+          ...event,
+          allDay: event.allDay === true,
+          id: newId(),
+        }))
+      )
+      .run();
   };
 
   if (isNew) {
-    transaction(() => {
+    db.transaction(() => {
       seed(options.sample === true);
     });
   }
 
+  const clarifyAction = (
+    taskId: string,
+    outcome: Extract<ClarifyOutcome, { kind: "action" }>
+  ): void => {
+    let projectId: string | null = null;
+
+    if (outcome.project.kind === "existing") {
+      ({ projectId } = outcome.project);
+    } else if (outcome.project.kind === "new") {
+      projectId = insertProject({
+        areaId: null,
+        deadline: null,
+        name: outcome.project.name,
+        outcome: outcome.project.outcome,
+      }).id;
+    }
+
+    const { owner, when } = outcome;
+    const delegated = owner.kind === "delegate";
+
+    db.update(tasks)
+      .set({
+        contextId: delegated ? null : when.contextId,
+        deadline: when.deadline,
+        energy: delegated ? null : when.energy,
+        followUpOn: delegated ? owner.followUpOn : null,
+        list: delegated ? "waiting" : "next",
+        minutes: delegated ? null : when.minutes,
+        projectId,
+        startOn: delegated ? null : when.startOn,
+        title: outcome.title,
+        waitingOn: delegated ? owner.person : null,
+      })
+      .where(eq(tasks.id, taskId))
+      .run();
+  };
+
   const store: Store = {
     activate: (taskId) => {
       findTask(taskId);
-      run("update tasks set list = 'next' where id = ?", taskId);
+      db.update(tasks).set({ list: "next" }).where(eq(tasks.id, taskId)).run();
 
       return findTask(taskId);
     },
@@ -363,63 +303,32 @@ export const openStore = (options: StoreOptions): Store => {
     clarify: (taskId: string, outcome: ClarifyOutcome) => {
       findTask(taskId);
 
-      transaction(() => {
+      db.transaction(() => {
         switch (outcome.kind) {
           case "trash": {
-            run("delete from tasks where id = ?", taskId);
+            db.delete(tasks).where(eq(tasks.id, taskId)).run();
             break;
           }
 
           case "someday":
           case "reference": {
-            run("update tasks set list = ? where id = ?", outcome.kind, taskId);
+            db.update(tasks)
+              .set({ list: outcome.kind })
+              .where(eq(tasks.id, taskId))
+              .run();
             break;
           }
 
           case "done": {
-            run(
-              "update tasks set list = 'next', completed_at = ? where id = ?",
-              now(),
-              taskId
-            );
+            db.update(tasks)
+              .set({ completedAt: now(), list: "next" })
+              .where(eq(tasks.id, taskId))
+              .run();
             break;
           }
 
           case "action": {
-            let projectId: string | null = null;
-
-            if (outcome.project.kind === "existing") {
-              ({ projectId } = outcome.project);
-            } else if (outcome.project.kind === "new") {
-              projectId = insertProject({
-                areaId: null,
-                deadline: null,
-                name: outcome.project.name,
-                outcome: outcome.project.outcome,
-              }).id;
-            }
-
-            const delegated = outcome.owner.kind === "delegate";
-
-            run(
-              `update tasks set
-                 title = ?, list = ?, project_id = ?, context_id = ?, minutes = ?,
-                 energy = ?, start_on = ?, deadline = ?, waiting_on = ?, follow_up_on = ?
-               where id = ?`,
-              outcome.title,
-              delegated ? "waiting" : "next",
-              projectId,
-              delegated ? null : outcome.when.contextId,
-              delegated ? null : outcome.when.minutes,
-              delegated ? null : outcome.when.energy,
-              delegated ? null : outcome.when.startOn,
-              outcome.when.deadline,
-              outcome.owner.kind === "delegate" ? outcome.owner.person : null,
-              outcome.owner.kind === "delegate"
-                ? outcome.owner.followUpOn
-                : null,
-              taskId
-            );
+            clarifyAction(taskId, outcome);
             break;
           }
 
@@ -431,21 +340,13 @@ export const openStore = (options: StoreOptions): Store => {
     },
 
     close: () => {
-      db.close();
+      client.close();
     },
 
     createEvent: (event: NewEvent) => {
       const created: CalendarEvent = { ...event, id: newId() };
 
-      run(
-        "insert into events (id, title, kind, start, end_at, all_day) values (?, ?, ?, ?, ?, ?)",
-        created.id,
-        created.title,
-        created.kind,
-        created.start,
-        created.end,
-        created.allDay ? 1 : 0
-      );
+      db.insert(events).values(created).run();
 
       return created;
     },
@@ -453,17 +354,19 @@ export const openStore = (options: StoreOptions): Store => {
     createProject: insertProject,
 
     deleteTask: (taskId) => {
-      run("delete from tasks where id = ?", taskId);
+      db.delete(tasks).where(eq(tasks.id, taskId)).run();
     },
 
     finishReview: () => {
-      transaction(() => {
-        run("delete from review_steps");
-        run(
-          `insert into settings (key, value) values ('last_reviewed_on', ?)
-           on conflict (key) do update set value = excluded.value`,
-          today()
-        );
+      db.transaction(() => {
+        db.delete(reviewSteps).run();
+        db.insert(settings)
+          .values({ key: "last_reviewed_on", value: today() })
+          .onConflictDoUpdate({
+            set: { value: today() },
+            target: settings.key,
+          })
+          .run();
       });
 
       return reviewState();
@@ -478,12 +381,11 @@ export const openStore = (options: StoreOptions): Store => {
 
       const plan = planFollowUp(waiting, today());
 
-      return transaction(() => {
-        run(
-          "update tasks set follow_up_on = ? where id = ?",
-          plan.nextFollowUpOn,
-          taskId
-        );
+      return db.transaction(() => {
+        db.update(tasks)
+          .set({ followUpOn: plan.nextFollowUpOn })
+          .where(eq(tasks.id, taskId))
+          .run();
 
         return insertTask({
           ...blankTask(plan.actionTitle),
@@ -494,29 +396,39 @@ export const openStore = (options: StoreOptions): Store => {
     },
 
     getProject: (projectId) => {
-      const row = one("select * from projects where id = ?", projectId);
+      const row = db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, projectId))
+        .get();
 
       if (row === undefined) {
         return null;
       }
 
-      const project = toProject(row);
-
-      const areaRow =
-        project.areaId === null
+      const area =
+        row.areaId === null
           ? undefined
-          : one("select * from areas where id = ?", project.areaId);
+          : db
+              .select({ id: areas.id, name: areas.name })
+              .from(areas)
+              .where(eq(areas.id, row.areaId))
+              .get();
 
       return {
-        area:
-          areaRow === undefined
-            ? null
-            : { id: readText(areaRow, "id"), name: readText(areaRow, "name") },
-        project,
-        tasks: all(
-          "select * from tasks where project_id = ? order by completed_at is not null, captured_at, rowid",
-          projectId
-        ).map(toTask),
+        area: area ?? null,
+        project: toProject(row),
+        tasks: db
+          .select()
+          .from(tasks)
+          .where(eq(tasks.projectId, projectId))
+          .orderBy(
+            isNotNull(tasks.completedAt),
+            asc(tasks.capturedAt),
+            asc(rowid)
+          )
+          .all()
+          .map(toTask),
       };
     },
 
@@ -528,135 +440,171 @@ export const openStore = (options: StoreOptions): Store => {
       const until = `${days[6] ?? day}T23:59`;
 
       return {
-        blocks: all(
-          "select * from tasks where block_start >= ? and block_start <= ? order by block_start",
-          from,
-          until
-        ).map(toTask),
+        blocks: db
+          .select()
+          .from(tasks)
+          .where(between(tasks.blockStart, from, until))
+          .orderBy(asc(tasks.blockStart))
+          .all()
+          .map(toTask),
         days,
-        events: all(
-          "select * from events where start >= ? and start <= ? order by start",
-          from,
-          until
-        ).map(toEvent),
+        events: db
+          .select()
+          .from(events)
+          .where(between(events.start, from, until))
+          .orderBy(asc(events.start))
+          .all()
+          .map(toEvent),
       };
     },
 
     listAreas: () =>
-      all("select id, name from areas order by position").map((row) => ({
-        id: readText(row, "id"),
-        name: readText(row, "name"),
-      })),
+      db
+        .select({ id: areas.id, name: areas.name })
+        .from(areas)
+        .orderBy(asc(areas.position))
+        .all(),
 
     listContexts: () =>
-      all("select * from contexts order by position").map(toContext),
+      db
+        .select({ color: contexts.color, id: contexts.id, name: contexts.name })
+        .from(contexts)
+        .orderBy(asc(contexts.position))
+        .all(),
 
     listInbox: () =>
-      all(
-        "select * from tasks where list = 'inbox' order by captured_at desc, rowid desc"
-      ).map(toTask),
+      db
+        .select()
+        .from(tasks)
+        .where(eq(tasks.list, "inbox"))
+        .orderBy(desc(tasks.capturedAt), desc(rowid))
+        .all()
+        .map(toTask),
 
     listNextActions: () =>
-      all(
-        `select * from tasks where ${availableNext} order by captured_at, rowid`,
-        today()
-      ).map(toTask),
+      db
+        .select()
+        .from(tasks)
+        .where(availableNext(today()))
+        .orderBy(asc(tasks.capturedAt), asc(rowid))
+        .all()
+        .map(toTask),
 
-    listProjects: (): ProjectSummary[] =>
-      all(
-        `select projects.*,
-           (select count(*) from tasks where project_id = projects.id and completed_at is null) as open_count,
-           (select count(*) from tasks where project_id = projects.id and completed_at is not null) as done_count
-         from projects
-         left join areas on areas.id = projects.area_id
-         where status = 'active'
-         order by areas.position is null, areas.position, projects.created_at`
-      ).map((row) => ({
-        ...toProject(row),
-        doneCount: count({ count: row.done_count ?? 0 }),
-        openCount: count({ count: row.open_count ?? 0 }),
-      })),
+    listProjects: (): ProjectSummary[] => {
+      const openCount = sql<number>`(select count(*) from ${tasks} where ${tasks.projectId} = ${projects.id} and ${tasks.completedAt} is null)`;
+      const doneCount = sql<number>`(select count(*) from ${tasks} where ${tasks.projectId} = ${projects.id} and ${tasks.completedAt} is not null)`;
+
+      return db
+        .select({ doneCount, openCount, project: projects })
+        .from(projects)
+        .leftJoin(areas, eq(areas.id, projects.areaId))
+        .where(eq(projects.status, "active"))
+        .orderBy(
+          isNull(areas.position),
+          asc(areas.position),
+          asc(projects.createdAt)
+        )
+        .all()
+        .map((row) => ({
+          ...toProject(row.project),
+          doneCount: row.doneCount,
+          openCount: row.openCount,
+        }));
+    },
 
     listSomeday: () =>
-      all(
-        "select * from tasks where list = 'someday' and completed_at is null order by captured_at, rowid"
-      ).map(toTask),
+      db
+        .select()
+        .from(tasks)
+        .where(openIn("someday"))
+        .orderBy(asc(tasks.capturedAt), asc(rowid))
+        .all()
+        .map(toTask),
 
     listUpcoming: () => {
       const day = today();
 
-      return all(
-        `select * from tasks
-         where list = 'next' and completed_at is null
-           and (start_on > ? or deadline > ?)
-         order by coalesce(start_on, deadline)`,
-        day,
-        day
-      ).map(toTask);
+      return db
+        .select()
+        .from(tasks)
+        .where(
+          and(
+            openIn("next"),
+            or(gt(tasks.startOn, day), gt(tasks.deadline, day))
+          )
+        )
+        .orderBy(sql`coalesce(${tasks.startOn}, ${tasks.deadline})`)
+        .all()
+        .map(toTask);
     },
 
     listWaiting: () =>
-      all(
-        "select * from tasks where list = 'waiting' and completed_at is null order by follow_up_on"
-      ).map(toTask),
+      db
+        .select()
+        .from(tasks)
+        .where(openIn("waiting"))
+        .orderBy(asc(tasks.followUpOn))
+        .all()
+        .map(toTask),
 
     overview: (): Overview => {
       const day = today();
       const lastReviewedOn = getSetting("last_reviewed_on");
 
       return {
-        contexts: all(
-          `select context_id as id, count(*) as count from tasks
-           where ${availableNext} and context_id is not null
-           group by context_id`,
-          day
-        ).map((row) => ({ count: count(row), id: readText(row, "id") })),
-        inbox: countOf("list = 'inbox'"),
-        nextActions: countOf(availableNext, day),
+        contexts: db
+          .select({ count: count(), id: tasks.contextId })
+          .from(tasks)
+          .where(and(availableNext(day), isNotNull(tasks.contextId)))
+          .groupBy(tasks.contextId)
+          .all()
+          .flatMap((row) =>
+            row.id === null ? [] : [{ count: row.count, id: row.id }]
+          ),
+        inbox: countTasks(eq(tasks.list, "inbox")),
+        nextActions: countTasks(availableNext(day)),
         review: {
           due: isReviewDue(lastReviewedOn, day),
           dueOn: nextReviewOn(day),
         },
-        someday: countOf("list = 'someday' and completed_at is null"),
+        someday: countTasks(openIn("someday")),
         today: day,
-        waiting: countOf("list = 'waiting' and completed_at is null"),
-        waitingDue: countOf(
-          "list = 'waiting' and completed_at is null and follow_up_on <= ?",
-          day
+        waiting: countTasks(openIn("waiting")),
+        waitingDue: countTasks(
+          and(openIn("waiting"), lte(tasks.followUpOn, day))
         ),
       };
     },
 
     scheduleBlock: (taskId, block) => {
       findTask(taskId);
-      run(
-        "update tasks set block_start = ?, block_end = ? where id = ?",
-        block?.start ?? null,
-        block?.end ?? null,
-        taskId
-      );
+      db.update(tasks)
+        .set({
+          blockEnd: block?.end ?? null,
+          blockStart: block?.start ?? null,
+        })
+        .where(eq(tasks.id, taskId))
+        .run();
 
       return findTask(taskId);
     },
 
     setCompleted: (taskId, completed) => {
       findTask(taskId);
-      run(
-        "update tasks set completed_at = ? where id = ?",
-        completed ? now() : null,
-        taskId
-      );
+      db.update(tasks)
+        .set({ completedAt: completed ? now() : null })
+        .where(eq(tasks.id, taskId))
+        .run();
 
       return findTask(taskId);
     },
 
     setReviewStep: (stepId, checked) => {
-      run(
-        checked
-          ? "insert or ignore into review_steps (step_id) values (?)"
-          : "delete from review_steps where step_id = ?",
-        stepId
-      );
+      if (checked) {
+        db.insert(reviewSteps).values({ stepId }).onConflictDoNothing().run();
+      } else {
+        db.delete(reviewSteps).where(eq(reviewSteps.stepId, stepId)).run();
+      }
 
       return reviewState();
     },
@@ -664,20 +612,23 @@ export const openStore = (options: StoreOptions): Store => {
     updateTask: (taskId, changes: TaskChanges) => {
       findTask(taskId);
 
-      const fields = editableFields.flatMap((field) => {
-        const value = changes[field];
+      // Pick the editable fields by name: changes arrive over IPC and may
+      // carry anything. Drizzle leaves out fields that are undefined.
+      const fields: TaskChanges = {
+        contextId: changes.contextId,
+        deadline: changes.deadline,
+        energy: changes.energy,
+        followUpOn: changes.followUpOn,
+        minutes: changes.minutes,
+        notes: changes.notes,
+        projectId: changes.projectId,
+        starred: changes.starred,
+        startOn: changes.startOn,
+        title: changes.title,
+      };
 
-        return value === undefined
-          ? []
-          : [{ column: taskColumns[field], value: toInput(value) }];
-      });
-
-      if (fields.length > 0) {
-        run(
-          `update tasks set ${fields.map((field) => `${field.column} = ?`).join(", ")} where id = ?`,
-          ...fields.map((field) => field.value),
-          taskId
-        );
+      if (Object.values(fields).some((value) => value !== undefined)) {
+        db.update(tasks).set(fields).where(eq(tasks.id, taskId)).run();
       }
 
       return findTask(taskId);

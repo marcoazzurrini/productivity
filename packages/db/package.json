@@ -9,14 +9,17 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "db:generate": "drizzle-kit generate && bun scripts/embed-migrations.ts && oxfmt src/migrations.ts"
   },
   "dependencies": {
-    "@productivity/gtd": "workspace:*"
+    "@productivity/gtd": "workspace:*",
+    "drizzle-orm": "1.0.0-rc.5"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",
     "@types/node": "^24.13.3",
+    "drizzle-kit": "1.0.0-rc.5",
     "typescript": "7.0.2"
   }
 }

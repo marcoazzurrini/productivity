@@ -1,76 +1,94 @@
+import type {
+  CalendarEventKind,
+  CaptureSource,
+  Energy,
+  LocalDate,
+  LocalDateTime,
+  ProjectStatus,
+  TagColor,
+  TaskList,
+} from "@productivity/gtd";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
 /**
- * Schema changes, applied in order. A database records how many it has run
- * in `user_version`, so each migration runs exactly once. Never edit a
- * shipped migration: append a new one.
+ * The database schema. After changing it, run `bun run db:generate` to write
+ * the SQL migration that brings existing databases up to date.
  */
-export const migrations: readonly string[] = [
-  `
-  create table contexts (
-    id text primary key,
-    name text not null,
-    color text not null,
-    position integer not null
-  );
 
-  create table areas (
-    id text primary key,
-    name text not null,
-    position integer not null
-  );
+export const contexts = sqliteTable("contexts", {
+  color: text("color").$type<TagColor>().notNull(),
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  position: integer("position").notNull(),
+});
 
-  create table projects (
-    id text primary key,
-    name text not null,
-    area_id text references areas (id) on delete set null,
-    outcome text not null default '',
-    deadline text,
-    status text not null default 'active',
-    created_at text not null
-  );
+export const areas = sqliteTable("areas", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  position: integer("position").notNull(),
+});
 
-  create table tasks (
-    id text primary key,
-    title text not null,
-    notes text not null default '',
-    list text not null,
-    source text not null default 'manual',
-    captured_at text not null,
-    project_id text references projects (id) on delete set null,
-    context_id text references contexts (id) on delete set null,
-    minutes integer,
-    energy text,
-    start_on text,
-    deadline text,
-    starred integer not null default 0,
-    waiting_on text,
-    follow_up_on text,
-    block_start text,
-    block_end text,
-    completed_at text
-  );
+export const projects = sqliteTable("projects", {
+  areaId: text("area_id").references(() => areas.id, { onDelete: "set null" }),
+  createdAt: text("created_at").$type<LocalDateTime>().notNull(),
+  deadline: text("deadline").$type<LocalDate>(),
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  outcome: text("outcome").notNull().default(""),
+  status: text("status").$type<ProjectStatus>().notNull().default("active"),
+});
 
-  create index tasks_by_list on tasks (list, completed_at);
-  create index tasks_by_project on tasks (project_id);
-  create index tasks_by_block on tasks (block_start);
+export const tasks = sqliteTable(
+  "tasks",
+  {
+    blockEnd: text("block_end").$type<LocalDateTime>(),
+    blockStart: text("block_start").$type<LocalDateTime>(),
+    capturedAt: text("captured_at").$type<LocalDateTime>().notNull(),
+    completedAt: text("completed_at").$type<LocalDateTime>(),
+    contextId: text("context_id").references(() => contexts.id, {
+      onDelete: "set null",
+    }),
+    deadline: text("deadline").$type<LocalDate>(),
+    energy: text("energy").$type<Energy>(),
+    followUpOn: text("follow_up_on").$type<LocalDate>(),
+    id: text("id").primaryKey(),
+    list: text("list").$type<TaskList>().notNull(),
+    minutes: integer("minutes"),
+    notes: text("notes").notNull().default(""),
+    projectId: text("project_id").references(() => projects.id, {
+      onDelete: "set null",
+    }),
+    source: text("source").$type<CaptureSource>().notNull().default("manual"),
+    starred: integer("starred", { mode: "boolean" }).notNull().default(false),
+    startOn: text("start_on").$type<LocalDate>(),
+    title: text("title").notNull(),
+    waitingOn: text("waiting_on"),
+  },
+  (table) => [
+    index("tasks_by_list").on(table.list, table.completedAt),
+    index("tasks_by_project").on(table.projectId),
+    index("tasks_by_block").on(table.blockStart),
+  ]
+);
 
-  create table events (
-    id text primary key,
-    title text not null,
-    kind text not null,
-    start text not null,
-    end_at text not null,
-    all_day integer not null default 0
-  );
+export const events = sqliteTable(
+  "events",
+  {
+    allDay: integer("all_day", { mode: "boolean" }).notNull().default(false),
+    end: text("end_at").$type<LocalDateTime>().notNull(),
+    id: text("id").primaryKey(),
+    kind: text("kind").$type<CalendarEventKind>().notNull(),
+    start: text("start").$type<LocalDateTime>().notNull(),
+    title: text("title").notNull(),
+  },
+  (table) => [index("events_by_start").on(table.start)]
+);
 
-  create index events_by_start on events (start);
+export const reviewSteps = sqliteTable("review_steps", {
+  stepId: text("step_id").primaryKey(),
+});
 
-  create table review_steps (
-    step_id text primary key
-  );
-
-  create table settings (
-    key text primary key,
-    value text not null
-  );
-  `,
-];
+export const settings = sqliteTable("settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});

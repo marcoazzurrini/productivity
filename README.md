@@ -10,7 +10,7 @@ apps/
   demo/      Storybook for the design system
 packages/
   gtd/       The GTD method as pure functions, plus the GtdStore contract
-  db/        SQLite implementation of GtdStore
+  db/        SQLite implementation of GtdStore, with Drizzle ORM
   ui/        Design tokens and components (StyleX on Base UI)
 design/      OpenPencil design file
 ```
@@ -18,11 +18,19 @@ design/      OpenPencil design file
 Each package is a deep module: a small public interface over the detail it hides.
 
 - **`@productivity/gtd`** knows the method: the Clarify questions and their order, grouping Next Actions by context, the Upcoming tickler, follow-ups for Waiting For, and the Weekly Review. It has no dependencies. It also defines `GtdStore`, the one interface the app uses for data.
-- **`@productivity/db`** implements `GtdStore` with `node:sqlite`, which runs both under Bun (tests) and in Electron. Schema, migrations, IDs and the clock stay inside.
+- **`@productivity/db`** implements `GtdStore` with Drizzle ORM on `node:sqlite`, which runs both under Bun (tests) and in Electron. Schema, migrations, IDs and the clock stay inside.
 - **`@productivity/ui`** knows nothing about GTD. Every text color meets WCAG AA contrast.
 - **`apps/desktop`** connects them. The renderer reaches the database only through one IPC channel, which accepts nothing but `GtdStore` methods.
 
 `dependency-cruiser` enforces these boundaries (`bun run boundaries`).
+
+### Changing the database schema
+
+1. Edit `packages/db/src/schema.ts`.
+2. Run `bun run --filter @productivity/db db:generate`. Drizzle Kit writes the SQL to `packages/db/migrations/`, and the script copies it into `src/migrations.ts`, because the bundled app has no migrations folder.
+3. Commit both. The app applies new migrations on its next start and keeps existing data.
+
+Never edit a migration that has shipped. Add a new one instead.
 
 ## Commands
 
