@@ -49,6 +49,8 @@ bun run install-app --open   # the same, then open it
 
 Run it again whenever you want the latest version. It quits the running app, backs up the database, and replaces the app. There is no installer, code signing or auto-update: the app is built for this Mac only.
 
+The app icon is `apps/desktop/resources/icon.svg`, built from the logo in `design/logo/inbox-zero.svg`. After editing it, run `bun run --filter @productivity/desktop make-icon` to rebuild `icon.icns`, then reinstall.
+
 ## Data
 
 The packaged app stores its database in Electron's user-data folder. Development uses a separate `productivity-dev.sqlite` filled with sample data. Set `PRODUCTIVITY_DATA_DIR` to use another folder.

@@ -4,6 +4,7 @@ appId: com.marcoazzurrini.productivity
 productName: Productivity
 directories:
   output: release
+  buildResources: resources
 # Vite bundles everything into out/, so the app needs no node_modules.
 files:
   - out/**
@@ -14,6 +15,8 @@ mac:
     - target: dir
       arch: arm64
   category: public.app-category.productivity
+  # Made from resources/icon.svg by `bun run make-icon`.
+  icon: icon.icns
   # Ad-hoc signature: enough to run on the Mac that built it. The hardened
   # runtime only matters for Apple notarization, and with an ad-hoc
   # signature it can stop the app from launching.
