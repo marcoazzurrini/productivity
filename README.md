@@ -49,6 +49,13 @@ Packages test with `bun test`. The desktop app tests with Vitest: unit tests ren
 
 Lefthook runs on every commit: oxfmt, oxlint (Ultracite presets with anti-slop) and typecheck. On push it runs boundaries, all tests and the end-to-end suite.
 
+## Pull requests
+
+`main` is protected: every change lands through a pull request, rebased onto `main`. CI (`.github/workflows/ci.yml`) must pass first:
+
+- **Checks**: format, lint, boundaries, typecheck, tests and build, on Linux.
+- **End-to-end**: builds the app and drives the real window, on macOS.
+
 ## Installing on your Mac
 
 ```sh
