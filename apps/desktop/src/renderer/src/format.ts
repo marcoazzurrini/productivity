@@ -78,3 +78,9 @@ export const durationLabel = (minutes: number): string => {
 
   return rest === 0 ? `${hours}h` : `${hours}h ${rest}m`;
 };
+
+/** Words a person would count: to-do boxes and Markdown symbols are not words. */
+export const wordCount = (markdown: string): number =>
+  markdown
+    .replaceAll(/\[[ xX]\]/gu, " ")
+    .match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)?.length ?? 0;

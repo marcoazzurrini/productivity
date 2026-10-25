@@ -5,6 +5,7 @@ import { CalendarPane } from "./calendar-pane.tsx";
 import { useNavigation } from "./navigation.tsx";
 import { ClarifyScreen } from "./screens/clarify.tsx";
 import { InboxScreen } from "./screens/inbox.tsx";
+import { JournalScreen } from "./screens/journal.tsx";
 import { NextActionsScreen } from "./screens/next-actions.tsx";
 import { ProjectScreen } from "./screens/project.tsx";
 import { ReviewScreen } from "./screens/review.tsx";
@@ -69,6 +70,10 @@ const CurrentScreen = () => {
 
     case "project": {
       return <ProjectScreen key={view.projectId} projectId={view.projectId} />;
+    }
+
+    case "journal": {
+      return <JournalScreen day={view.day} />;
     }
 
     default: {

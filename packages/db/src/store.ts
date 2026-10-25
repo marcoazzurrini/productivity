@@ -40,6 +40,8 @@ import {
 import type { SQL } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-sqlite";
 
+import { createJournal } from "./journal.ts";
+import type { JournalStore } from "./journal.ts";
 import { migrate } from "./migrate.ts";
 import { toEvent, toProject, toTask, toTaskRow } from "./rows.ts";
 import {
@@ -63,6 +65,8 @@ export interface StoreOptions {
 }
 
 export interface Store extends GtdStore {
+  /** The journal, kept in the same database. */
+  journal: JournalStore;
   close: () => void;
 }
 
@@ -458,6 +462,7 @@ export const openStore = (options: StoreOptions): Store => {
       };
     },
 
+    journal: createJournal(db, now),
     listAreas: () =>
       db
         .select({ id: areas.id, name: areas.name })

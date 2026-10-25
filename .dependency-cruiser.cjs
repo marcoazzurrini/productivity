@@ -68,6 +68,14 @@ module.exports = {
       },
     },
     {
+      comment:
+        "Shared code also runs in the renderer and preload: it may use the database's types, never its code.",
+      from: { path: "^apps/desktop/src/shared/" },
+      name: "shared-uses-only-db-types",
+      severity: "error",
+      to: { dependencyTypesNot: ["type-only"], path: "^packages/db/" },
+    },
+    {
       from: { path: "^apps/desktop/src/renderer/" },
       name: "renderer-cannot-use-node",
       severity: "error",

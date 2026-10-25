@@ -92,3 +92,10 @@ export const settings = sqliteTable("settings", {
   key: text("key").primaryKey(),
   value: text("value").notNull(),
 });
+
+/** One journal page per day. Days with nothing written have no row. */
+export const journalPages = sqliteTable("journal_pages", {
+  day: text("day").$type<LocalDate>().primaryKey(),
+  markdown: text("markdown").notNull(),
+  updatedAt: text("updated_at").$type<LocalDateTime>().notNull(),
+});

@@ -4,6 +4,7 @@ import {
   dayLabel,
   durationLabel,
   weekNumber,
+  wordCount,
 } from "../src/renderer/src/format.ts";
 
 describe(weekNumber, () => {
@@ -30,5 +31,18 @@ describe("labels", () => {
 
   it("formats a day without a comma", () => {
     expect(dayLabel("2026-10-24")).toBe("Sat Oct 24");
+  });
+});
+
+describe(wordCount, () => {
+  it.each([
+    ["", 0],
+    ["   \n ", 0],
+    ["Slept well.", 2],
+    ["## Morning\n\n- [ ] Book flights\n- [x] Send **the** draft", 6],
+    ["It's 8 km, give or take", 6],
+    ["Café — très bien", 3],
+  ])("counts %j as %i words", (markdown, words) => {
+    expect(wordCount(markdown)).toBe(words);
   });
 });

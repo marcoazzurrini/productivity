@@ -45,6 +45,10 @@ export type { IconButtonProps } from "./components/icon-button.tsx";
 
 export { Kbd } from "./components/kbd.tsx";
 
+export { MarkdownEditor } from "./components/markdown-editor/markdown-editor.tsx";
+
+export type { MarkdownEditorProps } from "./components/markdown-editor/markdown-editor.tsx";
+
 export { NavItem, NavSection } from "./components/nav.tsx";
 
 export type { NavItemProps } from "./components/nav.tsx";
