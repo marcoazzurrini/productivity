@@ -4,7 +4,9 @@ import { openStore } from "@productivity/db";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 
 import { storeChannel } from "../shared/channel.ts";
+import { journalChannel } from "../shared/journal.ts";
 import { canOpenExternally } from "./external-links.ts";
+import { checkRead, checkWrite } from "./journal-handler.ts";
 import { callStore } from "./store-handler.ts";
 
 const isDev = !app.isPackaged;
@@ -32,6 +34,30 @@ const store = openStore({
 ipcMain.handle(storeChannel, (_event, method: string, args) =>
   callStore(store, method, args)
 );
+
+ipcMain.handle(journalChannel.read, (_event, ...args) => {
+  checkRead(args);
+
+  return store.journal.read(...args);
+});
+
+ipcMain.handle(journalChannel.write, (_event, ...args) => {
+  checkWrite(args);
+
+  return store.journal.write(...args);
+});
+
+// The renderer is blocked until this replies, so it must always reply.
+ipcMain.on(journalChannel.writeNow, (event, ...args) => {
+  try {
+    checkWrite(args);
+    store.journal.write(...args);
+    event.returnValue = true;
+  } catch (error) {
+    console.error("Could not save the journal page on close.", error);
+    event.returnValue = false;
+  }
+});
 
 const createWindow = (): void => {
   const window = new BrowserWindow({

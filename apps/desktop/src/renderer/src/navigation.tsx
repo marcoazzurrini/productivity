@@ -1,3 +1,4 @@
+import type { LocalDate } from "@productivity/gtd";
 import { createContext, use, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
@@ -10,7 +11,8 @@ export type View =
   | { kind: "waiting" }
   | { kind: "someday" }
   | { kind: "project"; projectId: string }
-  | { kind: "review" };
+  | { kind: "review" }
+  | { kind: "journal"; day: LocalDate };
 
 interface Navigation {
   view: View;

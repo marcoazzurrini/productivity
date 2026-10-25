@@ -79,12 +79,12 @@ describe("migrations", () => {
     expect(migrations).toEqual(onDisk);
   });
 
-  test("a new database has the same shape as one made before Drizzle", () => {
+  test("the baseline migration matches the schema made before Drizzle", () => {
     const legacy = new DatabaseSync(":memory:");
     const current = new DatabaseSync(":memory:");
 
     legacy.exec(legacySchema);
-    migrate(current);
+    migrate(current, migrations.slice(0, 1));
 
     expect(describeSchema(current)).toEqual(describeSchema(legacy));
 
@@ -117,8 +117,10 @@ describe("migrations", () => {
     ]);
 
     store.capture({ title: "Captured after the upgrade" });
+    store.journal.write("2026-10-23", "Upgraded today.");
 
     expect(store.listInbox()).toHaveLength(1);
+    expect(store.journal.read("2026-10-23").markdown).toBe("Upgraded today.");
 
     store.close();
   });

@@ -3,6 +3,8 @@ import { ToastProvider } from "@productivity/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
+import type { JournalBridge } from "../../shared/journal.ts";
+import { JournalProvider } from "./journal-context.tsx";
 import { NavigationProvider } from "./navigation.tsx";
 import type { View } from "./navigation.tsx";
 import { QuickCaptureProvider } from "./quick-capture.tsx";
@@ -18,6 +20,7 @@ export const createQueryClient = (): QueryClient =>
 
 export interface RootProps {
   store: RemoteGtdStore;
+  journal: JournalBridge;
   /** One per app window, or per test. */
   client: QueryClient;
   initialView?: View;
@@ -25,16 +28,24 @@ export interface RootProps {
 }
 
 /** Every provider the app needs, in dependency order. Tests use it too. */
-export const Root = ({ store, client, initialView, children }: RootProps) => (
+export const Root = ({
+  store,
+  journal,
+  client,
+  initialView,
+  children,
+}: RootProps) => (
   <QueryClientProvider client={client}>
     <StoreProvider store={store}>
-      <NavigationProvider initial={initialView}>
-        <ToastProvider>
-          <TaskDialogProvider>
-            <QuickCaptureProvider>{children}</QuickCaptureProvider>
-          </TaskDialogProvider>
-        </ToastProvider>
-      </NavigationProvider>
+      <JournalProvider journal={journal}>
+        <NavigationProvider initial={initialView}>
+          <ToastProvider>
+            <TaskDialogProvider>
+              <QuickCaptureProvider>{children}</QuickCaptureProvider>
+            </TaskDialogProvider>
+          </ToastProvider>
+        </NavigationProvider>
+      </JournalProvider>
     </StoreProvider>
   </QueryClientProvider>
 );

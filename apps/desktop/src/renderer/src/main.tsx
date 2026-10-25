@@ -22,6 +22,7 @@ createRoot(container).render(
   <StrictMode>
     <Root
       client={createQueryClient()}
+      journal={window.journal}
       store={createRemoteStore(window.gtd.call)}
     >
       <App />
