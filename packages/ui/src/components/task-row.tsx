@@ -86,7 +86,7 @@ const styles = stylex.create({
       default: color.accentSubtle,
     },
   },
-  star: { color: "#E2B203", display: "flex", flexShrink: 0 },
+  star: { color: color.star, display: "flex", flexShrink: 0 },
   subtitle: {
     color: color.textTertiary,
     fontSize: font.size12,

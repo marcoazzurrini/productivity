@@ -1,3 +1,10 @@
+import { color } from "@productivity/ui/tokens.stylex";
+import * as stylex from "@stylexjs/stylex";
+
+const styles = stylex.create({
+  pie: { color: color.iconMuted },
+});
+
 /** A small pie that fills as a project's actions get done. */
 export const ProjectPie = ({
   done,
@@ -13,11 +20,21 @@ export const ProjectPie = ({
   const largeArc = share > 0.5 ? 1 : 0;
 
   return (
-    <svg aria-hidden fill="none" height={16} viewBox="0 0 16 16" width={16}>
-      <circle cx={8} cy={8} r={6.5} stroke="#A5A5A2" strokeWidth={1.5} />
-      {share >= 1 ? <circle cx={8} cy={8} fill="#A5A5A2" r={5} /> : null}
+    <svg
+      aria-hidden
+      fill="none"
+      height={16}
+      viewBox="0 0 16 16"
+      width={16}
+      {...stylex.props(styles.pie)}
+    >
+      <circle cx={8} cy={8} r={6.5} stroke="currentColor" strokeWidth={1.5} />
+      {share >= 1 ? <circle cx={8} cy={8} fill="currentColor" r={5} /> : null}
       {share > 0 && share < 1 ? (
-        <path d={`M8 8 L8 3 A5 5 0 ${largeArc} 1 ${x} ${y} Z`} fill="#A5A5A2" />
+        <path
+          d={`M8 8 L8 3 A5 5 0 ${largeArc} 1 ${x} ${y} Z`}
+          fill="currentColor"
+        />
       ) : null}
     </svg>
   );

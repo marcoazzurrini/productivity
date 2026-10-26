@@ -2,6 +2,8 @@ import { color, font, radius, space } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 
+import { DayNav } from "./day-nav.tsx";
+
 const styles = stylex.create({
   column: {
     display: "flex",
@@ -31,8 +33,8 @@ const styles = stylex.create({
 });
 
 /**
- * The center pane's frame: a drag strip for the window, then content held
- * to a 640 px reading column.
+ * The center pane's frame: a drag strip for the window that ends with the
+ * journal's day buttons, then content held to a 640 px reading column.
  */
 export const Page = ({
   topbar,
@@ -44,6 +46,7 @@ export const Page = ({
   <>
     <div className="drag-region" {...stylex.props(styles.topbar)}>
       {topbar}
+      <DayNav />
     </div>
     <div {...stylex.props(styles.scroll)}>
       <div {...stylex.props(styles.column)}>{children}</div>

@@ -180,3 +180,30 @@ describe("weekly review", () => {
     });
   });
 });
+
+describe("theme", () => {
+  it("follows the system until you pick light or dark", async () => {
+    const { appearance } = renderApp();
+    const user = userEvent.setup();
+    const theme = await screen.findByRole("group", { name: "Theme" });
+
+    await waitFor(() => {
+      expect(
+        within(theme)
+          .getByRole("button", { name: "Match the system" })
+          .getAttribute("aria-pressed")
+      ).toBe("true");
+    });
+
+    await user.click(within(theme).getByRole("button", { name: "Dark" }));
+
+    await waitFor(() => {
+      expect(appearance.theme).toBe("dark");
+    });
+    expect(
+      within(theme)
+        .getByRole("button", { name: "Dark" })
+        .getAttribute("aria-pressed")
+    ).toBe("true");
+  });
+});

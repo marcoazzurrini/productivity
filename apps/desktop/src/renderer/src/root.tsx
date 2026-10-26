@@ -3,8 +3,10 @@ import { ToastProvider } from "@productivity/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
+import type { AppearanceBridge } from "../../shared/appearance.ts";
 import type { CalendarBridge } from "../../shared/calendar.ts";
 import type { JournalBridge } from "../../shared/journal.ts";
+import { AppearanceProvider } from "./appearance-context.tsx";
 import { CalendarProvider } from "./calendar-context.tsx";
 import { JournalProvider } from "./journal-context.tsx";
 import { NavigationProvider } from "./navigation.tsx";
@@ -24,6 +26,7 @@ export interface RootProps {
   store: RemoteGtdStore;
   journal: JournalBridge;
   calendar: CalendarBridge;
+  appearance: AppearanceBridge;
   /** One per app window, or per test. */
   client: QueryClient;
   initialView?: View;
@@ -35,23 +38,26 @@ export const Root = ({
   store,
   journal,
   calendar,
+  appearance,
   client,
   initialView,
   children,
 }: RootProps) => (
   <QueryClientProvider client={client}>
-    <StoreProvider store={store}>
-      <CalendarProvider bridge={calendar}>
-        <JournalProvider journal={journal}>
-          <NavigationProvider initial={initialView}>
-            <ToastProvider>
-              <TaskDialogProvider>
-                <QuickCaptureProvider>{children}</QuickCaptureProvider>
-              </TaskDialogProvider>
-            </ToastProvider>
-          </NavigationProvider>
-        </JournalProvider>
-      </CalendarProvider>
-    </StoreProvider>
+    <AppearanceProvider appearance={appearance}>
+      <StoreProvider store={store}>
+        <CalendarProvider bridge={calendar}>
+          <JournalProvider journal={journal}>
+            <NavigationProvider initial={initialView}>
+              <ToastProvider>
+                <TaskDialogProvider>
+                  <QuickCaptureProvider>{children}</QuickCaptureProvider>
+                </TaskDialogProvider>
+              </ToastProvider>
+            </NavigationProvider>
+          </JournalProvider>
+        </CalendarProvider>
+      </StoreProvider>
+    </AppearanceProvider>
   </QueryClientProvider>
 );

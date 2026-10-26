@@ -4,17 +4,17 @@ import { CircleCheck } from "lucide-react";
 import { useCallback } from "react";
 import type { ReactNode } from "react";
 
-import { color, font, radius, space } from "../tokens.stylex.ts";
+import { color, font, radius, shadow, space } from "../tokens.stylex.ts";
 
 const styles = stylex.create({
   action: {
     backgroundColor: {
-      ":hover": "rgba(255, 255, 255, 0.08)",
+      ":hover": color.inverseHover,
       default: "transparent",
     },
     borderRadius: radius.md,
     borderStyle: "none",
-    color: "#7EB7F5",
+    color: color.textLinkOnInverse,
     cursor: "pointer",
     fontFamily: font.family,
     fontSize: font.size13,
@@ -22,12 +22,12 @@ const styles = stylex.create({
     height: 30,
     paddingInline: 10,
   },
-  icon: { color: "#4DAB9A", display: "flex", flexShrink: 0 },
+  icon: { color: color.successOnInverse, display: "flex", flexShrink: 0 },
   root: {
     alignItems: "center",
     backgroundColor: color.inverse,
     borderRadius: radius.lg,
-    boxShadow: "0 8px 24px rgba(15, 15, 15, 0.2)",
+    boxShadow: shadow.toast,
     color: color.textOnInverse,
     display: "flex",
     fontFamily: font.family,

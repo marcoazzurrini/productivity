@@ -19,6 +19,11 @@ body,
   margin: 0;
 }
 
+:root {
+  /* Native controls and scrollbars follow the theme too. */
+  color-scheme: light dark;
+}
+
 body {
   background: #ffffff;
   color: #191918;
@@ -28,6 +33,13 @@ body {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   line-height: 1.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #191919;
+    color: #ebebea;
+  }
 }
 
 button,
