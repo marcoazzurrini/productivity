@@ -1,45 +1,24 @@
-import {
-  addDays,
-  datePart,
-  minuteOfDay,
-  toLocalDate,
-  toLocalDateTime,
-  weekDays,
-} from "@productivity/gtd";
+import { addDays, toLocalDate, weekDays } from "@productivity/gtd";
 import type { LocalDate, ProjectDetail, Task } from "@productivity/gtd";
-import { WeekCalendar } from "@productivity/ui";
-import type { AllDayItem, CalendarItem } from "@productivity/ui";
+import { useToast, WeekCalendar } from "@productivity/ui";
+import type { CalendarEntry, CalendarRange } from "@productivity/ui";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { useOverview, useStoreAction, useWeek } from "./data.ts";
-import { monthLabel, timeLabel, weekNumber, weekdayLabel } from "./format.ts";
+import {
+  errorText,
+  useCalendarAction,
+  useEvents,
+  useOverview,
+  useStoreAction,
+  useWeek,
+} from "./data.ts";
+import { EventDialog } from "./event-dialog.tsx";
+import type { EventDialogTarget } from "./event-dialog.tsx";
+import { monthLabel, weekNumber } from "./format.ts";
+import { GoogleSync } from "./google-sync.tsx";
 import { useLookups } from "./lookups.ts";
 import { useTaskDialog } from "./task-dialog.tsx";
-
-/** The current time, refreshed every minute for the now line. */
-const useNow = (): Date => {
-  const [now, setNow] = useState(() => new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(new Date());
-    }, 60_000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return now;
-};
-
-const toDateTime = (day: LocalDate, minute: number): string =>
-  toLocalDateTime(
-    new Date(
-      `${day}T${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`
-    )
-  );
 
 const taskLists = [["next"], ["upcoming"], ["waiting"], ["someday"], ["inbox"]];
 
@@ -56,126 +35,171 @@ const useFindLoadedTask = () => {
     ].find((task) => task.id === taskId);
 };
 
+const pad = (value: number): string => String(value).padStart(2, "0");
+
+const addMinutes = (start: string, minutes: number): string => {
+  const date = new Date(`${start}:00`);
+
+  date.setMinutes(date.getMinutes() + minutes);
+
+  return `${toLocalDate(date)}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+/** Entries carry their source in the ID, so a click knows what it opened. */
+const eventPrefix = "event:";
+const taskPrefix = "task:";
+
 export const CalendarPane = () => {
-  const now = useNow();
-  const today = useOverview().data?.today ?? toLocalDate(now);
+  const toast = useToast();
+  // Until the overview loads, today is the day the pane opened.
+  const [openedOn, setOpenedOn] = useState(() => toLocalDate(new Date()));
+  const today = useOverview().data?.today ?? openedOn;
   const [anchor, setAnchor] = useState<LocalDate | null>(null);
+  const [dialog, setDialog] = useState<EventDialogTarget | null>(null);
   const day = anchor ?? today;
-  const week = useWeek(day).data;
+  const days = weekDays(day);
+  const monday = days[0] ?? day;
+  const blocks = useWeek(day).data?.blocks;
+  const events = useEvents(monday, addDays(monday, 7)).data;
   const lookups = useLookups();
   const openTask = useTaskDialog();
-  const nowMinute = now.getHours() * 60 + now.getMinutes();
   const findTask = useFindLoadedTask();
+
+  const onError = (error: Error): void => {
+    toast({ title: errorText(error) });
+  };
 
   const schedule = useStoreAction(
     (store, input: { taskId: string; start: string; end: string }) =>
       store.scheduleBlock(input.taskId, { end: input.end, start: input.start })
   );
 
-  const days = week?.days ?? weekDays(day);
-
-  const timed: CalendarItem[] = (week?.events ?? []).flatMap((event) =>
-    event.allDay
-      ? []
-      : [
-          {
-            dayIndex: days.indexOf(datePart(event.start)),
-            detail: `${timeLabel(event.start)} – ${timeLabel(event.end)}`,
-            endMinute: minuteOfDay(event.end),
-            id: event.id,
-            kind: event.kind,
-            startMinute: minuteOfDay(event.start),
-            title: event.title,
-          },
-        ]
+  const moveEvent = useCalendarAction(
+    (calendar, input: { id: string; range: CalendarRange }) =>
+      calendar.updateEvent(input.id, input.range)
   );
 
-  const blocks: CalendarItem[] = (week?.blocks ?? []).flatMap((task) =>
-    task.block === null
-      ? []
-      : [
-          {
-            dayIndex: days.indexOf(datePart(task.block.start)),
-            detail: [
-              `${timeLabel(task.block.start)} – ${timeLabel(task.block.end)}`,
-              lookups.project(task.projectId)?.name,
+  const entries = useMemo<CalendarEntry[]>(
+    () => [
+      ...(events ?? []).map((event) => ({
+        allDay: event.allDay,
+        color: event.color,
+        editable: event.editable,
+        end: event.end,
+        id: `${eventPrefix}${event.id}`,
+        kind: "event" as const,
+        start: event.start,
+        title: event.title,
+      })),
+      ...(blocks ?? []).flatMap((task) =>
+        task.block === null
+          ? []
+          : [
+              {
+                allDay: false,
+                detail: lookups.project(task.projectId)?.name,
+                done: task.completedAt !== null,
+                editable: true,
+                end: task.block.end,
+                id: `${taskPrefix}${task.id}`,
+                kind: "task" as const,
+                start: task.block.start,
+                title: task.title,
+              },
             ]
-              .filter((part) => part !== undefined)
-              .join(" · "),
-            done: task.completedAt !== null,
-            endMinute: minuteOfDay(task.block.end),
-            id: task.id,
-            kind: "task" as const,
-            startMinute: minuteOfDay(task.block.start),
-            title: task.title,
-          },
-        ]
+      ),
+    ],
+    [blocks, events, lookups]
   );
 
-  const allDay: AllDayItem[] = (week?.events ?? []).flatMap((event) => {
-    if (!event.allDay) {
-      return [];
+  const changeEntry = async (
+    id: string,
+    range: CalendarRange
+  ): Promise<void> => {
+    if (id.startsWith(eventPrefix)) {
+      await moveEvent.mutateAsync(
+        { id: id.slice(eventPrefix.length), range },
+        { onError }
+      );
+
+      return;
     }
 
-    const start = Math.max(0, days.indexOf(datePart(event.start)));
-    const endIndex = days.indexOf(datePart(event.end));
+    // A time block needs a time: a task dragged to all-day goes back.
+    if (range.allDay) {
+      throw new Error("Time blocks need a time.");
+    }
 
-    return [
+    await schedule.mutateAsync(
       {
-        endIndex: endIndex === -1 ? days.length - 1 : endIndex,
-        id: event.id,
-        startIndex: start,
-        title: event.title,
-        tone:
-          event.kind === "personal" ? ("pink" as const) : ("purple" as const),
+        end: range.end,
+        start: range.start,
+        taskId: id.slice(taskPrefix.length),
       },
-    ];
-  });
+      { onError }
+    );
+  };
 
   return (
-    <WeekCalendar
-      allDay={allDay}
-      days={days.map((date) => ({
-        dayNumber: Number(date.slice(8, 10)),
-        isToday: date === today,
-        key: date,
-        weekday: weekdayLabel(date),
-      }))}
-      items={[...timed, ...blocks]}
-      nowMinute={days.includes(today) ? nowMinute : null}
-      onDropTask={(taskId, dayIndex, minute) => {
-        const date = days[dayIndex];
+    <>
+      <WeekCalendar
+        actions={<GoogleSync />}
+        date={day}
+        entries={entries}
+        onDropTask={(taskId, start) => {
+          const minutes = findTask(taskId)?.minutes ?? 30;
 
-        if (date === undefined) {
-          return;
-        }
+          schedule.mutate(
+            { end: addMinutes(start, minutes), start, taskId },
+            { onError }
+          );
+        }}
+        onEntryChange={changeEntry}
+        onEntryOpen={(id) => {
+          if (id.startsWith(taskPrefix)) {
+            const task = blocks?.find(
+              (block) => block.id === id.slice(taskPrefix.length)
+            );
 
-        const minutes = findTask(taskId)?.minutes ?? 30;
+            if (task !== undefined) {
+              openTask(task);
+            }
 
-        schedule.mutate({
-          end: toDateTime(date, minute + minutes),
-          start: toDateTime(date, minute),
-          taskId,
-        });
-      }}
-      onItemOpen={(id) => {
-        const task = week?.blocks.find((block) => block.id === id);
+            return;
+          }
 
-        if (task !== undefined) {
-          openTask(task);
-        }
-      }}
-      onNext={() => {
-        setAnchor(addDays(day, 7));
-      }}
-      onPrevious={() => {
-        setAnchor(addDays(day, -7));
-      }}
-      onToday={() => {
-        setAnchor(null);
-      }}
-      subtitle={`Week ${weekNumber(day)}`}
-      title={monthLabel(days[0] ?? day)}
-    />
+          const event = events?.find(
+            (each) => each.id === id.slice(eventPrefix.length)
+          );
+
+          if (event !== undefined) {
+            setDialog({ event, kind: "edit" });
+          }
+        }}
+        onNext={() => {
+          setAnchor(addDays(day, 7));
+        }}
+        onPrevious={() => {
+          setAnchor(addDays(day, -7));
+        }}
+        onSelectRange={(range) => {
+          setDialog({ kind: "create", range });
+        }}
+        onToday={() => {
+          setAnchor(null);
+          setOpenedOn(toLocalDate(new Date()));
+        }}
+        subtitle={`Week ${weekNumber(day)}`}
+        title={monthLabel(monday)}
+      />
+      {dialog === null ? null : (
+        <EventDialog
+          onClose={() => {
+            setDialog(null);
+          }}
+          target={dialog}
+        />
+      )}
+    </>
   );
 };

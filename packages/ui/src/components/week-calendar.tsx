@@ -1,121 +1,107 @@
+import { Calendar as FullCalendar } from "@fullcalendar/react";
+import type {
+  CalendarRef,
+  DateClickInfo,
+  DateSelectInfo,
+  DayHeaderInfo,
+  EventChangeInfo,
+  EventClickInfo,
+  EventDisplayInfo,
+  EventInput,
+} from "@fullcalendar/react";
+import interactionPlugin from "@fullcalendar/react/interaction";
+import themePlugin from "@fullcalendar/react/themes/breezy";
+import timeGridPlugin from "@fullcalendar/react/timegrid";
 import * as stylex from "@stylexjs/stylex";
 import { ChevronLeft, ChevronRight, Square, SquareCheck } from "lucide-react";
-import type { DragEvent } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import type { DragEvent, ReactNode } from "react";
 
-import { color, font, radius, space, tag } from "../tokens.stylex.ts";
+import { color, font, space } from "../tokens.stylex.ts";
 import { Button } from "./button.tsx";
 import { IconButton } from "./icon-button.tsx";
 import { taskDragType } from "./task-row.tsx";
-import { toneStyles } from "./tone.ts";
-import type { Tone } from "./tone.ts";
-import { VisuallyHidden } from "./visually-hidden.tsx";
 
-export interface CalendarDay {
-  key: string;
-  /** Short weekday name: "Mon". */
-  weekday: string;
-  dayNumber: number;
-  isToday: boolean;
-}
-
-export type CalendarItemKind = "meeting" | "focus" | "personal" | "task";
-
-export interface CalendarItem {
+/** Something on the calendar: an event, or a task placed in a time slot. */
+export interface CalendarEntry {
   id: string;
-  /** 0 for the first day shown, 6 for the last. */
-  dayIndex: number;
-  /** Minutes since midnight. */
-  startMinute: number;
-  endMinute: number;
   title: string;
-  /** "10:00 – 11:00 · Q4 Planning". Hidden on items too short to fit it. */
-  detail?: string;
-  /** Tasks are drawn dashed so they read as plans, not appointments. */
-  kind: CalendarItemKind;
+  allDay: boolean;
+  /** `YYYY-MM-DDTHH:mm`, or `YYYY-MM-DD` for all-day entries. */
+  start: string;
+  /** Exclusive, in the same format as start. */
+  end: string;
+  /** Tasks are drawn dashed, so they read as plans rather than appointments. */
+  kind: "event" | "task";
+  /** A CSS color for events. Tasks use the accent color. */
+  color?: string;
+  /** False keeps the entry from being dragged or resized. */
+  editable: boolean;
   done?: boolean;
+  /** Shown after the time, such as the task's project. */
+  detail?: string;
 }
 
-export interface AllDayItem {
-  id: string;
-  title: string;
-  startIndex: number;
-  endIndex: number;
-  tone: Tone;
+/** A span of time on the calendar, in the same formats as an entry. */
+export interface CalendarRange {
+  start: string;
+  end: string;
+  allDay: boolean;
 }
 
 export interface WeekCalendarProps {
   title: string;
   subtitle?: string;
-  days: readonly CalendarDay[];
-  allDay?: readonly AllDayItem[];
-  items: readonly CalendarItem[];
-  /** The current time in minutes since midnight, drawn in today's column. */
-  nowMinute?: number | null;
+  /** Any day of the week to show, as `YYYY-MM-DD`. */
+  date: string;
+  entries: readonly CalendarEntry[];
+  /** Extra controls in the header, such as a sync button. */
+  actions?: ReactNode;
+  /** The hour the grid scrolls to first. */
   firstHour?: number;
-  lastHour?: number;
-  hourHeight?: number;
   onPrevious: () => void;
   onNext: () => void;
   onToday: () => void;
-  onItemOpen?: (id: string) => void;
-  /** Called when a dragged task row is dropped, snapped to 15 minutes. */
-  onDropTask?: (taskId: string, dayIndex: number, minute: number) => void;
+  /** The user clicked an empty slot or dragged across empty slots. */
+  onSelectRange?: (range: CalendarRange) => void;
+  onEntryOpen?: (id: string) => void;
+  /**
+   * The user moved or resized an entry. If the returned promise rejects,
+   * the entry goes back where it was.
+   */
+  onEntryChange?: (id: string, range: CalendarRange) => Promise<void>;
+  /** A task row was dropped on the grid, at a time snapped to 15 minutes. */
+  onDropTask?: (taskId: string, start: string) => void;
 }
 
-const gutter = 64;
-const noAllDayItems: readonly AllDayItem[] = [];
 const snapMinutes = 15;
+const slotMinutes = 30;
+
+/** A click on an empty slot proposes this long an event, like Google Calendar. */
+const clickMinutes = 60;
 
 const styles = stylex.create({
-  allDay: {
-    borderBottomColor: color.borderDefault,
-    borderBottomStyle: "solid",
-    borderBottomWidth: 1,
-    display: "grid",
-    gap: 2,
-    gridAutoRows: 20,
-    paddingBlock: space.s1,
-  },
-  allDayItem: {
-    alignItems: "center",
-    borderRadius: radius.sm,
+  content: {
     display: "flex",
-    fontSize: font.size11,
-    fontWeight: font.weightMedium,
-    marginInline: 2,
+    flexDirection: "column",
+    gap: 1,
+    height: "100%",
+    minWidth: 0,
     overflow: "hidden",
-    paddingInline: 6,
-    whiteSpace: "nowrap",
+    paddingBlock: 2,
+    paddingInline: 4,
   },
-  allDayLabel: {
-    alignSelf: "center",
-    color: color.textTertiary,
-    fontSize: 10,
-    gridColumn: 1,
-    gridRow: 1,
-    paddingInlineStart: space.s2,
-  },
-  column: {
-    borderInlineStartColor: color.borderDefault,
-    borderInlineStartStyle: "solid",
-    borderInlineStartWidth: 1,
-    listStyle: "none",
-    margin: 0,
-    padding: 0,
-    position: "relative",
-  },
-  columnToday: { backgroundColor: color.bgToday },
+  // The weekday sits above the number, so narrow columns still fit.
   dayHeader: {
-    alignItems: "baseline",
+    alignItems: "center",
     color: color.textSecondary,
     display: "flex",
-    fontSize: font.size12,
-    gap: 6,
-    paddingBlock: space.s3,
-    paddingInline: space.s2,
-  },
-  dayHeaders: {
-    display: "grid",
+    flexDirection: "column",
+    fontSize: font.size11,
+    gap: 2,
+    paddingBlock: space.s1,
+    textTransform: "uppercase",
+    width: "100%",
   },
   dayNumber: {
     alignItems: "center",
@@ -129,113 +115,44 @@ const styles = stylex.create({
   },
   dayNumberToday: {
     backgroundColor: color.accent,
-    borderRadius: radius.full,
+    borderRadius: 999,
     color: color.textOnAccent,
   },
   detail: {
-    color: color.textSecondary,
     fontSize: font.size11,
+    opacity: 0.85,
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
-  focus: {
-    backgroundColor: tag.purpleBg,
-    borderInlineStartColor: tag.purpleFg,
+  grid: {
+    // The theme's colors, from the design tokens.
+    "--fc-breezy-background": color.bgPage,
+    "--fc-breezy-border": color.borderDefault,
+    "--fc-breezy-foreground": color.textSecondary,
+    "--fc-breezy-highlight": color.accentSubtle,
+    "--fc-breezy-muted-border": color.borderDefault,
+    "--fc-breezy-muted-foreground": color.textTertiary,
+    "--fc-breezy-now": color.nowLine,
+    "--fc-breezy-primary": color.accent,
+    "--fc-breezy-primary-foreground": color.textOnAccent,
+    "--fc-breezy-primary-over": color.accentHover,
+    "--fc-breezy-strong-border": color.borderStrong,
+    "--fc-breezy-strong-foreground": color.textPrimary,
+    flexGrow: 1,
+    fontFamily: font.family,
+    fontSize: font.size12,
+    minHeight: 0,
   },
   header: {
     alignItems: "center",
     display: "flex",
+    flexShrink: 0,
     gap: space.s2,
     height: 52,
     paddingInline: space.s4,
   },
   headerSpacer: { flexGrow: 1 },
-  hourLabel: {
-    color: color.textTertiary,
-    fontSize: 10,
-    paddingInlineEnd: space.s2,
-    position: "absolute",
-    right: 0,
-    transform: "translateY(-50%)",
-    whiteSpace: "nowrap",
-  },
-  hourLine: {
-    borderTopColor: color.borderDefault,
-    borderTopStyle: "solid",
-    borderTopWidth: 1,
-    left: gutter,
-    position: "absolute",
-    right: 0,
-  },
-  item: {
-    backgroundColor: color.accentSubtle,
-    borderInlineStartColor: tag.blueFg,
-    borderInlineStartStyle: "solid",
-    borderInlineStartWidth: 3,
-    borderRadius: radius.sm,
-    boxSizing: "border-box",
-    color: color.textPrimary,
-    cursor: "default",
-    display: "flex",
-    flexDirection: "column",
-    fontFamily: font.family,
-    gap: 1,
-    overflow: "hidden",
-    paddingBlock: 3,
-    paddingInline: 6,
-    position: "absolute",
-    textAlign: "start",
-  },
-  itemButton: {
-    backgroundColor: "transparent",
-    borderStyle: "none",
-    color: "inherit",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    gap: 1,
-    height: "100%",
-    padding: 0,
-    textAlign: "start",
-    width: "100%",
-  },
-  itemTitle: {
-    alignItems: "center",
-    display: "flex",
-    fontSize: font.size12,
-    fontWeight: font.weightSemibold,
-    gap: 4,
-    minWidth: 0,
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-  },
-  itemTitleText: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-  meeting: {},
-  now: {
-    backgroundColor: color.nowLine,
-    height: 2,
-    left: -4,
-    position: "absolute",
-    right: 0,
-    zIndex: 2,
-  },
-  nowDot: {
-    backgroundColor: color.nowLine,
-    borderRadius: radius.full,
-    height: 8,
-    left: 0,
-    position: "absolute",
-    top: -3,
-    width: 8,
-  },
-  personal: {
-    backgroundColor: tag.greenBg,
-    borderInlineStartColor: tag.greenFg,
-  },
   root: {
     backgroundColor: color.bgPage,
     display: "flex",
@@ -244,132 +161,235 @@ const styles = stylex.create({
     height: "100%",
     minWidth: 0,
   },
-  scroll: {
-    flexGrow: 1,
-    minHeight: 0,
-    overflowY: "auto",
-    // Room above the first hour so its label is not cut off.
-    paddingTop: space.s3,
-  },
   subtitle: { color: color.textTertiary, fontSize: font.size13 },
   task: {
     backgroundColor: color.bgPage,
     borderColor: color.accent,
+    borderRadius: 4,
     borderStyle: "dashed",
     borderWidth: 1,
     color: color.textLink,
   },
-  timeline: {
-    display: "grid",
-    position: "relative",
-  },
-
   title: {
     color: color.textPrimary,
     fontSize: font.size15,
     fontWeight: font.weightSemibold,
     margin: 0,
   },
-  weekday: { fontSize: font.size12 },
+  titleLine: {
+    alignItems: "center",
+    display: "flex",
+    fontSize: font.size12,
+    fontWeight: font.weightSemibold,
+    gap: 4,
+    minWidth: 0,
+    whiteSpace: "nowrap",
+  },
+  titleText: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 });
 
-const kindStyle = {
-  focus: styles.focus,
-  meeting: styles.meeting,
-  personal: styles.personal,
-  task: styles.task,
-} as const;
+const pad = (value: number): string => String(value).padStart(2, "0");
 
-interface PlacedItem extends CalendarItem {
-  lane: number;
-  lanes: number;
-}
+const dayOf = (date: Date): string =>
+  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
-/** Side-by-side lanes for items that overlap on the same day. */
-const placeItems = (
-  items: readonly CalendarItem[],
-  dayCount: number
-): PlacedItem[][] =>
-  Array.from({ length: dayCount }, (_, dayIndex) => {
-    const placed: PlacedItem[] = [];
-    const dayItems = items.filter((item) => item.dayIndex === dayIndex);
-    const sorted = dayItems.toSorted((a, b) => a.startMinute - b.startMinute);
-    const laneEnds: number[] = [];
+const timeOf = (date: Date): string =>
+  `${dayOf(date)}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 
-    const lanesOf = sorted.map((item) => {
-      const free = laneEnds.findIndex((end) => end <= item.startMinute);
-      const lane = free === -1 ? laneEnds.length : free;
+const addMinutes = (date: Date, minutes: number): Date =>
+  new Date(date.getTime() + minutes * 60_000);
 
-      laneEnds[lane] = item.endMinute;
+const rangeOf = (start: Date, end: Date, allDay: boolean): CalendarRange =>
+  allDay
+    ? { allDay, end: dayOf(end), start: dayOf(start) }
+    : { allDay, end: timeOf(end), start: timeOf(start) };
 
-      return lane;
-    });
+/** The task's look, or the event's color for the theme to paint. */
+const toEventInput = (entry: CalendarEntry): EventInput => ({
+  allDay: entry.allDay,
+  color: entry.kind === "task" ? "transparent" : entry.color,
+  editable: entry.editable,
+  end: entry.end,
+  extendedProps: { entry },
+  id: entry.id,
+  start: entry.start,
+  textColor: entry.kind === "task" ? undefined : color.textOnAccent,
+  title: entry.title,
+});
 
-    for (const [index, item] of sorted.entries()) {
-      const overlapping = sorted.filter(
-        (other) =>
-          other.startMinute < item.endMinute &&
-          other.endMinute > item.startMinute
-      );
+const EntryContent = ({ info }: { info: EventDisplayInfo }) => {
+  // SAFETY: events come from toEventInput, which stores the entry here. The
+  // preview of a new selection has none.
+  const entry = info.event.extendedProps.entry as CalendarEntry | undefined;
+  const isTask = entry?.kind === "task";
+  const allDay = entry?.allDay ?? info.event.allDay;
+  const title = entry?.title ?? info.event.title;
 
-      const lanes =
-        Math.max(
-          ...overlapping.map((other) => lanesOf[sorted.indexOf(other)] ?? 0)
-        ) + 1;
+  const detail = [info.timeText, entry?.detail]
+    .filter((part) => part !== undefined && part !== "")
+    .join(" · ");
 
-      placed.push({ ...item, lane: lanesOf[index] ?? 0, lanes });
-    }
-
-    return placed;
-  });
-
-/** The first row where each all-day item fits without overlapping another. */
-const packRows = (items: readonly AllDayItem[]): number[] => {
-  const rowEnds: number[] = [];
-
-  return items.map((item) => {
-    const free = rowEnds.findIndex((end) => end < item.startIndex);
-    const row = free === -1 ? rowEnds.length : free;
-
-    rowEnds[row] = item.endIndex;
-
-    return row;
-  });
+  return (
+    <div {...stylex.props(styles.content, isTask && styles.task)}>
+      <span {...stylex.props(styles.titleLine)}>
+        {isTask &&
+          (entry?.done === true ? (
+            <SquareCheck aria-label="Done" size={11} />
+          ) : (
+            <Square aria-hidden size={11} />
+          ))}
+        <span {...stylex.props(styles.titleText)}>
+          {title === "" ? "(No title)" : title}
+        </span>
+      </span>
+      {allDay || detail === "" ? null : (
+        <span {...stylex.props(styles.detail)}>{detail}</span>
+      )}
+    </div>
+  );
 };
 
-/** A seven-day calendar with a time grid, like the right pane of the app. */
-export const WeekCalendar = ({
-  title,
-  subtitle,
-  days,
-  allDay = noAllDayItems,
-  items,
-  nowMinute = null,
-  firstHour = 7,
-  lastHour = 22,
-  hourHeight = 80,
-  onPrevious,
-  onNext,
-  onToday,
-  onItemOpen,
-  onDropTask,
-}: WeekCalendarProps) => {
-  const hours = Array.from(
-    { length: lastHour - firstHour + 1 },
-    (_, index) => firstHour + index
+const weekdayFormat = new Intl.DateTimeFormat(undefined, { weekday: "short" });
+
+/** "Mon 19", with today's number in a circle. */
+const DayHeader = ({ info }: { info: DayHeaderInfo }) => (
+  <span {...stylex.props(styles.dayHeader)}>
+    <span>{weekdayFormat.format(info.date)}</span>
+    <span
+      {...stylex.props(styles.dayNumber, info.isToday && styles.dayNumberToday)}
+    >
+      {info.date.getDate()}
+    </span>
+  </span>
+);
+
+const renderEntry = (info: EventDisplayInfo) => <EntryContent info={info} />;
+
+const renderDayHeader = (info: DayHeaderInfo) => <DayHeader info={info} />;
+
+/** The time under the pointer, from the grid's own slot and day elements. */
+const timeAtPoint = (
+  root: HTMLElement,
+  x: number,
+  y: number
+): string | null => {
+  const contains = (element: Element) => {
+    const box = element.getBoundingClientRect();
+
+    return x >= box.left && x < box.right && y >= box.top && y < box.bottom;
+  };
+
+  const day = [...root.querySelectorAll<HTMLElement>("[data-date]")].find(
+    (element) => element.closest("[data-time]") === null && contains(element)
   );
 
-  const height = (lastHour - firstHour + 1) * hourHeight;
-  const columns = `${gutter}px repeat(${days.length}, minmax(0, 1fr))`;
-  const placedByDay = placeItems(items, days.length);
-  const allDayRows = packRows(allDay);
+  const slot = [...root.querySelectorAll<HTMLElement>("[data-time]")].find(
+    (element) => {
+      const box = element.getBoundingClientRect();
 
-  const top = (minute: number): number =>
-    ((minute - firstHour * 60) / 60) * hourHeight;
+      return y >= box.top && y < box.bottom;
+    }
+  );
 
-  const acceptDrag = (event: DragEvent<HTMLOListElement>): void => {
+  const date = day?.dataset.date;
+  const time = slot?.dataset.time;
+
+  if (slot === undefined || date === undefined || time === undefined) {
+    return null;
+  }
+
+  const [hours = 0, minutes = 0] = time.split(":").map(Number);
+  const box = slot.getBoundingClientRect();
+  const offset = ((y - box.top) / box.height) * slotMinutes;
+
+  const minute =
+    Math.round((hours * 60 + minutes + offset) / snapMinutes) * snapMinutes;
+
+  return `${date}T${pad(Math.floor(minute / 60))}:${pad(minute % 60)}`;
+};
+
+/**
+ * A week of days with a time grid, built on FullCalendar. Click or drag on
+ * empty slots to propose an event; drag entries to move them, or their
+ * bottom edge to change their length.
+ */
+export const WeekCalendar = (props: WeekCalendarProps) => {
+  const { title, subtitle, date, entries, actions, firstHour = 7 } = props;
+  const calendar = useRef<CalendarRef>(null);
+  const grid = useRef<HTMLDivElement>(null);
+
+  // FullCalendar re-renders when an option changes identity, so its
+  // callbacks are made once and read the latest props through this ref.
+  const latest = useRef(props);
+
+  useLayoutEffect(() => {
+    latest.current = props;
+  });
+
+  useEffect(() => {
+    calendar.current?.getApi().gotoDate(date);
+  }, [date]);
+
+  const events = useMemo(() => entries.map(toEventInput), [entries]);
+
+  const handlers = useMemo(() => {
+    const change = (info: EventChangeInfo): void => {
+      const { start, end, allDay, id } = info.event;
+
+      if (start === null) {
+        info.revert();
+
+        return;
+      }
+
+      const until = end ?? addMinutes(start, allDay ? 24 * 60 : clickMinutes);
+
+      latest.current
+        .onEntryChange?.(id, rangeOf(start, until, allDay))
+        .catch(() => {
+          info.revert();
+        });
+    };
+
+    return {
+      dateClick: (info: DateClickInfo) => {
+        // A click means the half hour under the pointer, not the quarter.
+        const start = new Date(info.date);
+
+        start.setMinutes(
+          Math.floor(start.getMinutes() / slotMinutes) * slotMinutes
+        );
+        latest.current.onSelectRange?.(
+          rangeOf(
+            start,
+            addMinutes(start, info.allDay ? 24 * 60 : clickMinutes),
+            info.allDay
+          )
+        );
+      },
+      dayHeaderContent: renderDayHeader,
+      eventClick: (info: EventClickInfo) => {
+        info.jsEvent.preventDefault();
+        latest.current.onEntryOpen?.(info.event.id);
+      },
+      eventContent: renderEntry,
+      eventDrop: change,
+      eventResize: change,
+      select: (info: DateSelectInfo) => {
+        calendar.current?.getApi().unselect();
+        latest.current.onSelectRange?.(
+          rangeOf(info.start, info.end, info.allDay)
+        );
+      },
+    };
+  }, []);
+
+  const acceptDrag = (event: DragEvent<HTMLDivElement>): void => {
     if (
-      onDropTask !== undefined &&
+      props.onDropTask !== undefined &&
       event.dataTransfer.types.includes(taskDragType)
     ) {
       event.preventDefault();
@@ -377,29 +397,20 @@ export const WeekCalendar = ({
     }
   };
 
-  const dropOn = (dayIndex: number) => (event: DragEvent<HTMLOListElement>) => {
+  const drop = (event: DragEvent<HTMLDivElement>): void => {
     const taskId = event.dataTransfer.getData(taskDragType);
 
-    if (
-      onDropTask === undefined ||
-      taskId === "" ||
-      !Number.isFinite(event.clientY)
-    ) {
+    const start =
+      grid.current === null
+        ? null
+        : timeAtPoint(grid.current, event.clientX, event.clientY);
+
+    if (props.onDropTask === undefined || taskId === "" || start === null) {
       return;
     }
 
     event.preventDefault();
-
-    const offset =
-      event.clientY - event.currentTarget.getBoundingClientRect().top;
-
-    const minute = firstHour * 60 + (offset / hourHeight) * 60;
-
-    onDropTask(
-      taskId,
-      dayIndex,
-      Math.round(minute / snapMinutes) * snapMinutes
-    );
+    props.onDropTask(taskId, start);
   };
 
   return (
@@ -410,173 +421,59 @@ export const WeekCalendar = ({
           <span {...stylex.props(styles.subtitle)}>{subtitle}</span>
         )}
         <span {...stylex.props(styles.headerSpacer)} />
-        <Button onClick={onToday} size="small" variant="outline">
+        {actions}
+        <Button onClick={props.onToday} size="small" variant="outline">
           Today
         </Button>
         <IconButton
           icon={<ChevronLeft size={16} />}
           label="Previous week"
-          onClick={onPrevious}
+          onClick={props.onPrevious}
         />
         <IconButton
           icon={<ChevronRight size={16} />}
           label="Next week"
-          onClick={onNext}
+          onClick={props.onNext}
         />
       </div>
 
+      {/* Dropping task rows is a mouse shortcut; the task dialog schedules by keyboard. */}
+      {/* oxlint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
-        {...stylex.props(styles.dayHeaders)}
-        style={{ gridTemplateColumns: columns }}
+        onDragOver={acceptDrag}
+        onDrop={drop}
+        ref={grid}
+        {...stylex.props(styles.grid)}
       >
-        <span />
-        {days.map((day) => (
-          <div
-            aria-current={day.isToday ? "date" : undefined}
-            key={day.key}
-            {...stylex.props(styles.dayHeader)}
-          >
-            <span {...stylex.props(styles.weekday)}>{day.weekday}</span>
-            <span
-              {...stylex.props(
-                styles.dayNumber,
-                day.isToday && styles.dayNumberToday
-              )}
-            >
-              {day.dayNumber}
-            </span>
-          </div>
-        ))}
+        <FullCalendar
+          allDayText="all-day"
+          borderlessBottom
+          borderlessX
+          dateClick={handlers.dateClick}
+          dayHeaderContent={handlers.dayHeaderContent}
+          editable
+          eventClick={handlers.eventClick}
+          eventContent={handlers.eventContent}
+          eventDrop={handlers.eventDrop}
+          eventResize={handlers.eventResize}
+          events={events}
+          firstDay={1}
+          headerToolbar={false}
+          height="100%"
+          initialDate={date}
+          initialView="timeGridWeek"
+          nowIndicator
+          plugins={[themePlugin, timeGridPlugin, interactionPlugin]}
+          ref={calendar}
+          scrollTime={`${pad(firstHour)}:00:00`}
+          select={handlers.select}
+          selectMinDistance={5}
+          selectMirror
+          selectable
+          slotDuration={`00:${slotMinutes}:00`}
+          snapDuration={`00:${snapMinutes}:00`}
+        />
       </div>
-
-      <div
-        {...stylex.props(styles.allDay)}
-        style={{ gridTemplateColumns: columns }}
-      >
-        <span {...stylex.props(styles.allDayLabel)}>all-day</span>
-        {allDay.map((item, row) => (
-          <span
-            key={item.id}
-            {...stylex.props(styles.allDayItem, toneStyles[item.tone])}
-            style={{
-              gridColumn: `${item.startIndex + 2} / ${item.endIndex + 3}`,
-              gridRow: (allDayRows[row] ?? 0) + 1,
-            }}
-          >
-            {item.title}
-          </span>
-        ))}
-      </div>
-
-      {/* A scrollable region must take focus so keyboard users can scroll it (WCAG 2.1.1). */}
-      {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-      <section aria-label="Hours" tabIndex={0} {...stylex.props(styles.scroll)}>
-        <div
-          {...stylex.props(styles.timeline)}
-          style={{ gridTemplateColumns: columns, height }}
-        >
-          {hours.map((hour) => (
-            <div
-              aria-hidden
-              key={hour}
-              {...stylex.props(styles.hourLine)}
-              style={{ top: top(hour * 60) }}
-            >
-              <span
-                {...stylex.props(styles.hourLabel)}
-                style={{ right: "100%" }}
-              >
-                {hour % 12 === 0 ? 12 : hour % 12} {hour < 12 ? "AM" : "PM"}
-              </span>
-            </div>
-          ))}
-          <span />
-          {days.map((day, dayIndex) => (
-            // Each day column accepts dropped task rows to time-block them.
-            // Dragging is a mouse shortcut; the app also schedules by keyboard.
-            // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-            <ol
-              aria-label={`${day.weekday} ${day.dayNumber}`}
-              key={day.key}
-              onDragOver={acceptDrag}
-              onDrop={dropOn(dayIndex)}
-              {...stylex.props(
-                styles.column,
-                day.isToday && styles.columnToday
-              )}
-            >
-              {day.isToday && nowMinute !== null ? (
-                <li
-                  {...stylex.props(styles.now)}
-                  style={{ top: top(nowMinute) }}
-                >
-                  <span {...stylex.props(styles.nowDot)} />
-                  <VisuallyHidden>Current time</VisuallyHidden>
-                </li>
-              ) : null}
-              {(placedByDay[dayIndex] ?? []).map((item) => {
-                const tall = item.endMinute - item.startMinute > 30;
-
-                const itemStyle = stylex.props(
-                  styles.item,
-                  kindStyle[item.kind]
-                );
-
-                const position = {
-                  height:
-                    ((item.endMinute - item.startMinute) / 60) * hourHeight - 2,
-                  left: `calc(${(item.lane / item.lanes) * 100}% + 3px)`,
-                  top: top(item.startMinute) + 1,
-                  width: `calc(${100 / item.lanes}% - 6px)`,
-                };
-
-                const content = (
-                  <>
-                    <span {...stylex.props(styles.itemTitle)}>
-                      {item.kind === "task" &&
-                        (item.done === true ? (
-                          <SquareCheck aria-label="Done" size={11} />
-                        ) : (
-                          <Square aria-hidden size={11} />
-                        ))}
-                      <span {...stylex.props(styles.itemTitleText)}>
-                        {item.title}
-                      </span>
-                    </span>
-                    {tall && item.detail !== undefined ? (
-                      <span {...stylex.props(styles.detail)}>
-                        {item.detail}
-                      </span>
-                    ) : null}
-                  </>
-                );
-
-                return (
-                  <li
-                    key={item.id}
-                    {...itemStyle}
-                    style={{ ...itemStyle.style, ...position }}
-                  >
-                    {onItemOpen === undefined ? (
-                      content
-                    ) : (
-                      <button
-                        onClick={() => {
-                          onItemOpen(item.id);
-                        }}
-                        type="button"
-                        {...stylex.props(styles.itemButton)}
-                      >
-                        {content}
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-          ))}
-        </div>
-      </section>
     </section>
   );
 };

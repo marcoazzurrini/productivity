@@ -104,3 +104,78 @@ describe("the journal", () => {
     await second.close();
   });
 });
+
+/** The middle of the grid cell for a day and a half-hour slot. */
+const slotPoint = async (window: Page, day: string, time: string) => {
+  const lane = await window
+    .locator(`[data-date="${day}"]:not([data-time] *)`)
+    .last()
+    .boundingBox();
+
+  const slot = await window
+    .locator(`[data-time="${time}"]`)
+    .first()
+    .boundingBox();
+
+  if (lane === null || slot === null) {
+    throw new Error(`No grid cell for ${day} at ${time}.`);
+  }
+
+  return {
+    x: lane.x + lane.width / 2,
+    y: slot.y + slot.height / 2,
+  };
+};
+
+describe("the calendar", () => {
+  const dataDir = mkdtempSync(path.join(tmpdir(), "productivity-e2e-"));
+
+  afterAll(() => {
+    rmSync(dataDir, { force: true, recursive: true });
+  });
+
+  it("creates an event from a click and keeps it after a restart", async () => {
+    const first = await launch(dataDir);
+    const window = await first.firstWindow();
+    const week = window.getByRole("complementary", { name: "Week" });
+
+    await week
+      .locator(`[data-time="10:00:00"]`)
+      .first()
+      .waitFor({ state: "attached" });
+
+    const today = await window.evaluate(() => {
+      const now = new Date();
+
+      return [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0"),
+      ].join("-");
+    });
+
+    const point = await slotPoint(window, today, "10:00:00");
+
+    await window.mouse.click(point.x, point.y);
+
+    const dialog = window.getByRole("dialog", { name: "New event" });
+
+    await dialog.getByRole("textbox", { name: "Title" }).fill("Plant trees");
+    await dialog.getByRole("button", { name: "Save" }).click();
+    await week.getByText("Plant trees").waitFor();
+    await first.close();
+
+    const second = await launch(dataDir);
+    const reopened = await second.firstWindow();
+
+    const kept = reopened
+      .getByRole("complementary", { name: "Week" })
+      .getByText("Plant trees");
+
+    await kept.waitFor();
+
+    await expect(kept.count()).resolves.toBe(1);
+
+    await second.close();
+  });
+});

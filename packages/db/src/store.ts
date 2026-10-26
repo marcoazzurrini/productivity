@@ -1,5 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 
+import type { CalendarRepository } from "@productivity/calendar";
 import {
   isReviewDue,
   nextReviewOn,
@@ -10,11 +11,9 @@ import {
   weekDays,
 } from "@productivity/gtd";
 import type {
-  CalendarEvent,
   CaptureInput,
   ClarifyOutcome,
   GtdStore,
-  NewEvent,
   NewProject,
   Overview,
   Project,
@@ -40,14 +39,15 @@ import {
 import type { SQL } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-sqlite";
 
+import { createCalendarRepository } from "./calendar.ts";
 import { createJournal } from "./journal.ts";
 import type { JournalStore } from "./journal.ts";
 import { migrate } from "./migrate.ts";
-import { toEvent, toProject, toTask, toTaskRow } from "./rows.ts";
+import { toProject, toTask, toTaskRow } from "./rows.ts";
 import {
   areas,
+  calendarEvents,
   contexts,
-  events,
   projects,
   reviewSteps,
   settings,
@@ -67,6 +67,8 @@ export interface StoreOptions {
 export interface Store extends GtdStore {
   /** The journal, kept in the same database. */
   journal: JournalStore;
+  /** Storage for @productivity/calendar, kept in the same database. */
+  calendarRepository: CalendarRepository;
   close: () => void;
 }
 
@@ -228,11 +230,12 @@ export const openStore = (options: StoreOptions): Store => {
       )
       .run();
 
-    db.insert(events)
+    // The migrations created the local calendar these go on.
+    db.insert(calendarEvents)
       .values(
         sample.events.map((event) => ({
           ...event,
-          allDay: event.allDay === true,
+          calendarId: "local",
           id: newId(),
         }))
       )
@@ -290,6 +293,8 @@ export const openStore = (options: StoreOptions): Store => {
       return findTask(taskId);
     },
 
+    calendarRepository: createCalendarRepository(db),
+
     capture: (input: CaptureInput) => {
       const title = input.title.trim();
 
@@ -345,14 +350,6 @@ export const openStore = (options: StoreOptions): Store => {
 
     close: () => {
       client.close();
-    },
-
-    createEvent: (event: NewEvent) => {
-      const created: CalendarEvent = { ...event, id: newId() };
-
-      db.insert(events).values(created).run();
-
-      return created;
     },
 
     createProject: insertProject,
@@ -452,17 +449,11 @@ export const openStore = (options: StoreOptions): Store => {
           .all()
           .map(toTask),
         days,
-        events: db
-          .select()
-          .from(events)
-          .where(between(events.start, from, until))
-          .orderBy(asc(events.start))
-          .all()
-          .map(toEvent),
       };
     },
 
     journal: createJournal(db, now),
+
     listAreas: () =>
       db
         .select({ id: areas.id, name: areas.name })

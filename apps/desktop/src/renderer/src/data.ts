@@ -1,6 +1,8 @@
+import type { RemoteCalendar } from "@productivity/calendar";
 import type { LocalDate, RemoteGtdStore } from "@productivity/gtd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useCalendar } from "./calendar-context.tsx";
 import { useStore } from "./store-context.tsx";
 
 /**
@@ -62,3 +64,50 @@ export const useStoreAction = <Input, Result>(
     onSettled: () => client.invalidateQueries(),
   });
 };
+
+const useCalendarRead = <Result>(
+  key: readonly string[],
+  fetch: (calendar: RemoteCalendar) => Promise<Result>
+) => {
+  const calendar = useCalendar();
+
+  return useQuery({
+    queryFn: () => fetch(calendar),
+    queryKey: ["calendar", ...key],
+  });
+};
+
+/** Events that overlap the days [from, to). */
+export const useEvents = (from: LocalDate, to: LocalDate) =>
+  useCalendarRead(["events", from, to], (calendar) =>
+    calendar.listEvents(from, to)
+  );
+
+export const useCalendars = () =>
+  useCalendarRead(["calendars"], (calendar) => calendar.listCalendars());
+
+export const useSyncStatus = () =>
+  useCalendarRead(["status"], (calendar) => calendar.syncStatus());
+
+/** Runs a calendar write, then refreshes every list. */
+export const useCalendarAction = <Input, Result>(
+  action: (calendar: RemoteCalendar, input: Input) => Promise<Result>
+) => {
+  const calendar = useCalendar();
+  const client = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: Input) => action(calendar, input),
+    onSettled: () => client.invalidateQueries(),
+  });
+};
+
+/**
+ * The message of an error from the main process, without the "Error
+ * invoking remote method" wrapper Electron adds.
+ */
+export const errorText = (error: Error): string =>
+  error.message.replace(
+    /^Error invoking remote method '[^']+': (?:\w+: )?/u,
+    ""
+  );

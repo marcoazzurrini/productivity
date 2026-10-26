@@ -1,176 +1,112 @@
 import { describe, expect, mock, test } from "bun:test";
 
-import { createEvent, fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { WeekCalendar, taskDragType } from "../src/index.ts";
-import type { CalendarDay } from "../src/index.ts";
-
-const days: CalendarDay[] = [
-  "Mon",
-  "Tue",
-  "Wed",
-  "Thu",
-  "Fri",
-  "Sat",
-  "Sun",
-].map((weekday, index) => ({
-  dayNumber: 20 + index,
-  isToday: index === 3,
-  key: `day-${index}`,
-  weekday,
-}));
+import { WeekCalendar } from "../src/index.ts";
+import type { CalendarEntry, WeekCalendarProps } from "../src/index.ts";
 
 const noop = (): void => undefined;
 
+const entries: CalendarEntry[] = [
+  {
+    allDay: false,
+    color: "#039BE5",
+    editable: true,
+    end: "2026-10-22T11:00",
+    id: "planning",
+    kind: "event",
+    start: "2026-10-22T10:00",
+    title: "Q4 planning",
+  },
+  {
+    allDay: false,
+    detail: "Prepare Presentation",
+    done: true,
+    editable: true,
+    end: "2026-10-23T12:00",
+    id: "slides",
+    kind: "task",
+    start: "2026-10-23T11:00",
+    title: "Draft slide outline",
+  },
+  {
+    allDay: true,
+    color: "#8E24AA",
+    editable: false,
+    end: "2026-10-24",
+    id: "offsite",
+    kind: "event",
+    start: "2026-10-22",
+    title: "Offsite",
+  },
+];
+
+const calendar = (props: Partial<WeekCalendarProps> = {}) => (
+  <WeekCalendar
+    date="2026-10-23"
+    entries={entries}
+    onNext={noop}
+    onPrevious={noop}
+    onToday={noop}
+    subtitle="Week 43"
+    title="October 2026"
+    {...props}
+  />
+);
+
 describe("WeekCalendar", () => {
-  test("shows seven days and marks today", () => {
-    render(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="October 2026"
-      />
-    );
+  test("shows the week from Monday, with its entries", () => {
+    render(calendar());
 
-    const today = screen.getByText("23").parentElement;
-
-    expect(today?.getAttribute("aria-current")).toBe("date");
-    expect(screen.getByText("Sun")).toBeDefined();
-  });
-
-  test("draws the now line only when a time is given", () => {
-    const { rerender } = render(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        nowMinute={880}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="W"
-      />
-    );
-
-    expect(screen.getByText("Current time")).toBeDefined();
-
-    rerender(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="W"
-      />
-    );
-
-    expect(screen.queryByText("Current time")).toBeNull();
+    expect(screen.getByRole("heading", { name: "October 2026" })).toBeDefined();
+    expect(screen.getByText("Mon")).toBeDefined();
+    expect(screen.getByText("19")).toBeDefined();
+    expect(screen.getByText("Q4 planning")).toBeDefined();
+    expect(screen.getByText("Offsite")).toBeDefined();
+    expect(screen.getByText("Draft slide outline")).toBeDefined();
+    expect(screen.getByLabelText("Done")).toBeDefined();
   });
 
   test("navigates between weeks", async () => {
     const onNext = mock();
     const onPrevious = mock();
+    const onToday = mock();
 
-    render(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        onNext={onNext}
-        onPrevious={onPrevious}
-        onToday={noop}
-        title="W"
-      />
-    );
+    render(calendar({ onNext, onPrevious, onToday }));
+
     await userEvent.click(screen.getByRole("button", { name: "Next week" }));
     await userEvent.click(
       screen.getByRole("button", { name: "Previous week" })
     );
+    await userEvent.click(screen.getByRole("button", { name: "Today" }));
 
     expect(onNext).toHaveBeenCalledTimes(1);
     expect(onPrevious).toHaveBeenCalledTimes(1);
+    expect(onToday).toHaveBeenCalledTimes(1);
   });
 
-  test("opens an item when it is clicked", async () => {
-    const onItemOpen = mock();
+  test("opens an entry when it is clicked", async () => {
+    const onEntryOpen = mock();
 
-    render(
-      <WeekCalendar
-        days={days}
-        items={[
-          {
-            dayIndex: 1,
-            endMinute: 660,
-            id: "e1",
-            kind: "meeting",
-            startMinute: 600,
-            title: "1:1 with Olivia",
-          },
-        ]}
-        onItemOpen={onItemOpen}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="W"
-      />
-    );
-    await userEvent.click(
-      screen.getByRole("button", { name: /1:1 with Olivia/u })
-    );
+    render(calendar({ onEntryOpen }));
+    await userEvent.click(screen.getByText("Q4 planning"));
 
-    expect(onItemOpen).toHaveBeenCalledWith("e1");
+    expect(onEntryOpen).toHaveBeenCalledWith("planning");
   });
 
-  test("time-blocks a dropped task, snapped to 15 minutes", () => {
-    const onDropTask = mock();
+  test("shows extra header controls", () => {
+    render(calendar({ actions: <button type="button">Sync</button> }));
 
-    render(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        onDropTask={onDropTask}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="W"
-      />
-    );
-    const thursday = screen.getByRole("list", { name: "Thu 23" });
-
-    const drop = createEvent.drop(thursday, {
-      dataTransfer: { getData: () => "task-1", types: [taskDragType] },
-    });
-
-    // happy-dom ignores clientY in the event init, so set it directly.
-    // 100 px below the 7 AM line at 80 px an hour is 8:15 AM.
-    Object.defineProperty(drop, "clientY", { value: 100 });
-    fireEvent(thursday, drop);
-
-    expect(onDropTask).toHaveBeenCalledWith("task-1", 3, 495);
+    expect(screen.getByRole("button", { name: "Sync" })).toBeDefined();
   });
 
-  test("ignores drops that are not tasks", () => {
-    const onDropTask = mock();
+  test("moves to the week of a new date", () => {
+    const { rerender } = render(calendar());
 
-    render(
-      <WeekCalendar
-        days={days}
-        items={[]}
-        onDropTask={onDropTask}
-        onNext={noop}
-        onPrevious={noop}
-        onToday={noop}
-        title="W"
-      />
-    );
-    fireEvent.drop(screen.getByRole("list", { name: "Mon 20" }), {
-      clientY: 10,
-      dataTransfer: { getData: () => "", types: ["text/plain"] },
-    });
+    rerender(calendar({ date: "2026-10-30", entries: [] }));
 
-    expect(onDropTask).not.toHaveBeenCalled();
+    expect(screen.getByText("26")).toBeDefined();
+    expect(screen.queryByText("19")).toBeNull();
   });
 });

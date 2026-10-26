@@ -12,7 +12,7 @@ export interface TextFieldProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   description?: string;
-  type?: "text" | "date" | "number";
+  type?: "text" | "date" | "time" | "number";
   /** "bare" has no border, for the main field of a dialog. */
   appearance?: "boxed" | "bare";
   multiline?: boolean;

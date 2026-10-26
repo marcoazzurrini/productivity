@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@codemirror/view": "^6.43.15",
+    "@productivity/calendar": "workspace:*",
     "@productivity/db": "workspace:*",
     "@productivity/gtd": "workspace:*",
     "@productivity/ui": "workspace:*",

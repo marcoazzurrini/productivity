@@ -95,9 +95,7 @@ export { toneInk } from "./components/tone.ts";
 export { WeekCalendar } from "./components/week-calendar.tsx";
 
 export type {
-  AllDayItem,
-  CalendarDay,
-  CalendarItem,
-  CalendarItemKind,
+  CalendarEntry,
+  CalendarRange,
   WeekCalendarProps,
 } from "./components/week-calendar.tsx";

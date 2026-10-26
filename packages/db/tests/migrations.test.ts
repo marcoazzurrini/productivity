@@ -124,4 +124,72 @@ describe("migrations", () => {
 
     store.close();
   });
+
+  test("events move onto the local calendar, timed ones in UTC", () => {
+    const file = tempFile();
+    const legacy = new DatabaseSync(file);
+
+    migrate(legacy, migrations.slice(0, 2));
+    legacy.exec(
+      `insert into events (id, title, kind, start, end_at, all_day) values
+       ('standup', 'Standup', 'meeting', '2026-10-22T09:00', '2026-10-22T09:30', 0),
+       ('offsite', 'Offsite', 'focus', '2026-10-22T00:00', '2026-10-23T23:59', 1)`
+    );
+    legacy.close();
+
+    // SQLite converts with the system time zone, like the app's JavaScript.
+    // Bun's tests run JavaScript in UTC, so ask SQLite for the expected value.
+    const probe = new DatabaseSync(":memory:");
+
+    const utc = (local: string): string =>
+      String(
+        probe
+          .prepare("select strftime('%Y-%m-%dT%H:%M:%fZ', ?, 'utc') as utc")
+          .get(local)?.utc
+      );
+
+    const store = openStore({ clock: () => fixedNow, path: file });
+
+    const window = {
+      fromDate: "2026-10-19",
+      fromInstant: "2026-10-18T00:00:00.000Z",
+      toDate: "2026-10-26",
+      toInstant: "2026-10-27T00:00:00.000Z",
+    };
+
+    expect(store.calendarRepository.listCalendars()).toMatchObject([
+      { id: "local", source: "local", writable: true },
+    ]);
+    expect(store.calendarRepository.eventsIn(window)).toEqual([
+      {
+        allDay: true,
+        calendarId: "local",
+        editable: true,
+        end: "2026-10-24",
+        etag: null,
+        id: "offsite",
+        pending: null,
+        recurring: false,
+        remoteId: null,
+        start: "2026-10-22",
+        title: "Offsite",
+      },
+      {
+        allDay: false,
+        calendarId: "local",
+        editable: true,
+        end: utc("2026-10-22T09:30"),
+        etag: null,
+        id: "standup",
+        pending: null,
+        recurring: false,
+        remoteId: null,
+        start: utc("2026-10-22T09:00"),
+        title: "Standup",
+      },
+    ]);
+
+    probe.close();
+    store.close();
+  });
 });
