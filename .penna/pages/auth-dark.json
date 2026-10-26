@@ -1,0 +1,6088 @@
+{
+ "version": 2,
+ "name": "Auth · Dark",
+ "children": [
+  {
+   "id": "B9rvc",
+   "type": "frame",
+   "name": "Auth / 1 Welcome · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-page)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 0,
+   "y": 400,
+   "children": [
+    {
+     "id": "832VZ",
+     "type": "frame",
+     "name": "Titlebar",
+     "style": {
+      "height": "52px",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "8px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "4Cxmd",
+       "type": "frame",
+       "name": "Close",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      },
+      {
+       "id": "jprNX",
+       "type": "frame",
+       "name": "Minimise",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      },
+      {
+       "id": "ee3vJ",
+       "type": "frame",
+       "name": "Zoom",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      }
+     ]
+    },
+    {
+     "id": "pw3tN",
+     "type": "frame",
+     "name": "Body",
+     "style": {
+      "height": "796px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "gap": "40px",
+      "paddingBottom": "52px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "NqUDV",
+       "type": "frame",
+       "name": "Brand",
+       "style": {
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "20px"
+       },
+       "children": [
+        {
+         "id": "b352c",
+         "type": "frame",
+         "name": "App icon",
+         "style": {
+          "width": "88px",
+          "height": "88px",
+          "backgroundColor": "var(--color-accent-blue-strong)",
+          "borderRadius": "20px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "kh3h8",
+           "type": "frame",
+           "name": "custom",
+           "style": {
+            "width": "64px",
+            "height": "64px",
+            "position": "relative"
+           },
+           "children": [
+            {
+             "id": "8QRrz",
+             "type": "svg",
+             "name": "path",
+             "svg": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M35.99 17.68C28.38 14.91 19.86 17.8 15.51 24.63C11.15 31.47 12.13 40.41 17.86 46.14C23.59 51.87 32.53 52.85 39.37 48.49C46.2 44.14 49.09 35.62 46.32 28.01\" fill=\"none\" style=\"stroke:var(--color-text-on-accent)\" stroke-width=\"6.4\" stroke-linecap=\"round\"></path></svg>",
+             "style": {
+              "overflow": "visible",
+              "width": "64px",
+              "height": "64px",
+              "position": "absolute",
+              "left": "0px",
+              "top": "0px",
+              "boxSizing": "border-box"
+             }
+            },
+            {
+             "id": "K7c7K",
+             "type": "svg",
+             "name": "path",
+             "svg": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M41.73 17.15C41.73 19.98 44.02 22.27 46.85 22.27C49.68 22.27 51.97 19.98 51.97 17.15C51.97 14.32 49.68 12.03 46.85 12.03C44.02 12.03 41.73 14.32 41.73 17.15\" style=\"fill:var(--color-text-on-accent)\"></path></svg>",
+             "style": {
+              "overflow": "visible",
+              "width": "64px",
+              "height": "64px",
+              "position": "absolute",
+              "left": "0px",
+              "top": "0px"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "gGNua",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "wNAy7",
+           "type": "text",
+           "name": "Title",
+           "text": "Welcome to Productivity",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "32px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "ukzkS",
+           "type": "text",
+           "name": "Lede",
+           "text": "Sign in to keep your tasks in sync on this Mac and your iPhone.",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "lineHeight": "22px",
+            "whiteSpace": "pre"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "na86n",
+       "type": "frame",
+       "name": "Actions",
+       "style": {
+        "width": "320px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "12px"
+       },
+       "children": [
+        {
+         "id": "Wumca",
+         "type": "frame",
+         "name": "Button / Primary / Large",
+         "style": {
+          "height": "44px",
+          "backgroundColor": "var(--color-accent-blue-strong)",
+          "borderRadius": "8px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "KrYTb",
+           "type": "text",
+           "name": "Label",
+           "text": "Sign in",
+           "style": {
+            "color": "var(--color-text-on-accent)",
+            "fontFamily": "Inter",
+            "fontSize": "15px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "46Ad3",
+         "type": "frame",
+         "name": "Button / Secondary / Large",
+         "style": {
+          "height": "44px",
+          "backgroundColor": "var(--color-bg-card)",
+          "border": "1px solid var(--color-border-strong)",
+          "borderRadius": "8px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "gap": "8px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "cFzG7",
+           "type": "text",
+           "name": "Label",
+           "text": "Create an account",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "15px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "Mq3i3",
+         "type": "frame",
+         "name": "Hint",
+         "style": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "6px",
+          "paddingTop": "4px"
+         },
+         "children": [
+          {
+           "id": "kUmrE",
+           "type": "icon",
+           "name": "external-link",
+           "icon": "external-link",
+           "style": {
+            "color": "var(--color-text-muted)",
+            "width": "14px",
+            "height": "14px"
+           }
+          },
+          {
+           "id": "2Ehxt",
+           "type": "text",
+           "name": "Text",
+           "text": "Both open your browser, then bring you back here.",
+           "style": {
+            "color": "var(--color-text-muted)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "DAeBz",
+     "type": "frame",
+     "name": "Footer",
+     "style": {
+      "height": "52px",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "7Keiv",
+       "type": "text",
+       "name": "Text",
+       "text": "No passwords. Sign in with Touch ID, or with a link sent to your email.",
+       "style": {
+        "color": "var(--color-text-muted)",
+        "fontFamily": "Inter",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "whiteSpace": "pre",
+        "lineHeight": "normal"
+       }
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "fh2gp",
+   "type": "frame",
+   "name": "Auth / 2 Waiting for browser · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-page)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 1520,
+   "y": 400,
+   "children": [
+    {
+     "id": "TgS3B",
+     "type": "frame",
+     "name": "Titlebar",
+     "style": {
+      "height": "52px",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "8px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "HMAFA",
+       "type": "frame",
+       "name": "Close",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      },
+      {
+       "id": "STqmt",
+       "type": "frame",
+       "name": "Minimise",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      },
+      {
+       "id": "g5Ayb",
+       "type": "frame",
+       "name": "Zoom",
+       "style": {
+        "width": "12px",
+        "height": "12px",
+        "backgroundColor": "var(--color-bg-pressed)",
+        "borderRadius": "6px"
+       }
+      }
+     ]
+    },
+    {
+     "id": "YRs5a",
+     "type": "frame",
+     "name": "Body",
+     "style": {
+      "height": "796px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "gap": "32px",
+      "paddingBottom": "52px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "6mP2t",
+       "type": "frame",
+       "name": "Status",
+       "style": {
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "20px"
+       },
+       "children": [
+        {
+         "id": "VJSnj",
+         "type": "frame",
+         "name": "Spinner",
+         "style": {
+          "width": "88px",
+          "height": "88px",
+          "backgroundColor": "var(--color-accent-blue-subtle)",
+          "borderRadius": "44px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "5utHf",
+           "type": "icon",
+           "name": "loader-circle",
+           "icon": "loader-circle",
+           "style": {
+            "color": "var(--color-accent-blue-strong)",
+            "width": "36px",
+            "height": "36px"
+           }
+          }
+         ]
+        },
+        {
+         "id": "2WhDs",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "htj5y",
+           "type": "text",
+           "name": "Title",
+           "text": "Finish signing in in your browser",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "49X86",
+           "type": "text",
+           "name": "Lede",
+           "text": "We opened productivity.app in Safari. Sign in there with Touch ID or an email link, and this window updates by itself.",
+           "style": {
+            "width": "460px",
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "15px",
+            "fontWeight": "400",
+            "lineHeight": "22px",
+            "textAlign": "center",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "rRqrZ",
+       "type": "frame",
+       "name": "Actions",
+       "style": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "12px"
+       },
+       "children": [
+        {
+         "id": "HQ3V8",
+         "type": "frame",
+         "name": "Button / Secondary",
+         "style": {
+          "height": "36px",
+          "backgroundColor": "var(--color-bg-card)",
+          "border": "1px solid var(--color-border-strong)",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "gap": "6px",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "TuzAe",
+           "type": "icon",
+           "name": "external-link",
+           "icon": "external-link",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "width": "15px",
+            "height": "15px"
+           }
+          },
+          {
+           "id": "yvQfL",
+           "type": "text",
+           "name": "Label",
+           "text": "Open the browser again",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "3pUx8",
+         "type": "frame",
+         "name": "Button / Ghost",
+         "style": {
+          "height": "36px",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "WMBPt",
+           "type": "text",
+           "name": "Label",
+           "text": "Cancel",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "DSUrD",
+     "type": "frame",
+     "name": "Footer",
+     "style": {
+      "height": "52px",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "nuNBt",
+       "type": "text",
+       "name": "Text",
+       "text": "The browser hands a one-time code back to the app, so the app never sees your passkey or email link.",
+       "style": {
+        "color": "var(--color-text-muted)",
+        "fontFamily": "Inter",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "whiteSpace": "pre",
+        "lineHeight": "normal"
+       }
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "m4Kaa",
+   "type": "frame",
+   "name": "Auth / 3 Browser: Create account · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 0,
+   "y": 1400,
+   "children": [
+    {
+     "id": "74HZh",
+     "type": "frame",
+     "name": "Browser bar",
+     "style": {
+      "height": "52px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-default)",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "16px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "aAD38",
+       "type": "frame",
+       "name": "Lights",
+       "style": {
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "tJeD4",
+         "type": "frame",
+         "name": "Close",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "bhSQW",
+         "type": "frame",
+         "name": "Minimise",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "6sGPK",
+         "type": "frame",
+         "name": "Zoom",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "gEEnc",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      },
+      {
+       "id": "ZXpkc",
+       "type": "frame",
+       "name": "Address",
+       "style": {
+        "width": "520px",
+        "height": "32px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "8px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "gap": "6px"
+       },
+       "children": [
+        {
+         "id": "4eucB",
+         "type": "icon",
+         "name": "lock",
+         "icon": "lock",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "13px",
+          "height": "13px"
+         }
+        },
+        {
+         "id": "xfyc7",
+         "type": "text",
+         "name": "URL",
+         "text": "productivity.app/signup",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "YrnuQ",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      }
+     ]
+    },
+    {
+     "id": "pPc2w",
+     "type": "frame",
+     "name": "Page",
+     "style": {
+      "height": "848px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "X6CvM",
+       "type": "frame",
+       "name": "Card",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "borderRadius": "16px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "22px",
+        "padding": "40px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "guFui",
+         "type": "frame",
+         "name": "App icon",
+         "style": {
+          "width": "48px",
+          "height": "48px",
+          "backgroundColor": "var(--color-accent-blue-strong)",
+          "borderRadius": "11px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "qhLgH",
+           "type": "frame",
+           "name": "custom",
+           "style": {
+            "width": "34px",
+            "height": "34px",
+            "position": "relative"
+           },
+           "children": [
+            {
+             "id": "KYRHx",
+             "type": "svg",
+             "name": "path",
+             "svg": "<svg width=\"34\" height=\"34\" viewBox=\"0 0 34 34\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.12 9.39C15.08 7.92 10.55 9.46 8.24 13.09C5.93 16.72 6.45 21.47 9.49 24.51C12.53 27.55 17.28 28.07 20.91 25.76C24.54 23.45 26.08 18.92 24.61 14.88\" fill=\"none\" style=\"stroke:var(--color-text-on-accent)\" stroke-width=\"3.4\" stroke-linecap=\"round\"></path></svg>",
+             "style": {
+              "overflow": "visible",
+              "width": "34px",
+              "height": "34px",
+              "position": "absolute",
+              "left": "0px",
+              "top": "0px",
+              "boxSizing": "border-box"
+             }
+            },
+            {
+             "id": "hzmW8",
+             "type": "svg",
+             "name": "path",
+             "svg": "<svg width=\"34\" height=\"34\" viewBox=\"0 0 34 34\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M22.17 9.11C22.17 10.61 23.39 11.83 24.89 11.83C26.39 11.83 27.61 10.61 27.61 9.11C27.61 7.61 26.39 6.39 24.89 6.39C23.39 6.39 22.17 7.61 22.17 9.11Z\" style=\"fill:var(--color-text-on-accent)\"></path></svg>",
+             "style": {
+              "overflow": "visible",
+              "width": "34px",
+              "height": "34px",
+              "position": "absolute",
+              "left": "0px",
+              "top": "0px"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "WCT6k",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "6px"
+         },
+         "children": [
+          {
+           "id": "Kg9Eg",
+           "type": "text",
+           "name": "Title",
+           "text": "Create your account",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "b5VBY",
+           "type": "text",
+           "name": "Lede",
+           "text": "No password to remember. Use Touch ID, or get a link by email.",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "lineHeight": "20px",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "7bxci",
+         "type": "frame",
+         "name": "Fields",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "16px"
+         },
+         "children": [
+          {
+           "id": "QeFDu",
+           "type": "frame",
+           "name": "Field / Name",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "6px"
+           },
+           "children": [
+            {
+             "id": "bzLLW",
+             "type": "text",
+             "name": "Label",
+             "text": "Name",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "nfB72",
+             "type": "frame",
+             "name": "Input",
+             "style": {
+              "height": "40px",
+              "backgroundColor": "var(--color-bg-card)",
+              "border": "1px solid var(--color-border-strong)",
+              "borderRadius": "6px",
+              "alignSelf": "stretch",
+              "display": "flex",
+              "alignItems": "center",
+              "paddingInline": "12px",
+              "boxSizing": "border-box"
+             },
+             "children": [
+              {
+               "id": "824XV",
+               "type": "text",
+               "name": "Value",
+               "text": "Marco Azzurrini",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "id": "P6W6k",
+           "type": "frame",
+           "name": "Field / Email",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "6px"
+           },
+           "children": [
+            {
+             "id": "5ezR5",
+             "type": "text",
+             "name": "Label",
+             "text": "Email",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "zD63S",
+             "type": "frame",
+             "name": "Input focused",
+             "style": {
+              "height": "40px",
+              "backgroundColor": "var(--color-bg-card)",
+              "border": "2px solid var(--color-border-focus)",
+              "borderRadius": "6px",
+              "alignSelf": "stretch",
+              "display": "flex",
+              "alignItems": "center",
+              "paddingInline": "12px",
+              "boxSizing": "border-box"
+             },
+             "children": [
+              {
+               "id": "TAqpW",
+               "type": "text",
+               "name": "Value",
+               "text": "marco@example.com",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "Dxvyf",
+         "type": "frame",
+         "name": "Methods",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "12px"
+         },
+         "children": [
+          {
+           "id": "24mzf",
+           "type": "frame",
+           "name": "Button / Primary / Large",
+           "style": {
+            "height": "44px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "8px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "gap": "8px"
+           },
+           "children": [
+            {
+             "id": "QJrDP",
+             "type": "icon",
+             "name": "fingerprint",
+             "icon": "fingerprint",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "width": "18px",
+              "height": "18px"
+             }
+            },
+            {
+             "id": "ADCXV",
+             "type": "text",
+             "name": "Label",
+             "text": "Continue with Touch ID",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "15px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "TKVfD",
+           "type": "frame",
+           "name": "Or",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px"
+           },
+           "children": [
+            {
+             "id": "v6vHq",
+             "type": "frame",
+             "name": "Line",
+             "style": {
+              "width": "152px",
+              "height": "1px",
+              "backgroundColor": "var(--color-border-default)",
+              "flexGrow": "1"
+             }
+            },
+            {
+             "id": "YNmBN",
+             "type": "text",
+             "name": "Text",
+             "text": "or",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "Bbrje",
+             "type": "frame",
+             "name": "Line",
+             "style": {
+              "width": "152px",
+              "height": "1px",
+              "backgroundColor": "var(--color-border-default)",
+              "flexGrow": "1"
+             }
+            }
+           ]
+          },
+          {
+           "id": "htJeC",
+           "type": "frame",
+           "name": "Button / Secondary / Large",
+           "style": {
+            "height": "44px",
+            "backgroundColor": "var(--color-bg-card)",
+            "border": "1px solid var(--color-border-strong)",
+            "borderRadius": "8px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "gap": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "mM4fF",
+             "type": "icon",
+             "name": "mail",
+             "icon": "mail",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "width": "17px",
+              "height": "17px"
+             }
+            },
+            {
+             "id": "Pre58",
+             "type": "text",
+             "name": "Label",
+             "text": "Email me a link",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "15px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "iyA6x",
+         "type": "frame",
+         "name": "Switch",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "flex-start",
+          "gap": "4px"
+         },
+         "children": [
+          {
+           "id": "CQ5Hi",
+           "type": "text",
+           "name": "Text",
+           "text": "Already have an account?",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "g2Hry",
+           "type": "text",
+           "name": "Link",
+           "text": "Sign in",
+           "style": {
+            "color": "var(--color-text-link)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "j6wK4",
+   "type": "frame",
+   "name": "Auth / 4 Browser: Sign in · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "borderRadius": "12px",
+    "position": "relative"
+   },
+   "x": 1520,
+   "y": 1400,
+   "children": [
+    {
+     "id": "bQVxw",
+     "type": "frame",
+     "name": "Browser",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "border": "1px solid var(--color-border-default)",
+      "borderRadius": "12px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "atGKA",
+       "type": "frame",
+       "name": "Browser bar",
+       "style": {
+        "height": "52px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "16px",
+        "paddingInline": "20px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "mGAFe",
+         "type": "frame",
+         "name": "Lights",
+         "style": {
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "RMLxe",
+           "type": "frame",
+           "name": "Close",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          },
+          {
+           "id": "m7Ti2",
+           "type": "frame",
+           "name": "Minimise",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          },
+          {
+           "id": "ptgVi",
+           "type": "frame",
+           "name": "Zoom",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          }
+         ]
+        },
+        {
+         "id": "paarw",
+         "type": "frame",
+         "name": "Spacer",
+         "style": {
+          "width": "390px",
+          "height": "1px",
+          "flexGrow": "1"
+         }
+        },
+        {
+         "id": "sPCRm",
+         "type": "frame",
+         "name": "Address",
+         "style": {
+          "width": "520px",
+          "height": "32px",
+          "backgroundColor": "var(--color-bg-hover)",
+          "borderRadius": "8px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "gap": "6px"
+         },
+         "children": [
+          {
+           "id": "5Eepa",
+           "type": "icon",
+           "name": "lock",
+           "icon": "lock",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "width": "13px",
+            "height": "13px"
+           }
+          },
+          {
+           "id": "yditH",
+           "type": "text",
+           "name": "URL",
+           "text": "productivity.app/signin",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "fEZEN",
+         "type": "frame",
+         "name": "Spacer",
+         "style": {
+          "width": "390px",
+          "height": "1px",
+          "flexGrow": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "G2zat",
+       "type": "frame",
+       "name": "Page",
+       "style": {
+        "height": "848px",
+        "alignSelf": "stretch",
+        "flexGrow": "1",
+        "display": "flex",
+        "flexDirection": "column",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "paddingTop": "120px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "q6zdg",
+         "type": "frame",
+         "name": "Card",
+         "style": {
+          "width": "420px",
+          "backgroundColor": "var(--color-bg-card)",
+          "border": "1px solid var(--color-border-default)",
+          "borderRadius": "16px",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "22px",
+          "padding": "40px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "62Nae",
+           "type": "frame",
+           "name": "App icon",
+           "style": {
+            "width": "48px",
+            "height": "48px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "11px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "YWEra",
+             "type": "frame",
+             "name": "custom",
+             "style": {
+              "width": "34px",
+              "height": "34px",
+              "position": "relative"
+             },
+             "children": [
+              {
+               "id": "qmwF8",
+               "type": "svg",
+               "name": "path",
+               "svg": "<svg width=\"34\" height=\"34\" viewBox=\"0 0 34 34\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.12 9.39C15.08 7.92 10.55 9.46 8.24 13.09C5.93 16.72 6.45 21.47 9.49 24.51C12.53 27.55 17.28 28.07 20.91 25.76C24.54 23.45 26.08 18.92 24.61 14.88\" fill=\"none\" style=\"stroke:var(--color-text-on-accent)\" stroke-width=\"3.4\" stroke-linecap=\"round\"></path></svg>",
+               "style": {
+                "overflow": "visible",
+                "width": "34px",
+                "height": "34px",
+                "position": "absolute",
+                "left": "0px",
+                "top": "0px",
+                "boxSizing": "border-box"
+               }
+              },
+              {
+               "id": "X9te7",
+               "type": "svg",
+               "name": "path",
+               "svg": "<svg width=\"34\" height=\"34\" viewBox=\"0 0 34 34\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M22.17 9.11C22.17 10.61 23.39 11.83 24.89 11.83C26.39 11.83 27.61 10.61 27.61 9.11C27.61 7.61 26.39 6.39 24.89 6.39C23.39 6.39 22.17 7.61 22.17 9.11Z\" style=\"fill:var(--color-text-on-accent)\"></path></svg>",
+               "style": {
+                "overflow": "visible",
+                "width": "34px",
+                "height": "34px",
+                "position": "absolute",
+                "left": "0px",
+                "top": "0px"
+               }
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "id": "iKsWB",
+           "type": "frame",
+           "name": "Copy",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "6px"
+           },
+           "children": [
+            {
+             "id": "L4qUA",
+             "type": "text",
+             "name": "Title",
+             "text": "Sign in to Productivity",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "24px",
+              "fontWeight": "700",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "4TfSE",
+           "type": "frame",
+           "name": "Button / Primary / Large",
+           "style": {
+            "height": "44px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "8px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "gap": "8px"
+           },
+           "children": [
+            {
+             "id": "DyrKU",
+             "type": "icon",
+             "name": "fingerprint",
+             "icon": "fingerprint",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "width": "18px",
+              "height": "18px"
+             }
+            },
+            {
+             "id": "eyuaY",
+             "type": "text",
+             "name": "Label",
+             "text": "Sign in with Touch ID",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "15px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "5ewdp",
+           "type": "frame",
+           "name": "Or",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px"
+           },
+           "children": [
+            {
+             "id": "uxxtn",
+             "type": "frame",
+             "name": "Line",
+             "style": {
+              "width": "109px",
+              "height": "1px",
+              "backgroundColor": "var(--color-border-default)",
+              "flexGrow": "1"
+             }
+            },
+            {
+             "id": "czLLp",
+             "type": "text",
+             "name": "Text",
+             "text": "or use your email",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "tGD9a",
+             "type": "frame",
+             "name": "Line",
+             "style": {
+              "width": "109px",
+              "height": "1px",
+              "backgroundColor": "var(--color-border-default)",
+              "flexGrow": "1"
+             }
+            }
+           ]
+          },
+          {
+           "id": "gERF3",
+           "type": "frame",
+           "name": "Magic link",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "10px"
+           },
+           "children": [
+            {
+             "id": "nvVfd",
+             "type": "frame",
+             "name": "Input",
+             "style": {
+              "height": "40px",
+              "backgroundColor": "var(--color-bg-card)",
+              "border": "1px solid var(--color-border-strong)",
+              "borderRadius": "6px",
+              "alignSelf": "stretch",
+              "display": "flex",
+              "alignItems": "center",
+              "paddingInline": "12px",
+              "boxSizing": "border-box"
+             },
+             "children": [
+              {
+               "id": "VrStP",
+               "type": "text",
+               "name": "Placeholder",
+               "text": "you@example.com",
+               "style": {
+                "color": "var(--color-text-placeholder)",
+                "fontFamily": "Inter",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            },
+            {
+             "id": "uiWed",
+             "type": "frame",
+             "name": "Button / Secondary / Large",
+             "style": {
+              "height": "44px",
+              "backgroundColor": "var(--color-bg-card)",
+              "border": "1px solid var(--color-border-strong)",
+              "borderRadius": "8px",
+              "alignSelf": "stretch",
+              "display": "flex",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "gap": "8px",
+              "boxSizing": "border-box"
+             },
+             "children": [
+              {
+               "id": "PppNy",
+               "type": "icon",
+               "name": "mail",
+               "icon": "mail",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "width": "17px",
+                "height": "17px"
+               }
+              },
+              {
+               "id": "9nqkG",
+               "type": "text",
+               "name": "Label",
+               "text": "Email me a sign-in link",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "15px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "id": "d7WmT",
+           "type": "frame",
+           "name": "Switch",
+           "style": {
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "flex-start",
+            "gap": "4px"
+           },
+           "children": [
+            {
+             "id": "pW5Xr",
+             "type": "text",
+             "name": "Text",
+             "text": "New here?",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "28dgb",
+             "type": "text",
+             "name": "Link",
+             "text": "Create an account",
+             "style": {
+              "color": "var(--color-text-link)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "SA7b3",
+     "type": "frame",
+     "name": "System sheet / Passkey (macOS draws this)",
+     "style": {
+      "width": "440px",
+      "position": "absolute",
+      "left": "500px",
+      "top": "60px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-strong)",
+      "boxShadow": "var(--shadow-lg)",
+      "borderRadius": "14px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "center",
+      "gap": "18px",
+      "padding": "24px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "ALRiv",
+       "type": "frame",
+       "name": "Touch ID",
+       "style": {
+        "width": "56px",
+        "height": "56px",
+        "backgroundColor": "var(--color-tag-red-bg)",
+        "borderRadius": "28px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center"
+       },
+       "children": [
+        {
+         "id": "h4Yvh",
+         "type": "icon",
+         "name": "fingerprint",
+         "icon": "fingerprint",
+         "style": {
+          "color": "var(--color-tag-red-fg)",
+          "width": "32px",
+          "height": "32px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "4y3Br",
+       "type": "frame",
+       "name": "Copy",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "6px"
+       },
+       "children": [
+        {
+         "id": "gnn2Z",
+         "type": "text",
+         "name": "Title",
+         "text": "Sign in to “productivity.app”?",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "nTQkY",
+         "type": "text",
+         "name": "Text",
+         "text": "Passkey for marco@example.com",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "HJxst",
+       "type": "text",
+       "name": "Prompt",
+       "text": "Touch ID to continue",
+       "style": {
+        "color": "var(--color-text-primary)",
+        "fontFamily": "Inter",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "whiteSpace": "pre",
+        "lineHeight": "normal"
+       }
+      },
+      {
+       "id": "3wbkS",
+       "type": "frame",
+       "name": "Button / Ghost",
+       "style": {
+        "height": "30px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "6px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "paddingInline": "14px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "P3ENW",
+         "type": "text",
+         "name": "Label",
+         "text": "Cancel",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "inaW4",
+   "type": "frame",
+   "name": "Auth / 5 Browser: Back to the app · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 3040,
+   "y": 1400,
+   "children": [
+    {
+     "id": "svRnZ",
+     "type": "frame",
+     "name": "Browser bar",
+     "style": {
+      "height": "52px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-default)",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "16px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "K5H6f",
+       "type": "frame",
+       "name": "Lights",
+       "style": {
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "BwXHL",
+         "type": "frame",
+         "name": "Close",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "MHSPU",
+         "type": "frame",
+         "name": "Minimise",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "VArVY",
+         "type": "frame",
+         "name": "Zoom",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "PrGKm",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      },
+      {
+       "id": "xjPUa",
+       "type": "frame",
+       "name": "Address",
+       "style": {
+        "width": "520px",
+        "height": "32px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "8px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "gap": "6px"
+       },
+       "children": [
+        {
+         "id": "8sux5",
+         "type": "icon",
+         "name": "lock",
+         "icon": "lock",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "13px",
+          "height": "13px"
+         }
+        },
+        {
+         "id": "QNWSr",
+         "type": "text",
+         "name": "URL",
+         "text": "productivity.app/signed-in",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "bmzHb",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      }
+     ]
+    },
+    {
+     "id": "tc3S3",
+     "type": "frame",
+     "name": "Page",
+     "style": {
+      "height": "848px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "VZyFs",
+       "type": "frame",
+       "name": "Card",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "borderRadius": "16px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "24px",
+        "padding": "40px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "xjxLg",
+         "type": "frame",
+         "name": "Done",
+         "style": {
+          "width": "56px",
+          "height": "56px",
+          "backgroundColor": "var(--color-tag-green-bg)",
+          "borderRadius": "28px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "aksfY",
+           "type": "icon",
+           "name": "check",
+           "icon": "check",
+           "style": {
+            "color": "var(--color-success-fg)",
+            "width": "28px",
+            "height": "28px"
+           }
+          }
+         ]
+        },
+        {
+         "id": "kQDa9",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "6px"
+         },
+         "children": [
+          {
+           "id": "D2NcS",
+           "type": "text",
+           "name": "Title",
+           "text": "You’re signed in",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "arwLk",
+           "type": "text",
+           "name": "Lede",
+           "text": "Productivity is opening now. You can close this tab.",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "lineHeight": "20px",
+            "textAlign": "center",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "VrTe4",
+         "type": "frame",
+         "name": "Button / Secondary",
+         "style": {
+          "height": "36px",
+          "backgroundColor": "var(--color-bg-card)",
+          "border": "1px solid var(--color-border-strong)",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "zAjjt",
+           "type": "text",
+           "name": "Label",
+           "text": "Open Productivity",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "NUn5V",
+   "type": "frame",
+   "name": "Auth / 6 First sync: merge this Mac · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-page)",
+    "borderRadius": "12px",
+    "position": "relative"
+   },
+   "x": 0,
+   "y": 2400,
+   "children": [
+    {
+     "id": "FpWqE",
+     "type": "frame",
+     "name": "App (dimmed)",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "border": "1px solid var(--color-border-default)",
+      "borderRadius": "12px",
+      "display": "flex",
+      "alignItems": "flex-start",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "MVeMM",
+       "type": "frame",
+       "name": "Sidebar",
+       "style": {
+        "width": "240px",
+        "backgroundColor": "var(--color-bg-sidebar)",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "8px",
+        "padding": "12px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "2kHYY",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "180px",
+          "height": "10px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "5px"
+         }
+        },
+        {
+         "id": "UhE2g",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "150px",
+          "height": "10px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "5px"
+         }
+        },
+        {
+         "id": "f6VxF",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "160px",
+          "height": "10px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "5px"
+         }
+        },
+        {
+         "id": "cZjUt",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "120px",
+          "height": "10px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "5px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "N7pBS",
+       "type": "frame",
+       "name": "Main",
+       "style": {
+        "width": "1200px",
+        "alignSelf": "stretch",
+        "flexGrow": "1",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "12px",
+        "padding": "48px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "R34qL",
+         "type": "frame",
+         "name": "Title",
+         "style": {
+          "width": "200px",
+          "height": "20px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "g8fGm",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "520px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-hover)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "TqtC3",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "460px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-hover)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "np8Uh",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "500px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-hover)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "6Duff",
+     "type": "frame",
+     "name": "Overlay",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "backgroundColor": "var(--color-scrim)",
+      "opacity": "0.3499999940395355",
+      "borderRadius": "12px"
+     }
+    },
+    {
+     "id": "SdNhe",
+     "type": "frame",
+     "name": "Dialog",
+     "style": {
+      "width": "520px",
+      "position": "absolute",
+      "left": "460px",
+      "top": "230px",
+      "backgroundColor": "var(--color-bg-card)",
+      "boxShadow": "var(--shadow-lg)",
+      "borderRadius": "12px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "gap": "20px",
+      "padding": "28px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "i99M4",
+       "type": "frame",
+       "name": "Copy",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "eQKky",
+         "type": "text",
+         "name": "Title",
+         "text": "Bring this Mac’s tasks into your account?",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "20px",
+          "fontWeight": "700",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "aCLju",
+         "type": "text",
+         "name": "Lede",
+         "text": "This Mac has 42 tasks and 5 projects from before you signed in. Your account already has 12 tasks from your iPhone.",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      },
+      {
+       "id": "7FTmk",
+       "type": "frame",
+       "name": "Choices",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "10px"
+       },
+       "children": [
+        {
+         "id": "H3qUJ",
+         "type": "frame",
+         "name": "Choice / Selected",
+         "style": {
+          "backgroundColor": "var(--color-accent-blue-subtle)",
+          "border": "2px solid var(--color-accent-blue-strong)",
+          "borderRadius": "10px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "12px",
+          "padding": "16px"
+         },
+         "children": [
+          {
+           "id": "N4xic",
+           "type": "frame",
+           "name": "Radio",
+           "style": {
+            "width": "18px",
+            "height": "18px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "9px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "ub3Ri",
+             "type": "frame",
+             "name": "Dot",
+             "style": {
+              "width": "6px",
+              "height": "6px",
+              "backgroundColor": "var(--color-bg-card)",
+              "borderRadius": "3px"
+             }
+            }
+           ]
+          },
+          {
+           "id": "KD8nh",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "385px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "4px"
+           },
+           "children": [
+            {
+             "id": "QaMzQ",
+             "type": "text",
+             "name": "Title",
+             "text": "Combine them",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "600",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "6TkM8",
+             "type": "text",
+             "name": "Body",
+             "text": "Keep everything. Same-named contexts and projects are joined.",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "lineHeight": "18px",
+              "whiteSpace": "pre-wrap"
+             }
+            }
+           ]
+          },
+          {
+           "id": "rXA93",
+           "type": "text",
+           "name": "Key",
+           "text": "1",
+           "style": {
+            "color": "var(--color-text-muted)",
+            "fontFamily": "Inter",
+            "fontSize": "12px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "tU4BW",
+         "type": "frame",
+         "name": "Choice",
+         "style": {
+          "backgroundColor": "var(--color-bg-card)",
+          "border": "1px solid var(--color-border-default)",
+          "borderRadius": "10px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "12px",
+          "padding": "16px"
+         },
+         "children": [
+          {
+           "id": "RAxnu",
+           "type": "frame",
+           "name": "Radio",
+           "style": {
+            "width": "18px",
+            "height": "18px",
+            "backgroundColor": "var(--color-bg-card)",
+            "border": "1.5px solid var(--color-border-strong)",
+            "borderRadius": "9px",
+            "boxSizing": "border-box"
+           }
+          },
+          {
+           "id": "yTg8K",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "382px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "4px"
+           },
+           "children": [
+            {
+             "id": "6gUdB",
+             "type": "text",
+             "name": "Title",
+             "text": "Use only my account",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "600",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "ianKu",
+             "type": "text",
+             "name": "Body",
+             "text": "This Mac’s tasks move to a backup you can restore later.",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "lineHeight": "18px",
+              "whiteSpace": "pre-wrap"
+             }
+            }
+           ]
+          },
+          {
+           "id": "sjGYj",
+           "type": "text",
+           "name": "Key",
+           "text": "2",
+           "style": {
+            "color": "var(--color-text-muted)",
+            "fontFamily": "Inter",
+            "fontSize": "12px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "TaSDM",
+       "type": "frame",
+       "name": "Footer",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "justifyContent": "flex-end",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "4TaaJ",
+         "type": "frame",
+         "name": "Button / Ghost",
+         "style": {
+          "height": "36px",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "nzDPf",
+           "type": "text",
+           "name": "Label",
+           "text": "Sign out",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "QkeBE",
+         "type": "frame",
+         "name": "Button / Primary",
+         "style": {
+          "height": "36px",
+          "backgroundColor": "var(--color-accent-blue-strong)",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "wu9KK",
+           "type": "text",
+           "name": "Label",
+           "text": "Combine and sync",
+           "style": {
+            "color": "var(--color-text-on-accent)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "EVaa9",
+   "type": "frame",
+   "name": "Auth / 7 Signed in: account menu · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-page)",
+    "borderRadius": "12px",
+    "position": "relative"
+   },
+   "x": 1520,
+   "y": 2400,
+   "children": [
+    {
+     "id": "UKn3h",
+     "type": "frame",
+     "name": "App",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "border": "1px solid var(--color-border-default)",
+      "borderRadius": "12px",
+      "display": "flex",
+      "alignItems": "flex-start",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "PQg8i",
+       "type": "frame",
+       "name": "Sidebar",
+       "style": {
+        "width": "260px",
+        "backgroundColor": "var(--color-bg-sidebar)",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start"
+       },
+       "children": [
+        {
+         "id": "ihFFv",
+         "type": "frame",
+         "name": "Titlebar",
+         "style": {
+          "height": "52px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "8px",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "e4bHx",
+           "type": "frame",
+           "name": "Close",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          },
+          {
+           "id": "EbX6g",
+           "type": "frame",
+           "name": "Minimise",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          },
+          {
+           "id": "ihYnM",
+           "type": "frame",
+           "name": "Zoom",
+           "style": {
+            "width": "12px",
+            "height": "12px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px"
+           }
+          },
+          {
+           "id": "GEDUP",
+           "type": "frame",
+           "name": "Spacer",
+           "style": {
+            "width": "132px",
+            "height": "1px",
+            "flexGrow": "1"
+           }
+          },
+          {
+           "id": "nHxSP",
+           "type": "frame",
+           "name": "New to-do",
+           "style": {
+            "width": "28px",
+            "height": "28px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "6px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "P7Umw",
+             "type": "icon",
+             "name": "plus",
+             "icon": "plus",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "width": "16px",
+              "height": "16px"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "fAWsY",
+         "type": "frame",
+         "name": "Lists",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "2px",
+          "paddingInline": "8px"
+         },
+         "children": [
+          {
+           "id": "CQRvG",
+           "type": "frame",
+           "name": "Nav / Inbox",
+           "style": {
+            "height": "30px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "T9Tmr",
+             "type": "icon",
+             "name": "inbox",
+             "icon": "inbox",
+             "style": {
+              "color": "var(--color-accent-blue-strong)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "tPc2K",
+             "type": "text",
+             "name": "Label",
+             "text": "Inbox",
+             "style": {
+              "width": "190px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "vkKHb",
+             "type": "text",
+             "name": "Count",
+             "text": "7",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "vTzQU",
+           "type": "frame",
+           "name": "Nav / Next Actions",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "Ff79Z",
+             "type": "icon",
+             "name": "list-checks",
+             "icon": "list-checks",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "kU7tH",
+             "type": "text",
+             "name": "Label",
+             "text": "Next Actions",
+             "style": {
+              "width": "182px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "CTEey",
+             "type": "text",
+             "name": "Count",
+             "text": "23",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "BvTwX",
+           "type": "frame",
+           "name": "Nav / Upcoming",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "PsZvW",
+             "type": "icon",
+             "name": "calendar",
+             "icon": "calendar",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "qm8UK",
+             "type": "text",
+             "name": "Label",
+             "text": "Upcoming",
+             "style": {
+              "width": "205px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "7Fjsr",
+           "type": "frame",
+           "name": "Nav / Waiting For",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "h8Ata",
+             "type": "icon",
+             "name": "hourglass",
+             "icon": "hourglass",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "y5G5j",
+             "type": "text",
+             "name": "Label",
+             "text": "Waiting For",
+             "style": {
+              "width": "189px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "hGZnN",
+             "type": "text",
+             "name": "Count",
+             "text": "4",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "ExKe7",
+           "type": "frame",
+           "name": "Nav / Someday",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "mheLv",
+             "type": "icon",
+             "name": "archive",
+             "icon": "archive",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "HVaU6",
+             "type": "text",
+             "name": "Label",
+             "text": "Someday / Maybe",
+             "style": {
+              "width": "184px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "kcnC3",
+             "type": "text",
+             "name": "Count",
+             "text": "12",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "fontFamily": "Inter",
+              "fontSize": "12px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "q4eqv",
+         "type": "frame",
+         "name": "Spacer",
+         "style": {
+          "height": "571px",
+          "alignSelf": "stretch",
+          "flexGrow": "1"
+         }
+        },
+        {
+         "id": "j2nLg",
+         "type": "frame",
+         "name": "Footer",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "2px",
+          "paddingRight": "8px",
+          "paddingBottom": "8px",
+          "paddingLeft": "8px"
+         },
+         "children": [
+          {
+           "id": "CYgxr",
+           "type": "frame",
+           "name": "Nav / Weekly Review",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "Dbuvr",
+             "type": "icon",
+             "name": "refresh-ccw",
+             "icon": "refresh-ccw",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "V28QG",
+             "type": "text",
+             "name": "Label",
+             "text": "Weekly Review",
+             "style": {
+              "width": "205px",
+              "flexGrow": "1",
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "EdB9E",
+           "type": "frame",
+           "name": "Nav / New Project",
+           "style": {
+            "height": "30px",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "baVmk",
+             "type": "icon",
+             "name": "plus",
+             "icon": "plus",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "15px",
+              "height": "15px"
+             }
+            },
+            {
+             "id": "8QpdP",
+             "type": "text",
+             "name": "Label",
+             "text": "New Project",
+             "style": {
+              "width": "205px",
+              "flexGrow": "1",
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre-wrap",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "SBxkE",
+           "type": "frame",
+           "name": "Divider",
+           "style": {
+            "height": "1px",
+            "backgroundColor": "var(--color-border-default)",
+            "alignSelf": "stretch"
+           }
+          },
+          {
+           "id": "HejYH",
+           "type": "frame",
+           "name": "Account row (open)",
+           "style": {
+            "height": "44px",
+            "backgroundColor": "var(--color-bg-pressed)",
+            "borderRadius": "6px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "10px",
+            "paddingInline": "8px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "7nUXS",
+             "type": "frame",
+             "name": "Avatar",
+             "style": {
+              "width": "26px",
+              "height": "26px",
+              "backgroundColor": "var(--color-accent-blue-strong)",
+              "borderRadius": "13px",
+              "display": "flex",
+              "justifyContent": "center",
+              "alignItems": "center"
+             },
+             "children": [
+              {
+               "id": "ANk5D",
+               "type": "text",
+               "name": "Initials",
+               "text": "MA",
+               "style": {
+                "color": "var(--color-text-on-accent)",
+                "fontFamily": "Inter",
+                "fontSize": "11px",
+                "fontWeight": "600",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            },
+            {
+             "id": "gd3B4",
+             "type": "frame",
+             "name": "Text",
+             "style": {
+              "width": "168px",
+              "flexGrow": "1",
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "flex-start",
+              "gap": "1px"
+             },
+             "children": [
+              {
+               "id": "5qjdR",
+               "type": "text",
+               "name": "Name",
+               "text": "Marco Azzurrini",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "13px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              },
+              {
+               "id": "KnLt9",
+               "type": "frame",
+               "name": "Sync",
+               "style": {
+                "display": "flex",
+                "alignItems": "center",
+                "gap": "5px"
+               },
+               "children": [
+                {
+                 "id": "E4GVA",
+                 "type": "frame",
+                 "name": "Dot",
+                 "style": {
+                  "width": "6px",
+                  "height": "6px",
+                  "backgroundColor": "var(--color-success-fg)",
+                  "borderRadius": "3px"
+                 }
+                },
+                {
+                 "id": "gxHYc",
+                 "type": "text",
+                 "name": "Status",
+                 "text": "Synced just now",
+                 "style": {
+                  "color": "var(--color-text-muted)",
+                  "fontFamily": "Inter",
+                  "fontSize": "11px",
+                  "fontWeight": "400",
+                  "whiteSpace": "pre",
+                  "lineHeight": "normal"
+                 }
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "id": "kRKp7",
+             "type": "icon",
+             "name": "chevrons-up-down",
+             "icon": "chevrons-up-down",
+             "style": {
+              "color": "var(--color-text-muted)",
+              "width": "14px",
+              "height": "14px"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "riU4U",
+       "type": "frame",
+       "name": "Main (unchanged)",
+       "style": {
+        "width": "1180px",
+        "alignSelf": "stretch",
+        "flexGrow": "1",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "12px",
+        "padding": "48px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "nKtCK",
+         "type": "frame",
+         "name": "Title",
+         "style": {
+          "width": "200px",
+          "height": "20px",
+          "backgroundColor": "var(--color-bg-hover)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "iRBXP",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "520px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-sidebar)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "fHxhd",
+         "type": "frame",
+         "name": "Row",
+         "style": {
+          "width": "460px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-sidebar)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "haDCT",
+     "type": "frame",
+     "name": "Account menu",
+     "style": {
+      "width": "260px",
+      "position": "absolute",
+      "left": "12px",
+      "top": "673px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-default)",
+      "boxShadow": "var(--shadow-sm)",
+      "borderRadius": "10px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "gap": "2px",
+      "padding": "6px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "HzBTm",
+       "type": "frame",
+       "name": "Header",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "2px",
+        "paddingBlock": "8px",
+        "paddingInline": "10px"
+       },
+       "children": [
+        {
+         "id": "kfPJz",
+         "type": "text",
+         "name": "Email",
+         "text": "marco@example.com",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "Sr42t",
+         "type": "text",
+         "name": "Status",
+         "text": "Synced just now · 2 devices",
+         "style": {
+          "color": "var(--color-text-muted)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "Fsc7X",
+       "type": "frame",
+       "name": "Divider",
+       "style": {
+        "height": "1px",
+        "backgroundColor": "var(--color-border-default)",
+        "alignSelf": "stretch"
+       }
+      },
+      {
+       "id": "mwNaf",
+       "type": "frame",
+       "name": "Item / hover",
+       "style": {
+        "height": "32px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "6px",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "paddingInline": "10px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "ypRGB",
+         "type": "icon",
+         "name": "user",
+         "icon": "user",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "15px",
+          "height": "15px"
+         }
+        },
+        {
+         "id": "JRFhA",
+         "type": "text",
+         "name": "Label",
+         "text": "Account settings…",
+         "style": {
+          "width": "177px",
+          "flexGrow": "1",
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre-wrap",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "C9j9u",
+         "type": "text",
+         "name": "Shortcut",
+         "text": "⌘,",
+         "style": {
+          "color": "var(--color-text-muted)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "XnaQr",
+       "type": "frame",
+       "name": "Item",
+       "style": {
+        "height": "32px",
+        "borderRadius": "6px",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "paddingInline": "10px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "wbtVB",
+         "type": "icon",
+         "name": "refresh-cw",
+         "icon": "refresh-cw",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "15px",
+          "height": "15px"
+         }
+        },
+        {
+         "id": "uMLF4",
+         "type": "text",
+         "name": "Label",
+         "text": "Sync now",
+         "style": {
+          "width": "203px",
+          "flexGrow": "1",
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre-wrap",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "RiRyx",
+       "type": "frame",
+       "name": "Divider",
+       "style": {
+        "height": "1px",
+        "backgroundColor": "var(--color-border-default)",
+        "alignSelf": "stretch"
+       }
+      },
+      {
+       "id": "fLTbB",
+       "type": "frame",
+       "name": "Item",
+       "style": {
+        "height": "32px",
+        "borderRadius": "6px",
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "paddingInline": "10px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "TPXAr",
+         "type": "icon",
+         "name": "log-out",
+         "icon": "log-out",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "15px",
+          "height": "15px"
+         }
+        },
+        {
+         "id": "sM9hu",
+         "type": "text",
+         "name": "Label",
+         "text": "Sign out",
+         "style": {
+          "width": "203px",
+          "flexGrow": "1",
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre-wrap",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "NquvY",
+   "type": "frame",
+   "name": "Auth / 8 Account settings · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-page)",
+    "borderRadius": "12px",
+    "position": "relative"
+   },
+   "x": 3040,
+   "y": 2400,
+   "children": [
+    {
+     "id": "ts7YW",
+     "type": "frame",
+     "name": "App (dimmed)",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "backgroundColor": "var(--color-bg-sidebar)",
+      "border": "1px solid var(--color-border-default)",
+      "borderRadius": "12px",
+      "boxSizing": "border-box"
+     }
+    },
+    {
+     "id": "XnSra",
+     "type": "frame",
+     "name": "Overlay",
+     "style": {
+      "width": "1440px",
+      "height": "900px",
+      "position": "absolute",
+      "left": "0px",
+      "top": "0px",
+      "backgroundColor": "var(--color-scrim)",
+      "opacity": "0.3499999940395355",
+      "borderRadius": "12px"
+     }
+    },
+    {
+     "id": "eGHPp",
+     "type": "frame",
+     "name": "Dialog",
+     "style": {
+      "width": "600px",
+      "position": "absolute",
+      "left": "420px",
+      "top": "110px",
+      "backgroundColor": "var(--color-bg-card)",
+      "boxShadow": "var(--shadow-lg)",
+      "borderRadius": "12px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "gap": "24px",
+      "padding": "28px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "KKH3r",
+       "type": "frame",
+       "name": "Header",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center"
+       },
+       "children": [
+        {
+         "id": "Rj98e",
+         "type": "text",
+         "name": "Title",
+         "text": "Account",
+         "style": {
+          "width": "526px",
+          "flexGrow": "1",
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "20px",
+          "fontWeight": "700",
+          "whiteSpace": "pre-wrap",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "JmxHz",
+         "type": "icon",
+         "name": "x",
+         "icon": "x",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "18px",
+          "height": "18px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "anArR",
+       "type": "frame",
+       "name": "Profile",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "14px"
+       },
+       "children": [
+        {
+         "id": "DSWNz",
+         "type": "frame",
+         "name": "Avatar",
+         "style": {
+          "width": "44px",
+          "height": "44px",
+          "backgroundColor": "var(--color-accent-blue-strong)",
+          "borderRadius": "22px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "Db4fv",
+           "type": "text",
+           "name": "Initials",
+           "text": "MA",
+           "style": {
+            "color": "var(--color-text-on-accent)",
+            "fontFamily": "Inter",
+            "fontSize": "16px",
+            "fontWeight": "600",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "9TzJv",
+         "type": "frame",
+         "name": "Text",
+         "style": {
+          "width": "424px",
+          "flexGrow": "1",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "2px"
+         },
+         "children": [
+          {
+           "id": "NbNBC",
+           "type": "text",
+           "name": "Name",
+           "text": "Marco Azzurrini",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "15px",
+            "fontWeight": "600",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "sgBKw",
+           "type": "text",
+           "name": "Email",
+           "text": "marco@example.com",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        },
+        {
+         "id": "ySUHi",
+         "type": "frame",
+         "name": "Button / Secondary / Small",
+         "style": {
+          "height": "30px",
+          "border": "1px solid var(--color-border-strong)",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "paddingInline": "12px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "saiku",
+           "type": "text",
+           "name": "Label",
+           "text": "Edit",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "hmCDD",
+       "type": "frame",
+       "name": "Section / Sign-in methods",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "fpPau",
+         "type": "text",
+         "name": "Heading",
+         "text": "SIGN-IN METHODS",
+         "style": {
+          "color": "var(--color-text-muted)",
+          "fontFamily": "Inter",
+          "fontSize": "11px",
+          "fontWeight": "600",
+          "letterSpacing": "0.6000000238418579px",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "7qaKj",
+         "type": "frame",
+         "name": "List",
+         "style": {
+          "border": "1px solid var(--color-border-default)",
+          "borderRadius": "8px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start"
+         },
+         "children": [
+          {
+           "id": "A6AnG",
+           "type": "frame",
+           "name": "Row / Passkey",
+           "style": {
+            "height": "52px",
+            "border": "1px solid var(--color-border-default)",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px",
+            "paddingInline": "14px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "HphWi",
+             "type": "icon",
+             "name": "fingerprint",
+             "icon": "fingerprint",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "16px",
+              "height": "16px"
+             }
+            },
+            {
+             "id": "wAriB",
+             "type": "frame",
+             "name": "Text",
+             "style": {
+              "width": "426px",
+              "flexGrow": "1",
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "flex-start",
+              "gap": "2px"
+             },
+             "children": [
+              {
+               "id": "CyCbx",
+               "type": "text",
+               "name": "Title",
+               "text": "Touch ID passkey",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "13px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              },
+              {
+               "id": "7sxvM",
+               "type": "text",
+               "name": "Meta",
+               "text": "In iCloud Keychain, so it works on your iPhone too · Added 24 Oct",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "12px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            },
+            {
+             "id": "Hz3Rk",
+             "type": "text",
+             "name": "Action",
+             "text": "Remove",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "rED8k",
+           "type": "frame",
+           "name": "Row / Email link",
+           "style": {
+            "height": "52px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px",
+            "paddingInline": "14px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "4HMVn",
+             "type": "icon",
+             "name": "mail",
+             "icon": "mail",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "16px",
+              "height": "16px"
+             }
+            },
+            {
+             "id": "JrTFp",
+             "type": "frame",
+             "name": "Text",
+             "style": {
+              "width": "488px",
+              "flexGrow": "1",
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "flex-start",
+              "gap": "2px"
+             },
+             "children": [
+              {
+               "id": "5cFzn",
+               "type": "text",
+               "name": "Title",
+               "text": "Email link",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "13px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              },
+              {
+               "id": "CtdQD",
+               "type": "text",
+               "name": "Meta",
+               "text": "Sent to marco@example.com · Always on, so you can’t get locked out",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "12px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "gjg68",
+         "type": "text",
+         "name": "Add",
+         "text": "+ Add a passkey",
+         "style": {
+          "color": "var(--color-text-link)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "MDg98",
+       "type": "frame",
+       "name": "Section / Devices",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "EZSXc",
+         "type": "text",
+         "name": "Heading",
+         "text": "SIGNED-IN DEVICES",
+         "style": {
+          "color": "var(--color-text-muted)",
+          "fontFamily": "Inter",
+          "fontSize": "11px",
+          "fontWeight": "600",
+          "letterSpacing": "0.6000000238418579px",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "6eK2P",
+         "type": "frame",
+         "name": "List",
+         "style": {
+          "border": "1px solid var(--color-border-default)",
+          "borderRadius": "8px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start"
+         },
+         "children": [
+          {
+           "id": "n3upa",
+           "type": "frame",
+           "name": "Row",
+           "style": {
+            "height": "52px",
+            "border": "1px solid var(--color-border-default)",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px",
+            "paddingInline": "14px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "kitqJ",
+             "type": "icon",
+             "name": "laptop",
+             "icon": "laptop",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "16px",
+              "height": "16px"
+             }
+            },
+            {
+             "id": "hrCyy",
+             "type": "frame",
+             "name": "Text",
+             "style": {
+              "width": "420px",
+              "flexGrow": "1",
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "flex-start",
+              "gap": "2px"
+             },
+             "children": [
+              {
+               "id": "LXUjE",
+               "type": "text",
+               "name": "Title",
+               "text": "This Mac",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "13px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              },
+              {
+               "id": "hhAvu",
+               "type": "text",
+               "name": "Meta",
+               "text": "Synced just now",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "12px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            },
+            {
+             "id": "JjtsR",
+             "type": "frame",
+             "name": "Tag",
+             "style": {
+              "height": "20px",
+              "backgroundColor": "var(--color-tag-green-bg)",
+              "borderRadius": "4px",
+              "display": "flex",
+              "alignItems": "center",
+              "paddingInline": "8px",
+              "boxSizing": "border-box"
+             },
+             "children": [
+              {
+               "id": "unwPt",
+               "type": "text",
+               "name": "Label",
+               "text": "Current",
+               "style": {
+                "color": "var(--color-success-fg)",
+                "fontFamily": "Inter",
+                "fontSize": "11px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "id": "sAn3d",
+           "type": "frame",
+           "name": "Row",
+           "style": {
+            "height": "52px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "12px",
+            "paddingInline": "14px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "2gwZ8",
+             "type": "icon",
+             "name": "smartphone",
+             "icon": "smartphone",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "width": "16px",
+              "height": "16px"
+             }
+            },
+            {
+             "id": "9PV7C",
+             "type": "frame",
+             "name": "Text",
+             "style": {
+              "width": "425px",
+              "flexGrow": "1",
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "flex-start",
+              "gap": "2px"
+             },
+             "children": [
+              {
+               "id": "NUqNP",
+               "type": "text",
+               "name": "Title",
+               "text": "iPhone",
+               "style": {
+                "color": "var(--color-text-primary)",
+                "fontFamily": "Inter",
+                "fontSize": "13px",
+                "fontWeight": "500",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              },
+              {
+               "id": "bJnkH",
+               "type": "text",
+               "name": "Meta",
+               "text": "Last synced 2 hours ago",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "12px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            },
+            {
+             "id": "4pyyc",
+             "type": "text",
+             "name": "Action",
+             "text": "Sign out",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "rD5gt",
+       "type": "frame",
+       "name": "Footer",
+       "style": {
+        "alignSelf": "stretch",
+        "display": "flex",
+        "alignItems": "center",
+        "paddingTop": "4px"
+       },
+       "children": [
+        {
+         "id": "C9sPi",
+         "type": "text",
+         "name": "Danger",
+         "text": "Delete account…",
+         "style": {
+          "width": "357px",
+          "flexGrow": "1",
+          "color": "var(--color-danger-fg)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "whiteSpace": "pre-wrap",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "Gac5N",
+         "type": "frame",
+         "name": "Button / Secondary",
+         "style": {
+          "height": "36px",
+          "border": "1px solid var(--color-border-strong)",
+          "borderRadius": "6px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "gap": "6px",
+          "paddingInline": "16px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "6LGLP",
+           "type": "icon",
+           "name": "log-out",
+           "icon": "log-out",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "width": "15px",
+            "height": "15px"
+           }
+          },
+          {
+           "id": "vnBGS",
+           "type": "text",
+           "name": "Label",
+           "text": "Sign out of this Mac",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "ZEFrc",
+   "type": "frame",
+   "name": "Auth / 9 Sync states and sign out · Dark",
+   "style": {
+    "width": "2960px",
+    "height": "620px",
+    "backgroundColor": "var(--color-bg-page)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "alignItems": "flex-start",
+    "gap": "80px",
+    "padding": "56px",
+    "boxSizing": "border-box"
+   },
+   "x": 0,
+   "y": 3400,
+   "children": [
+    {
+     "id": "ueGZr",
+     "type": "frame",
+     "name": "Account row states",
+     "style": {
+      "width": "420px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "gap": "20px"
+     },
+     "children": [
+      {
+       "id": "CANXC",
+       "type": "text",
+       "name": "Heading",
+       "text": "Account row states",
+       "style": {
+        "color": "var(--color-text-primary)",
+        "fontFamily": "Inter",
+        "fontSize": "20px",
+        "fontWeight": "700",
+        "whiteSpace": "pre",
+        "lineHeight": "normal"
+       }
+      },
+      {
+       "id": "gMC4j",
+       "type": "frame",
+       "name": "States",
+       "style": {
+        "width": "260px",
+        "backgroundColor": "var(--color-bg-sidebar)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "12px",
+        "padding": "8px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "LRKrN",
+         "type": "frame",
+         "name": "State / Synced",
+         "style": {
+          "height": "44px",
+          "borderRadius": "6px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "10px",
+          "paddingInline": "8px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "BJKcH",
+           "type": "frame",
+           "name": "Avatar",
+           "style": {
+            "width": "26px",
+            "height": "26px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "13px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "5XNZW",
+             "type": "text",
+             "name": "Initials",
+             "text": "MA",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "11px",
+              "fontWeight": "600",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "BwWW3",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "192px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "1px"
+           },
+           "children": [
+            {
+             "id": "uWqXd",
+             "type": "text",
+             "name": "Name",
+             "text": "Marco Azzurrini",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "PmuhJ",
+             "type": "frame",
+             "name": "Sync",
+             "style": {
+              "display": "flex",
+              "alignItems": "center",
+              "gap": "5px"
+             },
+             "children": [
+              {
+               "id": "MYL3T",
+               "type": "frame",
+               "name": "Dot",
+               "style": {
+                "width": "6px",
+                "height": "6px",
+                "backgroundColor": "var(--color-success-fg)",
+                "borderRadius": "3px"
+               }
+              },
+              {
+               "id": "d4eNT",
+               "type": "text",
+               "name": "Status",
+               "text": "Synced just now",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "11px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "mygb8",
+         "type": "frame",
+         "name": "State / Syncing",
+         "style": {
+          "height": "44px",
+          "borderRadius": "6px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "10px",
+          "paddingInline": "8px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "wMi28",
+           "type": "frame",
+           "name": "Avatar",
+           "style": {
+            "width": "26px",
+            "height": "26px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "13px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "6fYiR",
+             "type": "text",
+             "name": "Initials",
+             "text": "MA",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "11px",
+              "fontWeight": "600",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "WVEPP",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "192px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "1px"
+           },
+           "children": [
+            {
+             "id": "pTwNV",
+             "type": "text",
+             "name": "Name",
+             "text": "Marco Azzurrini",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "kL49u",
+             "type": "frame",
+             "name": "Sync",
+             "style": {
+              "display": "flex",
+              "alignItems": "center",
+              "gap": "5px"
+             },
+             "children": [
+              {
+               "id": "PxNpX",
+               "type": "icon",
+               "name": "refresh-cw",
+               "icon": "refresh-cw",
+               "style": {
+                "color": "var(--color-accent-blue-strong)",
+                "width": "10px",
+                "height": "10px"
+               }
+              },
+              {
+               "id": "9Agmr",
+               "type": "text",
+               "name": "Status",
+               "text": "Syncing 3 changes…",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "11px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "dusLF",
+         "type": "frame",
+         "name": "State / Offline",
+         "style": {
+          "height": "44px",
+          "borderRadius": "6px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "10px",
+          "paddingInline": "8px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "QpycT",
+           "type": "frame",
+           "name": "Avatar",
+           "style": {
+            "width": "26px",
+            "height": "26px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "13px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "Awstt",
+             "type": "text",
+             "name": "Initials",
+             "text": "MA",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "11px",
+              "fontWeight": "600",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "4XdkT",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "192px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "1px"
+           },
+           "children": [
+            {
+             "id": "Cztzw",
+             "type": "text",
+             "name": "Name",
+             "text": "Marco Azzurrini",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "Tfjty",
+             "type": "frame",
+             "name": "Sync",
+             "style": {
+              "display": "flex",
+              "alignItems": "center",
+              "gap": "5px"
+             },
+             "children": [
+              {
+               "id": "QTTUh",
+               "type": "icon",
+               "name": "cloud-off",
+               "icon": "cloud-off",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "width": "10px",
+                "height": "10px"
+               }
+              },
+              {
+               "id": "trQAE",
+               "type": "text",
+               "name": "Status",
+               "text": "Offline · saved on this Mac",
+               "style": {
+                "color": "var(--color-text-muted)",
+                "fontFamily": "Inter",
+                "fontSize": "11px",
+                "fontWeight": "400",
+                "whiteSpace": "pre",
+                "lineHeight": "normal"
+               }
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": "ESs4p",
+         "type": "frame",
+         "name": "State / Needs sign-in",
+         "style": {
+          "height": "44px",
+          "backgroundColor": "var(--color-tag-orange-bg)",
+          "borderRadius": "6px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "10px",
+          "paddingInline": "8px",
+          "boxSizing": "border-box"
+         },
+         "children": [
+          {
+           "id": "bgXV5",
+           "type": "frame",
+           "name": "Avatar",
+           "style": {
+            "width": "26px",
+            "height": "26px",
+            "backgroundColor": "var(--color-warning-fg)",
+            "borderRadius": "13px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "ZUz8i",
+             "type": "icon",
+             "name": "key-round",
+             "icon": "key-round",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "width": "13px",
+              "height": "13px"
+             }
+            }
+           ]
+          },
+          {
+           "id": "Q3qQk",
+           "type": "frame",
+           "name": "Text",
+           "style": {
+            "width": "192px",
+            "flexGrow": "1",
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "flex-start",
+            "gap": "1px"
+           },
+           "children": [
+            {
+             "id": "Ay8iB",
+             "type": "text",
+             "name": "Name",
+             "text": "Sign in to sync",
+             "style": {
+              "color": "var(--color-text-primary)",
+              "fontFamily": "Inter",
+              "fontSize": "13px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            },
+            {
+             "id": "rvcQJ",
+             "type": "text",
+             "name": "Status",
+             "text": "Session ended · changes are safe",
+             "style": {
+              "color": "var(--color-warning-fg)",
+              "fontFamily": "Inter",
+              "fontSize": "11px",
+              "fontWeight": "400",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "sw52L",
+       "type": "text",
+       "name": "Note",
+       "text": "The app always works offline. Tasks save on this Mac first and sync when the network is back. Sync never blocks typing.",
+       "style": {
+        "width": "420px",
+        "color": "var(--color-text-secondary)",
+        "fontFamily": "Inter",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "19px",
+        "whiteSpace": "pre-wrap"
+       }
+      }
+     ]
+    },
+    {
+     "id": "sFsmG",
+     "type": "frame",
+     "name": "Sign out confirmation",
+     "style": {
+      "width": "1000px",
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "flex-start",
+      "gap": "20px"
+     },
+     "children": [
+      {
+       "id": "7uDAf",
+       "type": "text",
+       "name": "Heading",
+       "text": "Sign out",
+       "style": {
+        "color": "var(--color-text-primary)",
+        "fontFamily": "Inter",
+        "fontSize": "20px",
+        "fontWeight": "700",
+        "whiteSpace": "pre",
+        "lineHeight": "normal"
+       }
+      },
+      {
+       "id": "gbQ3F",
+       "type": "frame",
+       "name": "Dialog",
+       "style": {
+        "width": "460px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "boxShadow": "var(--shadow-md)",
+        "borderRadius": "12px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "20px",
+        "padding": "28px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "ZRzpQ",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "YzLn7",
+           "type": "text",
+           "name": "Title",
+           "text": "Sign out of this Mac?",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "20px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "kDHGv",
+           "type": "text",
+           "name": "Lede",
+           "text": "Your tasks stay in your account and on your iPhone. This Mac removes its copy until you sign in again.",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "lineHeight": "20px",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "THNcX",
+         "type": "frame",
+         "name": "Banner / Warning",
+         "style": {
+          "backgroundColor": "var(--color-tag-orange-bg)",
+          "borderRadius": "8px",
+          "alignSelf": "stretch",
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "10px",
+          "padding": "12px"
+         },
+         "children": [
+          {
+           "id": "wrYd4",
+           "type": "icon",
+           "name": "triangle-alert",
+           "icon": "triangle-alert",
+           "style": {
+            "color": "var(--color-warning-fg)",
+            "width": "16px",
+            "height": "16px"
+           }
+          },
+          {
+           "id": "uRXQx",
+           "type": "text",
+           "name": "Text",
+           "text": "3 changes have not synced yet. Connect to the internet first, or they will be lost.",
+           "style": {
+            "width": "354px",
+            "flexGrow": "1",
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "lineHeight": "18px",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "6g57m",
+         "type": "frame",
+         "name": "Footer",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "justifyContent": "flex-end",
+          "alignItems": "flex-start",
+          "gap": "8px"
+         },
+         "children": [
+          {
+           "id": "xzwrh",
+           "type": "frame",
+           "name": "Button / Ghost",
+           "style": {
+            "height": "36px",
+            "borderRadius": "6px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "paddingInline": "16px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "a854K",
+             "type": "text",
+             "name": "Label",
+             "text": "Cancel",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "zsm3h",
+           "type": "frame",
+           "name": "Button / Danger",
+           "style": {
+            "height": "36px",
+            "backgroundColor": "var(--color-danger-solid)",
+            "borderRadius": "6px",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "paddingInline": "16px",
+            "boxSizing": "border-box"
+           },
+           "children": [
+            {
+             "id": "gcVd2",
+             "type": "text",
+             "name": "Label",
+             "text": "Sign out",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "14px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "Wk2fH",
+       "type": "text",
+       "name": "Note",
+       "text": "The warning only shows when changes are waiting to sync. Otherwise the dialog is just the question.",
+       "style": {
+        "width": "460px",
+        "color": "var(--color-text-secondary)",
+        "fontFamily": "Inter",
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "19px",
+        "whiteSpace": "pre-wrap"
+       }
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "zZmDY",
+   "type": "frame",
+   "name": "Auth flow · Dark",
+   "style": {
+    "width": "7520px",
+    "height": "309px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "gap": "20px",
+    "padding": "48px",
+    "boxSizing": "border-box"
+   },
+   "x": 0,
+   "y": 0,
+   "children": [
+    {
+     "id": "p8Pkp",
+     "type": "text",
+     "name": "Title",
+     "text": "Accounts and sync, no passwords",
+     "style": {
+      "color": "var(--color-text-primary)",
+      "fontFamily": "Inter",
+      "fontSize": "32px",
+      "fontWeight": "700",
+      "whiteSpace": "pre",
+      "lineHeight": "normal"
+     }
+    },
+    {
+     "id": "ZDn9C",
+     "type": "frame",
+     "name": "Steps",
+     "style": {
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "flex-start",
+      "gap": "16px"
+     },
+     "children": [
+      {
+       "id": "Sr5k3",
+       "type": "frame",
+       "name": "Step",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "6px",
+        "padding": "16px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "7kaFW",
+         "type": "text",
+         "name": "N",
+         "text": "1 · APP",
+         "style": {
+          "color": "var(--color-accent-blue-strong)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "7cVzx",
+         "type": "text",
+         "name": "T",
+         "text": "Signed out, the app shows Welcome. Both buttons open the browser.",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      },
+      {
+       "id": "GS72Y",
+       "type": "frame",
+       "name": "Step",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "6px",
+        "padding": "16px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "6CTNQ",
+         "type": "text",
+         "name": "N",
+         "text": "2 · BROWSER",
+         "style": {
+          "color": "var(--color-accent-blue-strong)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "DreKU",
+         "type": "text",
+         "name": "T",
+         "text": "The sync server’s page signs you in with Touch ID (passkey plugin) or a link sent to your email (magic link plugin).",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sREAN",
+       "type": "frame",
+       "name": "Step",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "6px",
+        "padding": "16px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "W27eX",
+         "type": "text",
+         "name": "N",
+         "text": "3 · HAND-BACK",
+         "style": {
+          "color": "var(--color-accent-blue-strong)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "3Vz33",
+         "type": "text",
+         "name": "T",
+         "text": "The page opens productivity:// with a one-time code. The app swaps it for a session.",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      },
+      {
+       "id": "TXkFT",
+       "type": "frame",
+       "name": "Step",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "6px",
+        "padding": "16px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "X2Aw7",
+         "type": "text",
+         "name": "N",
+         "text": "4 · FIRST SYNC",
+         "style": {
+          "color": "var(--color-accent-blue-strong)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "UwyCw",
+         "type": "text",
+         "name": "T",
+         "text": "If this Mac and the account both have tasks, ask once: combine, or use the account.",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sUyVN",
+       "type": "frame",
+       "name": "Step",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "borderRadius": "10px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "flex-start",
+        "gap": "6px",
+        "padding": "16px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "e36XA",
+         "type": "text",
+         "name": "N",
+         "text": "5 · SIGNED IN",
+         "style": {
+          "color": "var(--color-accent-blue-strong)",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": "600",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        },
+        {
+         "id": "P4vnm",
+         "type": "text",
+         "name": "T",
+         "text": "The account row in the sidebar shows sync status and opens the account menu.",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "whiteSpace": "pre-wrap"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ijnRq",
+     "type": "text",
+     "name": "Why browser",
+     "text": "Why the browser: passkeys inside an Electron window need a paid Apple developer certificate and associated domains. The browser already has iCloud Keychain and Touch ID, and the future iPhone app can use the same passkey natively.",
+     "style": {
+      "width": "2100px",
+      "color": "var(--color-text-secondary)",
+      "fontFamily": "Inter",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "21px",
+      "whiteSpace": "pre-wrap"
+     }
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "tBvxz",
+   "type": "frame",
+   "name": "Auth / 4b Browser: Check your email · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 4560,
+   "y": 1400,
+   "children": [
+    {
+     "id": "sAR2k",
+     "type": "frame",
+     "name": "Browser bar",
+     "style": {
+      "height": "52px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-default)",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "16px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "JmpjN",
+       "type": "frame",
+       "name": "Lights",
+       "style": {
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "QHHUG",
+         "type": "frame",
+         "name": "Close",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "96NRy",
+         "type": "frame",
+         "name": "Minimise",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "9yXvi",
+         "type": "frame",
+         "name": "Zoom",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "MshNj",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      },
+      {
+       "id": "wJzj7",
+       "type": "frame",
+       "name": "Address",
+       "style": {
+        "width": "520px",
+        "height": "32px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "8px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "gap": "6px"
+       },
+       "children": [
+        {
+         "id": "bmQ9t",
+         "type": "icon",
+         "name": "lock",
+         "icon": "lock",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "13px",
+          "height": "13px"
+         }
+        },
+        {
+         "id": "9LdBi",
+         "type": "text",
+         "name": "URL",
+         "text": "productivity.app/check-email",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "n4iJd",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      }
+     ]
+    },
+    {
+     "id": "CF2B5",
+     "type": "frame",
+     "name": "Page",
+     "style": {
+      "height": "848px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "a4PqN",
+       "type": "frame",
+       "name": "Card",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "borderRadius": "16px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "22px",
+        "padding": "40px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "JqNYU",
+         "type": "frame",
+         "name": "Mail",
+         "style": {
+          "width": "56px",
+          "height": "56px",
+          "backgroundColor": "var(--color-accent-blue-subtle)",
+          "borderRadius": "28px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "mNkqQ",
+           "type": "icon",
+           "name": "mail",
+           "icon": "mail",
+           "style": {
+            "color": "var(--color-accent-blue-strong)",
+            "width": "26px",
+            "height": "26px"
+           }
+          }
+         ]
+        },
+        {
+         "id": "mEyHn",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "6px"
+         },
+         "children": [
+          {
+           "id": "B6p24",
+           "type": "text",
+           "name": "Title",
+           "text": "Check your email",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "4dYDq",
+           "type": "text",
+           "name": "Lede",
+           "text": "We sent a sign-in link to marco@example.com. Open it on this Mac. It works once and expires in 10 minutes.",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "lineHeight": "20px",
+            "textAlign": "center",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "bGYcf",
+         "type": "frame",
+         "name": "Actions",
+         "style": {
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "16px"
+         },
+         "children": [
+          {
+           "id": "F354K",
+           "type": "text",
+           "name": "Link",
+           "text": "Send it again",
+           "style": {
+            "color": "var(--color-text-link)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "Bshmx",
+           "type": "text",
+           "name": "Dot",
+           "text": "·",
+           "style": {
+            "color": "var(--color-text-placeholder)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "400",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "FEig9",
+           "type": "text",
+           "name": "Link",
+           "text": "Use a different email",
+           "style": {
+            "color": "var(--color-text-link)",
+            "fontFamily": "Inter",
+            "fontSize": "13px",
+            "fontWeight": "500",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "gKC5D",
+       "type": "text",
+       "name": "Note",
+       "text": "Clicking the link signs you in and sends you back to the app, like Touch ID does.",
+       "style": {
+        "width": "420px",
+        "color": "var(--color-text-muted)",
+        "fontFamily": "Inter",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "lineHeight": "17px",
+        "textAlign": "center",
+        "whiteSpace": "pre-wrap"
+       }
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  },
+  {
+   "id": "V2DmN",
+   "type": "frame",
+   "name": "Auth / 5b Browser: Signed in by email, offer Touch ID · Dark",
+   "style": {
+    "width": "1440px",
+    "height": "900px",
+    "backgroundColor": "var(--color-bg-sidebar)",
+    "border": "1px solid var(--color-border-default)",
+    "borderRadius": "12px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "boxSizing": "border-box"
+   },
+   "x": 6080,
+   "y": 1400,
+   "children": [
+    {
+     "id": "B5GRE",
+     "type": "frame",
+     "name": "Browser bar",
+     "style": {
+      "height": "52px",
+      "backgroundColor": "var(--color-bg-card)",
+      "border": "1px solid var(--color-border-default)",
+      "alignSelf": "stretch",
+      "display": "flex",
+      "alignItems": "center",
+      "gap": "16px",
+      "paddingInline": "20px",
+      "boxSizing": "border-box"
+     },
+     "children": [
+      {
+       "id": "bb25S",
+       "type": "frame",
+       "name": "Lights",
+       "style": {
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "8px"
+       },
+       "children": [
+        {
+         "id": "2gpGF",
+         "type": "frame",
+         "name": "Close",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "y8UEL",
+         "type": "frame",
+         "name": "Minimise",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        },
+        {
+         "id": "AEd7i",
+         "type": "frame",
+         "name": "Zoom",
+         "style": {
+          "width": "12px",
+          "height": "12px",
+          "backgroundColor": "var(--color-bg-pressed)",
+          "borderRadius": "6px"
+         }
+        }
+       ]
+      },
+      {
+       "id": "Fk4hh",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      },
+      {
+       "id": "Eqmzn",
+       "type": "frame",
+       "name": "Address",
+       "style": {
+        "width": "520px",
+        "height": "32px",
+        "backgroundColor": "var(--color-bg-hover)",
+        "borderRadius": "8px",
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "gap": "6px"
+       },
+       "children": [
+        {
+         "id": "vNffQ",
+         "type": "icon",
+         "name": "lock",
+         "icon": "lock",
+         "style": {
+          "color": "var(--color-text-secondary)",
+          "width": "13px",
+          "height": "13px"
+         }
+        },
+        {
+         "id": "66kuJ",
+         "type": "text",
+         "name": "URL",
+         "text": "productivity.app/signed-in",
+         "style": {
+          "color": "var(--color-text-primary)",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "whiteSpace": "pre",
+          "lineHeight": "normal"
+         }
+        }
+       ]
+      },
+      {
+       "id": "apxiB",
+       "type": "frame",
+       "name": "Spacer",
+       "style": {
+        "width": "390px",
+        "height": "1px",
+        "flexGrow": "1"
+       }
+      }
+     ]
+    },
+    {
+     "id": "9yGxh",
+     "type": "frame",
+     "name": "Page",
+     "style": {
+      "height": "848px",
+      "alignSelf": "stretch",
+      "flexGrow": "1",
+      "display": "flex",
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "alignItems": "center"
+     },
+     "children": [
+      {
+       "id": "6Me3A",
+       "type": "frame",
+       "name": "Card",
+       "style": {
+        "width": "420px",
+        "backgroundColor": "var(--color-bg-card)",
+        "border": "1px solid var(--color-border-default)",
+        "borderRadius": "16px",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "22px",
+        "padding": "40px",
+        "boxSizing": "border-box"
+       },
+       "children": [
+        {
+         "id": "8Xqm2",
+         "type": "frame",
+         "name": "Done",
+         "style": {
+          "width": "56px",
+          "height": "56px",
+          "backgroundColor": "var(--color-tag-green-bg)",
+          "borderRadius": "28px",
+          "display": "flex",
+          "justifyContent": "center",
+          "alignItems": "center"
+         },
+         "children": [
+          {
+           "id": "vYVcT",
+           "type": "icon",
+           "name": "check",
+           "icon": "check",
+           "style": {
+            "color": "var(--color-success-fg)",
+            "width": "28px",
+            "height": "28px"
+           }
+          }
+         ]
+        },
+        {
+         "id": "fBQEj",
+         "type": "frame",
+         "name": "Copy",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "center",
+          "gap": "6px"
+         },
+         "children": [
+          {
+           "id": "jBBXV",
+           "type": "text",
+           "name": "Title",
+           "text": "You’re signed in",
+           "style": {
+            "color": "var(--color-text-primary)",
+            "fontFamily": "Inter",
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "whiteSpace": "pre",
+            "lineHeight": "normal"
+           }
+          },
+          {
+           "id": "WUUpr",
+           "type": "text",
+           "name": "Lede",
+           "text": "Productivity is opening now. Want to skip the email next time?",
+           "style": {
+            "color": "var(--color-text-secondary)",
+            "fontFamily": "Inter",
+            "fontSize": "14px",
+            "fontWeight": "400",
+            "lineHeight": "20px",
+            "textAlign": "center",
+            "whiteSpace": "pre-wrap"
+           }
+          }
+         ]
+        },
+        {
+         "id": "j6gTv",
+         "type": "frame",
+         "name": "Actions",
+         "style": {
+          "alignSelf": "stretch",
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "flex-start",
+          "gap": "10px"
+         },
+         "children": [
+          {
+           "id": "Kb6Mu",
+           "type": "frame",
+           "name": "Button / Primary / Large",
+           "style": {
+            "height": "44px",
+            "backgroundColor": "var(--color-accent-blue-strong)",
+            "borderRadius": "8px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "gap": "8px"
+           },
+           "children": [
+            {
+             "id": "3N9Jd",
+             "type": "icon",
+             "name": "fingerprint",
+             "icon": "fingerprint",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "width": "18px",
+              "height": "18px"
+             }
+            },
+            {
+             "id": "aRvjh",
+             "type": "text",
+             "name": "Label",
+             "text": "Set up Touch ID",
+             "style": {
+              "color": "var(--color-text-on-accent)",
+              "fontFamily": "Inter",
+              "fontSize": "15px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          },
+          {
+           "id": "ZkA7u",
+           "type": "frame",
+           "name": "Button / Ghost / Large",
+           "style": {
+            "height": "44px",
+            "borderRadius": "8px",
+            "alignSelf": "stretch",
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center"
+           },
+           "children": [
+            {
+             "id": "c83JR",
+             "type": "text",
+             "name": "Label",
+             "text": "Not now",
+             "style": {
+              "color": "var(--color-text-secondary)",
+              "fontFamily": "Inter",
+              "fontSize": "15px",
+              "fontWeight": "500",
+              "whiteSpace": "pre",
+              "lineHeight": "normal"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "QjH22",
+       "type": "text",
+       "name": "Note",
+       "text": "Only shown after an email sign-in, when the account has no passkey yet.",
+       "style": {
+        "width": "420px",
+        "color": "var(--color-text-muted)",
+        "fontFamily": "Inter",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "lineHeight": "17px",
+        "textAlign": "center",
+        "whiteSpace": "pre-wrap"
+       }
+      }
+     ]
+    }
+   ],
+   "theme": "dark"
+  }
+ ]
+}

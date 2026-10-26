@@ -545,7 +545,7 @@
              "name": "chevron-down",
              "icon": "chevron-down",
              "style": {
-              "color": "#5F5E5B",
+              "color": "var(--color-text-secondary)",
               "width": "14px",
               "height": "14px"
              }
@@ -588,7 +588,7 @@
              "name": "chevron-down",
              "icon": "chevron-down",
              "style": {
-              "color": "#5F5E5B",
+              "color": "var(--color-text-secondary)",
               "width": "14px",
               "height": "14px"
              }
@@ -1516,7 +1516,7 @@
              "name": "table-2",
              "icon": "table-2",
              "style": {
-              "color": "#191918",
+              "color": "var(--color-text-primary)",
               "width": "14px",
               "height": "14px"
              }
@@ -1558,7 +1558,7 @@
              "name": "table-2",
              "icon": "table-2",
              "style": {
-              "color": "#91918E",
+              "color": "var(--color-text-tertiary)",
               "width": "14px",
               "height": "14px"
              }
@@ -1698,7 +1698,7 @@
              "name": "users",
              "icon": "users",
              "style": {
-              "color": "#D44C47",
+              "color": "var(--color-tag-red-fg)",
               "width": "16px",
               "height": "16px"
              }
@@ -1744,7 +1744,7 @@
              "name": "users",
              "icon": "users",
              "style": {
-              "color": "#D44C47",
+              "color": "var(--color-tag-red-fg)",
               "width": "16px",
               "height": "16px"
              }
@@ -1790,7 +1790,7 @@
              "name": "users",
              "icon": "users",
              "style": {
-              "color": "#D44C47",
+              "color": "var(--color-tag-red-fg)",
               "width": "16px",
               "height": "16px"
              }
@@ -1914,7 +1914,7 @@
            "style": {
             "width": "180px",
             "backgroundColor": "var(--color-bg-card)",
-            "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+            "boxShadow": "var(--shadow-card)",
             "borderRadius": "4px",
             "display": "flex",
             "flexDirection": "column",
@@ -1947,8 +1947,8 @@
            "name": "State=Hover",
            "style": {
             "width": "180px",
-            "backgroundColor": "#FBFBFA",
-            "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+            "backgroundColor": "var(--color-bg-sidebar)",
+            "boxShadow": "var(--shadow-card)",
             "borderRadius": "4px",
             "display": "flex",
             "flexDirection": "column",
@@ -1982,7 +1982,7 @@
            "style": {
             "width": "180px",
             "backgroundColor": "var(--color-bg-card)",
-            "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px 0px rgba(15, 15, 15, 0.1), 0px 9px 24px 0px rgba(15, 15, 15, 0.1)",
+            "boxShadow": "var(--shadow-popover)",
             "borderRadius": "4px",
             "transform": "rotate(-1.9999999065344156deg)",
             "display": "flex",
@@ -2123,7 +2123,7 @@
              "name": "search",
              "icon": "search",
              "style": {
-              "color": "#5F5E5B",
+              "color": "var(--color-text-secondary)",
               "width": "16px",
               "height": "16px"
              }
@@ -2149,7 +2149,7 @@
              "style": {
               "width": "12px",
               "height": "12px",
-              "backgroundColor": "#E3E2E0",
+              "backgroundColor": "var(--color-bg-pressed)",
               "borderRadius": "50%"
              }
             },
@@ -2160,7 +2160,7 @@
              "style": {
               "width": "12px",
               "height": "12px",
-              "backgroundColor": "#E3E2E0",
+              "backgroundColor": "var(--color-bg-pressed)",
               "borderRadius": "50%"
              }
             },
@@ -2171,7 +2171,7 @@
              "style": {
               "width": "12px",
               "height": "12px",
-              "backgroundColor": "#E3E2E0",
+              "backgroundColor": "var(--color-bg-pressed)",
               "borderRadius": "50%"
              }
             }
@@ -2291,7 +2291,7 @@
              "name": "plus",
              "icon": "plus",
              "style": {
-              "color": "#91918E",
+              "color": "var(--color-text-tertiary)",
               "width": "14px",
               "height": "14px"
              }
@@ -2368,7 +2368,7 @@
          "style": {
           "width": "28px",
           "height": "28px",
-          "border": "2px solid #111111",
+          "border": "2px solid var(--color-illustration-ink)",
           "borderRadius": "6px",
           "display": "flex",
           "justifyContent": "center",
@@ -2382,7 +2382,7 @@
            "name": "Text",
            "text": "N",
            "style": {
-            "color": "#111111",
+            "color": "var(--color-illustration-ink)",
             "fontFamily": "Inter",
             "fontSize": "16px",
             "fontWeight": "700",
@@ -2702,7 +2702,7 @@
       "width": "1000px",
       "height": "440px",
       "backgroundColor": "var(--color-bg-page)",
-      "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+      "boxShadow": "var(--shadow-window)",
       "borderRadius": "12px",
       "overflow": "hidden",
       "display": "flex",
@@ -3104,7 +3104,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3123,7 +3123,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3215,7 +3215,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3239,7 +3239,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3331,7 +3331,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3423,7 +3423,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
@@ -3447,7 +3447,7 @@
              "ref": "n0_526",
              "style": {
               "backgroundColor": "var(--color-bg-card)",
-              "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+              "boxShadow": "var(--shadow-card)",
               "borderRadius": "4px",
               "alignSelf": "stretch",
               "display": "flex",
