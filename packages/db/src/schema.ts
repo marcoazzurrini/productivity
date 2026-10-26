@@ -1,5 +1,5 @@
+import type { CalendarSource, PendingChange } from "@productivity/calendar";
 import type {
-  CalendarEventKind,
   CaptureSource,
   Energy,
   LocalDate,
@@ -8,7 +8,13 @@ import type {
   TagColor,
   TaskList,
 } from "@productivity/gtd";
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  integer,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 /**
  * The database schema. After changing it, run `bun run db:generate` to write
@@ -71,17 +77,50 @@ export const tasks = sqliteTable(
   ]
 );
 
-export const events = sqliteTable(
-  "events",
+/** The local calendar and the user's Google calendars. */
+export const calendars = sqliteTable("calendars", {
+  color: text("color").notNull(),
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  position: integer("position").notNull(),
+  primary: integer("is_primary", { mode: "boolean" }).notNull().default(false),
+  remoteId: text("remote_id"),
+  source: text("source").$type<CalendarSource>().notNull(),
+  syncToken: text("sync_token"),
+  writable: integer("writable", { mode: "boolean" }).notNull().default(true),
+});
+
+/**
+ * Timed events store UTC instants (`2026-10-25T09:00:00.000Z`), all-day
+ * events days (`2026-10-25`). Either way the end is exclusive.
+ */
+export const calendarEvents = sqliteTable(
+  "calendar_events",
   {
     allDay: integer("all_day", { mode: "boolean" }).notNull().default(false),
-    end: text("end_at").$type<LocalDateTime>().notNull(),
+    calendarId: text("calendar_id")
+      .notNull()
+      .references(() => calendars.id, { onDelete: "cascade" }),
+    editable: integer("editable", { mode: "boolean" }).notNull().default(true),
+    end: text("end_at").notNull(),
+    etag: text("etag"),
     id: text("id").primaryKey(),
-    kind: text("kind").$type<CalendarEventKind>().notNull(),
-    start: text("start").$type<LocalDateTime>().notNull(),
+    pending: text("pending").$type<PendingChange>(),
+    recurring: integer("recurring", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    remoteId: text("remote_id"),
+    start: text("start_at").notNull(),
     title: text("title").notNull(),
   },
-  (table) => [index("events_by_start").on(table.start)]
+  (table) => [
+    index("calendar_events_by_start").on(table.start),
+    index("calendar_events_by_pending").on(table.pending),
+    uniqueIndex("calendar_events_by_remote_id").on(
+      table.calendarId,
+      table.remoteId
+    ),
+  ]
 );
 
 export const reviewSteps = sqliteTable("review_steps", {

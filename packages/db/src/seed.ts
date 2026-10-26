@@ -1,6 +1,5 @@
-import { addDays, startOfWeek } from "@productivity/gtd";
+import { addDays, parseLocalDateTime, startOfWeek } from "@productivity/gtd";
 import type {
-  CalendarEventKind,
   CaptureSource,
   Context,
   Energy,
@@ -47,12 +46,14 @@ export interface SeedTask {
   block?: { start: string; end: string };
 }
 
+/** An event on the local calendar, in its stored form. */
 export interface SeedEvent {
   title: string;
-  kind: CalendarEventKind;
+  allDay: boolean;
+  /** A UTC instant, or for all-day events a day. */
   start: string;
+  /** Exclusive, in the same format as start. */
   end: string;
-  allDay?: boolean;
 }
 
 export interface SampleData {
@@ -70,150 +71,57 @@ export const sampleData = (today: LocalDate): SampleData => {
   const monday = startOfWeek(today);
 
   const at = (weekday: number, time: string): string =>
-    `${addDays(monday, weekday)}T${time}`;
+    parseLocalDateTime(`${addDays(monday, weekday)}T${time}`).toISOString();
+
+  const timed = (
+    weekday: number,
+    from: string,
+    until: string,
+    title: string
+  ) => ({
+    allDay: false,
+    end: at(weekday, until),
+    start: at(weekday, from),
+    title,
+  });
 
   return {
     events: [
-      ...[0, 1, 2, 3, 4].map((weekday) => ({
-        end: at(weekday, "09:30"),
-        kind: "meeting" as const,
-        start: at(weekday, "09:00"),
-        title: "Team standup",
-      })),
+      ...[0, 1, 2, 3, 4].map((weekday) =>
+        timed(weekday, "09:00", "09:30", "Team standup")
+      ),
       {
         allDay: true,
-        end: at(4, "23:59"),
-        kind: "focus",
-        start: at(0, "00:00"),
+        end: addDays(monday, 5),
+        start: monday,
         title: "Q4 planning week",
       },
       {
         allDay: true,
-        end: at(5, "23:59"),
-        kind: "personal",
-        start: at(5, "00:00"),
+        end: addDays(monday, 6),
+        start: addDays(monday, 5),
         title: "Eve's birthday",
       },
-      {
-        end: at(0, "12:00"),
-        kind: "meeting",
-        start: at(0, "11:00"),
-        title: "Design review",
-      },
-      {
-        end: at(0, "16:00"),
-        kind: "focus",
-        start: at(0, "14:00"),
-        title: "Deep work: roadmap",
-      },
-      {
-        end: at(0, "20:00"),
-        kind: "personal",
-        start: at(0, "19:00"),
-        title: "Gym",
-      },
-      {
-        end: at(1, "10:30"),
-        kind: "meeting",
-        start: at(1, "10:00"),
-        title: "1:1 with Olivia",
-      },
-      {
-        end: at(1, "16:00"),
-        kind: "meeting",
-        start: at(1, "15:00"),
-        title: "Eng sync",
-      },
-      {
-        end: at(2, "12:00"),
-        kind: "focus",
-        start: at(2, "10:00"),
-        title: "Writing: Q4 goals",
-      },
-      {
-        end: at(2, "14:00"),
-        kind: "meeting",
-        start: at(2, "13:00"),
-        title: "Product review",
-      },
-      {
-        end: at(2, "17:00"),
-        kind: "personal",
-        start: at(2, "16:00"),
-        title: "Dentist",
-      },
-      {
-        end: at(3, "11:00"),
-        kind: "meeting",
-        start: at(3, "10:00"),
-        title: "Design Weekly",
-      },
-      {
-        end: at(3, "13:00"),
-        kind: "meeting",
-        start: at(3, "12:00"),
-        title: "Eng Kickoff",
-      },
-      {
-        end: at(3, "14:00"),
-        kind: "personal",
-        start: at(3, "13:00"),
-        title: "Lunch with Diane",
-      },
-      {
-        end: at(3, "15:30"),
-        kind: "focus",
-        start: at(3, "14:00"),
-        title: "Deep work: Q4 budget",
-      },
-      {
-        end: at(3, "17:00"),
-        kind: "meeting",
-        start: at(3, "16:00"),
-        title: "Product Updates",
-      },
-      {
-        end: at(3, "20:00"),
-        kind: "personal",
-        start: at(3, "19:00"),
-        title: "Gym",
-      },
-      {
-        end: at(4, "10:30"),
-        kind: "meeting",
-        start: at(4, "10:00"),
-        title: "1:1 with James",
-      },
-      {
-        end: at(4, "13:30"),
-        kind: "personal",
-        start: at(4, "12:30"),
-        title: "Team lunch",
-      },
-      {
-        end: at(4, "19:30"),
-        kind: "personal",
-        start: at(4, "18:00"),
-        title: "Team drinks",
-      },
-      {
-        end: at(5, "11:00"),
-        kind: "personal",
-        start: at(5, "10:00"),
-        title: "Farmers market",
-      },
-      {
-        end: at(5, "21:30"),
-        kind: "personal",
-        start: at(5, "19:30"),
-        title: "Dinner with Eve",
-      },
-      {
-        end: at(6, "09:30"),
-        kind: "personal",
-        start: at(6, "08:00"),
-        title: "Long run",
-      },
+      timed(0, "11:00", "12:00", "Design review"),
+      timed(0, "14:00", "16:00", "Deep work: roadmap"),
+      timed(0, "19:00", "20:00", "Gym"),
+      timed(1, "10:00", "10:30", "1:1 with Olivia"),
+      timed(1, "15:00", "16:00", "Eng sync"),
+      timed(2, "10:00", "12:00", "Writing: Q4 goals"),
+      timed(2, "13:00", "14:00", "Product review"),
+      timed(2, "16:00", "17:00", "Dentist"),
+      timed(3, "10:00", "11:00", "Design Weekly"),
+      timed(3, "12:00", "13:00", "Eng Kickoff"),
+      timed(3, "13:00", "14:00", "Lunch with Diane"),
+      timed(3, "14:00", "15:30", "Deep work: Q4 budget"),
+      timed(3, "16:00", "17:00", "Product Updates"),
+      timed(3, "19:00", "20:00", "Gym"),
+      timed(4, "10:00", "10:30", "1:1 with James"),
+      timed(4, "12:30", "13:30", "Team lunch"),
+      timed(4, "18:00", "19:30", "Team drinks"),
+      timed(5, "10:00", "11:00", "Farmers market"),
+      timed(5, "19:30", "21:30", "Dinner with Eve"),
+      timed(6, "08:00", "09:30", "Long run"),
     ],
     projects: [
       {

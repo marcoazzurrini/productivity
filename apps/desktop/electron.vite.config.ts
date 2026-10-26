@@ -5,6 +5,7 @@ import { defineConfig } from "electron-vite";
 // Workspace packages ship TypeScript source, so they are bundled rather than
 // loaded from node_modules at runtime.
 const workspacePackages = [
+  "@productivity/calendar",
   "@productivity/db",
   "@productivity/gtd",
   "@productivity/ui",

@@ -3,7 +3,9 @@ import { ToastProvider } from "@productivity/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
+import type { CalendarBridge } from "../../shared/calendar.ts";
 import type { JournalBridge } from "../../shared/journal.ts";
+import { CalendarProvider } from "./calendar-context.tsx";
 import { JournalProvider } from "./journal-context.tsx";
 import { NavigationProvider } from "./navigation.tsx";
 import type { View } from "./navigation.tsx";
@@ -21,6 +23,7 @@ export const createQueryClient = (): QueryClient =>
 export interface RootProps {
   store: RemoteGtdStore;
   journal: JournalBridge;
+  calendar: CalendarBridge;
   /** One per app window, or per test. */
   client: QueryClient;
   initialView?: View;
@@ -31,21 +34,24 @@ export interface RootProps {
 export const Root = ({
   store,
   journal,
+  calendar,
   client,
   initialView,
   children,
 }: RootProps) => (
   <QueryClientProvider client={client}>
     <StoreProvider store={store}>
-      <JournalProvider journal={journal}>
-        <NavigationProvider initial={initialView}>
-          <ToastProvider>
-            <TaskDialogProvider>
-              <QuickCaptureProvider>{children}</QuickCaptureProvider>
-            </TaskDialogProvider>
-          </ToastProvider>
-        </NavigationProvider>
-      </JournalProvider>
+      <CalendarProvider bridge={calendar}>
+        <JournalProvider journal={journal}>
+          <NavigationProvider initial={initialView}>
+            <ToastProvider>
+              <TaskDialogProvider>
+                <QuickCaptureProvider>{children}</QuickCaptureProvider>
+              </TaskDialogProvider>
+            </ToastProvider>
+          </NavigationProvider>
+        </JournalProvider>
+      </CalendarProvider>
     </StoreProvider>
   </QueryClientProvider>
 );

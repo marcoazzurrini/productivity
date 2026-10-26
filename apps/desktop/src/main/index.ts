@@ -1,11 +1,16 @@
 import path from "node:path";
 
+import { createCalendar } from "@productivity/calendar";
+import type { GoogleOptions } from "@productivity/calendar";
 import { openStore } from "@productivity/db";
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, safeStorage, shell } from "electron";
 
+import { calendarChannel } from "../shared/calendar.ts";
 import { storeChannel } from "../shared/channel.ts";
 import { journalChannel } from "../shared/journal.ts";
+import { callCalendar } from "./calendar-handler.ts";
 import { canOpenExternally } from "./external-links.ts";
+import { encryptedFile, listenForRedirect } from "./google.ts";
 import { checkRead, checkWrite } from "./journal-handler.ts";
 import { callStore } from "./store-handler.ts";
 
@@ -34,6 +39,56 @@ const store = openStore({
 ipcMain.handle(storeChannel, (_event, method: string, args) =>
   callStore(store, method, args)
 );
+
+/**
+ * The Google Cloud OAuth client ("Desktop app"), from .env.local at build
+ * time or the environment at run time. Without one the calendar is local.
+ */
+const googleClientId =
+  process.env.GOOGLE_CLIENT_ID ?? import.meta.env.MAIN_VITE_GOOGLE_CLIENT_ID;
+
+const googleClientSecret =
+  process.env.GOOGLE_CLIENT_SECRET ??
+  import.meta.env.MAIN_VITE_GOOGLE_CLIENT_SECRET;
+
+const google: GoogleOptions | undefined =
+  googleClientId === undefined || googleClientId === ""
+    ? undefined
+    : {
+        client: { clientId: googleClientId, clientSecret: googleClientSecret },
+        listenForRedirect,
+        openBrowser: (url) => shell.openExternal(url),
+        secrets: encryptedFile(
+          path.join(dataDir, isDev ? "google-dev.token" : "google.token"),
+          safeStorage
+        ),
+      };
+
+const calendar = createCalendar({
+  google,
+  repository: store.calendarRepository,
+});
+
+ipcMain.handle(calendarChannel.call, (_event, method: string, args) =>
+  callCalendar(calendar, method, args)
+);
+
+calendar.subscribe(() => {
+  for (const window of BrowserWindow.getAllWindows()) {
+    window.webContents.send(calendarChannel.changed);
+  }
+});
+
+/** Google has no push for desktop apps, so ask for changes regularly. */
+const syncEveryMs = 2 * 60 * 1000;
+
+setInterval(() => {
+  void calendar.sync();
+}, syncEveryMs);
+
+app.on("browser-window-focus", () => {
+  void calendar.sync();
+});
 
 ipcMain.handle(journalChannel.read, (_event, ...args) => {
   checkRead(args);
@@ -125,5 +180,6 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
+  calendar.close();
   store.close();
 });

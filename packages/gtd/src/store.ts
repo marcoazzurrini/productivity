@@ -1,9 +1,7 @@
 import type { ClarifyOutcome } from "./clarify.ts";
-import type { LocalDate, LocalDateTime } from "./dates.ts";
+import type { LocalDate } from "./dates.ts";
 import type {
   Area,
-  CalendarEvent,
-  CalendarEventKind,
   CaptureSource,
   Context,
   Energy,
@@ -40,14 +38,6 @@ export interface NewProject {
   deadline: LocalDate | null;
 }
 
-export interface NewEvent {
-  title: string;
-  kind: CalendarEventKind;
-  start: LocalDateTime;
-  end: LocalDateTime;
-  allDay: boolean;
-}
-
 export interface Overview {
   today: LocalDate;
   inbox: number;
@@ -72,8 +62,7 @@ export interface ProjectDetail {
 
 export interface Week {
   days: LocalDate[];
-  events: CalendarEvent[];
-  /** Tasks the user dragged onto the calendar. */
+  /** Tasks the user dragged onto the calendar. Events live in @productivity/calendar. */
   blocks: Task[];
 }
 
@@ -113,7 +102,6 @@ export interface GtdStore {
   createProject: (project: NewProject) => Project;
 
   getWeek: (day: LocalDate) => Week;
-  createEvent: (event: NewEvent) => CalendarEvent;
   /** Places a task on the calendar, or removes it with null. */
   scheduleBlock: (taskId: string, block: TimeBlock | null) => Task;
 
@@ -148,7 +136,6 @@ export const gtdStoreMethods = [
   "getProject",
   "createProject",
   "getWeek",
-  "createEvent",
   "scheduleBlock",
   "getReview",
   "setReviewStep",
@@ -186,7 +173,6 @@ export const createRemoteStore = (
   activate: (...args) => transport("activate", args),
   capture: (...args) => transport("capture", args),
   clarify: (...args) => transport("clarify", args),
-  createEvent: (...args) => transport("createEvent", args),
   createProject: (...args) => transport("createProject", args),
   deleteTask: (...args) => transport("deleteTask", args),
   finishReview: (...args) => transport("finishReview", args),

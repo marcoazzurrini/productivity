@@ -1,5 +1,10 @@
 /* Global baseline for apps that use the design system. Component styles live in StyleX. */
 @import "@fontsource-variable/inter";
+/* The week calendar: FullCalendar's layout, its Breezy theme, and a palette
+   that WeekCalendar recolors with the design tokens. */
+@import "@fullcalendar/react/skeleton.css";
+@import "@fullcalendar/react/themes/breezy/theme.css";
+@import "@fullcalendar/react/themes/breezy/palettes/indigo.css";
 
 *,
 *::before,

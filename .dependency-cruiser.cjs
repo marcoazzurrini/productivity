@@ -45,10 +45,25 @@ module.exports = {
       to: { path: "^packages/", pathNot: "^packages/gtd/" },
     },
     {
-      from: { path: "^packages/db/" },
-      name: "db-only-depends-on-gtd",
+      comment:
+        "The calendar runs in any JavaScript runtime: no Node built-ins. Sign-in I/O is passed in.",
+      from: { path: "^packages/calendar/src/" },
+      name: "calendar-is-independent",
       severity: "error",
-      to: { path: "^packages/", pathNot: "^packages/(db|gtd)/" },
+      to: { dependencyTypes: ["core"], path: "." },
+    },
+    {
+      from: { path: "^packages/calendar/" },
+      name: "calendar-has-no-workspace-dependencies",
+      severity: "error",
+      to: { path: "^packages/", pathNot: "^packages/calendar/" },
+    },
+    {
+      comment: "db stores data for gtd and calendar, and knows nothing else.",
+      from: { path: "^packages/db/" },
+      name: "db-only-depends-on-gtd-and-calendar",
+      severity: "error",
+      to: { path: "^packages/", pathNot: "^packages/(db|gtd|calendar)/" },
     },
     {
       comment: "The design system knows nothing about GTD or storage.",

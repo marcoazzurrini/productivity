@@ -1,14 +1,21 @@
+import { createCalendar } from "@productivity/calendar";
+import type {
+  CalendarService,
+  CalendarTransport,
+} from "@productivity/calendar";
 import { openStore } from "@productivity/db";
 import type { Store } from "@productivity/db";
 import { createRemoteStore } from "@productivity/gtd";
 import type { StoreTransport } from "@productivity/gtd";
 import { render } from "@testing-library/react";
 
+import { runCalendarMethod } from "../src/main/calendar-handler.ts";
 import { checkRead, checkWrite } from "../src/main/journal-handler.ts";
 import { runStoreMethod } from "../src/main/store-handler.ts";
 import { App } from "../src/renderer/src/app.tsx";
 import type { View } from "../src/renderer/src/navigation.tsx";
 import { Root, createQueryClient } from "../src/renderer/src/root.tsx";
+import type { CalendarBridge } from "../src/shared/calendar.ts";
 import type { JournalBridge } from "../src/shared/journal.ts";
 
 /** Thursday 23 October 2026, 14:40: the day the design shows. */
@@ -20,8 +27,8 @@ export const fixedNow = new Date(2026, 9, 23, 14, 40);
  */
 export const renderApp = (
   initialView?: View,
-  /** Runs against the store before the app first reads it. */
-  prepare?: (store: Store) => void
+  /** Runs against the store and calendar before the app first reads them. */
+  prepare?: (store: Store, calendar: CalendarService) => void
 ) => {
   const store = openStore({
     clock: () => fixedNow,
@@ -29,7 +36,13 @@ export const renderApp = (
     sample: true,
   });
 
-  prepare?.(store);
+  const calendar = createCalendar({
+    clock: () => fixedNow,
+    repository: store.calendarRepository,
+    syncDelayMs: null,
+  });
+
+  prepare?.(store, calendar);
 
   const transport: StoreTransport = async (method, args) =>
     structuredClone(await runStoreMethod(store, method, structuredClone(args)));
@@ -54,8 +67,20 @@ export const renderApp = (
     },
   };
 
+  // The same handler as the calendar's IPC channel in main/index.ts.
+  const call: CalendarTransport = (method, args) =>
+    runCalendarMethod(calendar, method, structuredClone(args)).then((result) =>
+      structuredClone(result)
+    );
+
+  const calendarBridge: CalendarBridge = {
+    call,
+    onChanged: (listener) => calendar.subscribe(listener),
+  };
+
   render(
     <Root
+      calendar={calendarBridge}
       client={createQueryClient()}
       initialView={initialView}
       journal={journal}
@@ -65,5 +90,5 @@ export const renderApp = (
     </Root>
   );
 
-  return { store };
+  return { calendar, store };
 };

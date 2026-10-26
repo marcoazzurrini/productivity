@@ -256,15 +256,12 @@ describe("sample data", () => {
     ]);
   });
 
-  test("the week holds events and time-blocked tasks", () => {
+  test("the week holds time-blocked tasks", () => {
     store = memoryStore(true);
 
     const week = store.getWeek("2026-10-23");
 
     expect(week.days[0]).toBe("2026-10-19");
-    expect(
-      week.events.filter((event) => event.allDay).map((event) => event.title)
-    ).toEqual(["Q4 planning week", "Eve's birthday"]);
     expect(week.blocks.map((task) => task.title)).toEqual([
       "Draft slide outline",
       "Call Diane about venue",
@@ -290,20 +287,6 @@ describe("calendar and review", () => {
 
     store.scheduleBlock(task.id, null);
     expect(store.getWeek("2026-10-24").blocks).toEqual([]);
-  });
-
-  test("events outside the week are not returned", () => {
-    store = memoryStore();
-
-    store.createEvent({
-      allDay: false,
-      end: "2026-10-30T10:00",
-      kind: "meeting",
-      start: "2026-10-30T09:00",
-      title: "Next week",
-    });
-
-    expect(store.getWeek("2026-10-23").events).toEqual([]);
   });
 
   test("the review remembers ticked steps until it is finished", () => {

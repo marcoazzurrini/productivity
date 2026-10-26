@@ -75,14 +75,3 @@ export interface Project {
   deadline: LocalDate | null;
   status: ProjectStatus;
 }
-
-export type CalendarEventKind = "meeting" | "focus" | "personal";
-
-export interface CalendarEvent {
-  id: string;
-  title: string;
-  kind: CalendarEventKind;
-  start: LocalDateTime;
-  end: LocalDateTime;
-  allDay: boolean;
-}

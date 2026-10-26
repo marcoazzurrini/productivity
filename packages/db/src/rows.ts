@@ -1,6 +1,6 @@
-import type { CalendarEvent, Project, Task } from "@productivity/gtd";
+import type { Project, Task } from "@productivity/gtd";
 
-import type { events, projects, tasks } from "./schema.ts";
+import type { projects, tasks } from "./schema.ts";
 
 /**
  * Converts between Drizzle rows and the GTD model. The two differ only
@@ -31,5 +31,3 @@ export const toProject = (row: typeof projects.$inferSelect): Project => ({
   outcome: row.outcome,
   status: row.status,
 });
-
-export const toEvent = (row: typeof events.$inferSelect): CalendarEvent => row;
