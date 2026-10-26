@@ -1,12 +1,16 @@
 import { Toggle } from "@base-ui/react/toggle";
 import { ToggleGroup } from "@base-ui/react/toggle-group";
 import * as stylex from "@stylexjs/stylex";
+import type { ReactNode } from "react";
 
 import { color, font, motion, radius, shadow } from "../tokens.stylex.ts";
 
 export interface SegmentOption {
   value: string;
+  /** The visible text, or the accessible name and tooltip of an icon. */
   label: string;
+  /** Shows this in place of the label. */
+  icon?: ReactNode;
 }
 
 export interface SegmentedControlProps {
@@ -17,6 +21,8 @@ export interface SegmentedControlProps {
   onValueChange: (value: string) => void;
   /** "segmented" sits in a grey track; "pills" are free-standing filter chips. */
   variant?: "segmented" | "pills";
+  /** "small" fits beside a sidebar row. Segmented only. */
+  size?: "default" | "small";
 }
 
 const styles = stylex.create({
@@ -54,9 +60,18 @@ const styles = stylex.create({
     height: 24,
   },
   segmentPressed: {
-    backgroundColor: color.bgPage,
-    boxShadow: "0 1px 2px rgba(15, 15, 15, 0.1)",
+    backgroundColor: color.bgRaised,
+    boxShadow: shadow.raised,
     color: { ":hover": color.textPrimary, default: color.textPrimary },
+  },
+  small: {
+    height: 20,
+    justifyContent: "center",
+    paddingInline: 0,
+    width: 26,
+  },
+  smallTrack: {
+    gap: 0,
   },
   track: {
     backgroundColor: color.bgHover,
@@ -74,6 +89,7 @@ export const SegmentedControl = ({
   options,
   onValueChange,
   variant = "segmented",
+  size = "default",
 }: SegmentedControlProps) => (
   <ToggleGroup
     aria-label={label}
@@ -85,25 +101,31 @@ export const SegmentedControl = ({
       }
     }}
     value={[value]}
-    {...stylex.props(variant === "segmented" ? styles.track : styles.pills)}
+    {...stylex.props(
+      variant === "segmented" ? styles.track : styles.pills,
+      variant === "segmented" && size === "small" && styles.smallTrack
+    )}
   >
     {options.map((option) => {
       const pressed = option.value === value;
 
       return (
         <Toggle
+          aria-label={option.icon === undefined ? undefined : option.label}
           key={option.value}
+          title={option.icon === undefined ? undefined : option.label}
           value={option.value}
           {...stylex.props(
             styles.item,
             variant === "segmented" ? styles.segment : styles.pill,
+            variant === "segmented" && size === "small" && styles.small,
             pressed &&
               (variant === "segmented"
                 ? styles.segmentPressed
                 : styles.pillPressed)
           )}
         >
-          {option.label}
+          {option.icon ?? option.label}
         </Toggle>
       );
     })}

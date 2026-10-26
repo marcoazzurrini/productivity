@@ -1,6 +1,8 @@
 import type { StoreTransport } from "@productivity/gtd";
 import { contextBridge, ipcRenderer } from "electron";
 
+import { appearanceChannel } from "../shared/appearance.ts";
+import type { AppearanceBridge } from "../shared/appearance.ts";
 import { calendarChannel } from "../shared/calendar.ts";
 import type { CalendarBridge } from "../shared/calendar.ts";
 import { storeChannel } from "../shared/channel.ts";
@@ -35,9 +37,16 @@ const calendar: CalendarBridge = {
   },
 };
 
+const appearance: AppearanceBridge = {
+  getTheme: () => ipcRenderer.invoke(appearanceChannel.getTheme),
+  setTheme: (theme) => ipcRenderer.invoke(appearanceChannel.setTheme, theme),
+};
+
 // The renderer gets these functions and nothing else from Node or Electron.
 contextBridge.exposeInMainWorld("gtd", { call });
 
 contextBridge.exposeInMainWorld("journal", journal);
 
 contextBridge.exposeInMainWorld("calendar", calendar);
+
+contextBridge.exposeInMainWorld("appearance", appearance);

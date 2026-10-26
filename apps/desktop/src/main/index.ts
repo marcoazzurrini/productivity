@@ -3,11 +3,20 @@ import path from "node:path";
 import { createCalendar } from "@productivity/calendar";
 import type { GoogleOptions } from "@productivity/calendar";
 import { openStore } from "@productivity/db";
-import { app, BrowserWindow, ipcMain, safeStorage, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  nativeTheme,
+  safeStorage,
+  shell,
+} from "electron";
 
+import { appearanceChannel } from "../shared/appearance.ts";
 import { calendarChannel } from "../shared/calendar.ts";
 import { storeChannel } from "../shared/channel.ts";
 import { journalChannel } from "../shared/journal.ts";
+import { checkTheme, readTheme, writeTheme } from "./appearance.ts";
 import { callCalendar } from "./calendar-handler.ts";
 import { canOpenExternally } from "./external-links.ts";
 import { encryptedFile, listenForRedirect } from "./google.ts";
@@ -114,9 +123,25 @@ ipcMain.on(journalChannel.writeNow, (event, ...args) => {
   }
 });
 
+/** The Theme setting, shared by development and the installed app. */
+const themeFile = path.join(dataDir, "theme");
+
+ipcMain.handle(appearanceChannel.getTheme, () => nativeTheme.themeSource);
+
+// themeSource sets prefers-color-scheme in every window, which the design
+// tokens follow, and the native chrome such as scrollbars and menus.
+ipcMain.handle(appearanceChannel.setTheme, (_event, ...args) => {
+  checkTheme(args);
+  const [theme] = args;
+
+  nativeTheme.themeSource = theme;
+  writeTheme(themeFile, theme);
+});
+
 const createWindow = (): void => {
   const window = new BrowserWindow({
-    backgroundColor: "#FFFFFF",
+    // The page's background, so the window never flashes the other theme.
+    backgroundColor: nativeTheme.shouldUseDarkColors ? "#191919" : "#FFFFFF",
     height: 1100,
     minHeight: 700,
     minWidth: 1100,
@@ -165,7 +190,10 @@ const createWindow = (): void => {
 
 // An event, not a top-level await: an ES module main process would block
 // its own startup waiting for "ready".
-app.once("ready", createWindow);
+app.once("ready", () => {
+  nativeTheme.themeSource = readTheme(themeFile);
+  createWindow();
+});
 
 app.on("activate", () => {
   if (app.isReady() && BrowserWindow.getAllWindows().length === 0) {

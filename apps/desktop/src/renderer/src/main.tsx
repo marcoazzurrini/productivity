@@ -21,6 +21,7 @@ if (container === null) {
 createRoot(container).render(
   <StrictMode>
     <Root
+      appearance={window.appearance}
       calendar={window.calendar}
       client={createQueryClient()}
       journal={window.journal}

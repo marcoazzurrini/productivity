@@ -1,9 +1,7 @@
-import { toLocalDate } from "@productivity/gtd";
 import type { TagColor } from "@productivity/gtd";
 import {
   CountBadge,
   IconButton,
-  Kbd,
   NavItem,
   NavSection,
   Tag,
@@ -17,11 +15,10 @@ import {
   Hourglass,
   Inbox,
   ListChecks,
-  NotebookPen,
   Plus,
   RefreshCcw,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useAreas, useOverview } from "./data.ts";
 import { dayLabel } from "./format.ts";
@@ -30,6 +27,7 @@ import { useNavigation } from "./navigation.tsx";
 import { NewProjectDialog } from "./new-project-dialog.tsx";
 import { ProjectPie } from "./project-pie.tsx";
 import { useQuickCapture } from "./quick-capture.tsx";
+import { ThemeSetting } from "./theme-setting.tsx";
 
 const styles = stylex.create({
   dot: { borderRadius: "50%", height: 8, width: 8 },
@@ -92,28 +90,6 @@ export const Sidebar = () => {
   const lookups = useLookups();
   const openCapture = useQuickCapture();
   const [creatingProject, setCreatingProject] = useState(false);
-  const today = overview?.today;
-
-  // Today by the store's clock, or by the computer's before that loads.
-  const openJournal = useCallback((): void => {
-    go({ day: today ?? toLocalDate(new Date()), kind: "journal" });
-  }, [go, today]);
-
-  // ⌘J opens today's journal from anywhere.
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent): void => {
-      if (event.metaKey && event.key.toLowerCase() === "j") {
-        event.preventDefault();
-        openJournal();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [openJournal]);
 
   const contextCount = (id: string): number =>
     overview?.contexts.find((entry) => entry.id === id)?.count ?? 0;
@@ -248,13 +224,7 @@ export const Sidebar = () => {
         ))}
       </div>
       <div {...stylex.props(styles.footer)}>
-        <NavItem
-          badge={<Kbd>⌘J</Kbd>}
-          icon={<NotebookPen color="#1F9C8E" size={16} />}
-          label="Journal"
-          onSelect={openJournal}
-          selected={view.kind === "journal"}
-        />
+        <ThemeSetting />
         <NavItem
           badge={
             overview === undefined ? undefined : (

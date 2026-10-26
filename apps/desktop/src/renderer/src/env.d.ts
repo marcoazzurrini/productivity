@@ -1,5 +1,6 @@
 import type { StoreTransport } from "@productivity/gtd";
 
+import type { AppearanceBridge } from "../../shared/appearance.ts";
 import type { CalendarBridge } from "../../shared/calendar.ts";
 import type { JournalBridge } from "../../shared/journal.ts";
 
@@ -11,5 +12,7 @@ declare global {
     journal: JournalBridge;
     /** Set by the preload script. The renderer's only door to the calendar. */
     calendar: CalendarBridge;
+    /** Set by the preload script. Reads and changes the Theme setting. */
+    appearance: AppearanceBridge;
   }
 }

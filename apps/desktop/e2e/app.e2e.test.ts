@@ -24,9 +24,17 @@ const childEnv = (extra: Record<string, string>) => ({
   ...extra,
 });
 
-const launch = (dataDir: string): Promise<ElectronApplication> =>
+const launch = (
+  dataDir: string,
+  /**
+   * Playwright pins prefers-color-scheme to light unless this is null,
+   * which leaves it to the app's Theme setting.
+   */
+  colorScheme: "light" | null = "light"
+): Promise<ElectronApplication> =>
   electron.launch({
     args: [appDir],
+    colorScheme,
     cwd: appDir,
     env: childEnv({ PRODUCTIVITY_DATA_DIR: dataDir }),
     executablePath: String(electronPath),
@@ -175,6 +183,55 @@ describe("the calendar", () => {
     await kept.waitFor();
 
     await expect(kept.count()).resolves.toBe(1);
+
+    await second.close();
+  });
+});
+
+/** The window's background, which the design tokens set per theme. */
+const background = (window: Page) =>
+  window
+    .getByRole("main")
+    .evaluate(
+      (main) => getComputedStyle(main.parentElement ?? main).backgroundColor
+    );
+
+const isDark = (window: Page) =>
+  window.evaluate(() => matchMedia("(prefers-color-scheme: dark)").matches);
+
+describe("the theme", () => {
+  const dataDir = mkdtempSync(path.join(tmpdir(), "productivity-e2e-"));
+
+  afterAll(() => {
+    rmSync(dataDir, { force: true, recursive: true });
+  });
+
+  it("turns dark, and stays dark after a restart", async () => {
+    const first = await launch(dataDir, null);
+    const window = await first.firstWindow();
+    const theme = window.getByRole("group", { name: "Theme" });
+
+    await theme.getByRole("button", { name: "Light" }).click();
+    await expect.poll(() => isDark(window)).toBeFalsy();
+    await expect.poll(() => background(window)).toBe("rgb(255, 255, 255)");
+
+    await theme.getByRole("button", { name: "Dark" }).click();
+    await expect.poll(() => isDark(window)).toBeTruthy();
+    await expect.poll(() => background(window)).toBe("rgb(25, 25, 25)");
+    await first.close();
+
+    const second = await launch(dataDir, null);
+    const reopened = await second.firstWindow();
+
+    await reopened.getByRole("heading", { level: 1, name: "Inbox" }).waitFor();
+
+    await expect(isDark(reopened)).resolves.toBeTruthy();
+    await expect(
+      reopened
+        .getByRole("group", { name: "Theme" })
+        .getByRole("button", { name: "Dark" })
+        .getAttribute("aria-pressed")
+    ).resolves.toBe("true");
 
     await second.close();
   });

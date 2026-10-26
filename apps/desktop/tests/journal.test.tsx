@@ -9,6 +9,10 @@ const today = "2026-10-23";
 
 const sidebar = () => screen.getByRole("navigation", { name: "Lists" });
 
+/** The journal's Today button, in the center pane's top bar. */
+const todayButton = () =>
+  within(screen.getByRole("main")).getByRole("button", { name: "Today" });
+
 /** The CodeMirror editor behind a day's page. */
 const editorFor = async (date: string): Promise<EditorView> => {
   const content = await screen.findByRole("textbox", {
@@ -33,18 +37,34 @@ const typeInto = (view: EditorView, text: string): void => {
 };
 
 describe("journal", () => {
-  it("opens today's page from the sidebar", async () => {
-    renderApp();
+  it("opens today's page from the top bar of any list", async () => {
+    renderApp({ kind: "waiting" });
     const user = userEvent.setup();
 
-    await user.click(
-      within(sidebar()).getByRole("button", { name: /Journal/u })
-    );
+    await screen.findByRole("heading", { level: 1, name: "Waiting For" });
+    await user.click(todayButton());
 
     await expect(
       screen.findByRole("heading", { level: 1, name: "Friday, October 23" })
     ).resolves.toBeDefined();
     expect(screen.getByText(/New page/u)).toBeDefined();
+    expect(todayButton()).toHaveProperty("disabled", true);
+  });
+
+  it("opens yesterday's page from a list", async () => {
+    renderApp();
+    const user = userEvent.setup();
+
+    await screen.findByRole("heading", { level: 1, name: "Inbox" });
+    await user.click(
+      within(screen.getByRole("main")).getByRole("button", {
+        name: "Previous day",
+      })
+    );
+
+    await expect(
+      screen.findByRole("heading", { level: 1, name: "Thursday, October 22" })
+    ).resolves.toBeDefined();
   });
 
   it("⌘J opens today's page from anywhere", async () => {
@@ -82,9 +102,7 @@ describe("journal", () => {
       expect(store.journal.read(today).markdown).toBe("Left at once");
     });
 
-    await user.click(
-      within(sidebar()).getByRole("button", { name: /Journal/u })
-    );
+    await user.click(todayButton());
 
     const view = await editorFor("Friday, October 23");
 
@@ -113,9 +131,7 @@ describe("journal", () => {
       })
     );
     typeInto(await editorFor("Thursday, October 22"), "Thursday");
-    await user.click(
-      within(screen.getByRole("main")).getByRole("button", { name: "Today" })
-    );
+    await user.click(todayButton());
 
     await waitFor(() => {
       expect(store.journal.read("2026-10-22").markdown).toBe("Thursday");

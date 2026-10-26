@@ -24,7 +24,7 @@ const styles = stylex.create({
     },
     boxShadow: {
       ":focus-visible": shadow.focus,
-      default: "0 1px 2px rgba(5, 130, 255, 0.25)",
+      default: shadow.accent,
     },
     color: color.textOnAccent,
   },
