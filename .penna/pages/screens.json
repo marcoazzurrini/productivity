@@ -80,7 +80,7 @@
        "style": {
         "width": "1024px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+        "boxShadow": "var(--shadow-card)",
         "borderRadius": "8px",
         "flexGrow": "1",
         "display": "flex",
@@ -108,7 +108,7 @@
            "name": "circle-plus",
            "icon": "circle-plus",
            "style": {
-            "color": "#0582FF",
+            "color": "var(--color-accent-blue)",
             "width": "20px",
             "height": "20px"
            }
@@ -167,7 +167,7 @@
        "style": {
         "width": "1024px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+        "boxShadow": "var(--shadow-card)",
         "borderRadius": "8px",
         "flexGrow": "1",
         "display": "flex",
@@ -195,7 +195,7 @@
            "name": "split",
            "icon": "split",
            "style": {
-            "color": "#0582FF",
+            "color": "var(--color-accent-blue)",
             "width": "20px",
             "height": "20px"
            }
@@ -254,7 +254,7 @@
        "style": {
         "width": "1024px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+        "boxShadow": "var(--shadow-card)",
         "borderRadius": "8px",
         "flexGrow": "1",
         "display": "flex",
@@ -282,7 +282,7 @@
            "name": "folder",
            "icon": "folder",
            "style": {
-            "color": "#D9730D",
+            "color": "var(--color-tag-orange-fg)",
             "width": "20px",
             "height": "20px"
            }
@@ -341,7 +341,7 @@
        "style": {
         "width": "1024px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+        "boxShadow": "var(--shadow-card)",
         "borderRadius": "8px",
         "flexGrow": "1",
         "display": "flex",
@@ -369,7 +369,7 @@
            "name": "refresh-ccw",
            "icon": "refresh-ccw",
            "style": {
-            "color": "#A46EE0",
+            "color": "var(--color-illustration-violet)",
             "width": "20px",
             "height": "20px"
            }
@@ -428,7 +428,7 @@
        "style": {
         "width": "1024px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.04), 0px 1px 2px 0px rgba(15, 15, 15, 0.06)",
+        "boxShadow": "var(--shadow-card)",
         "borderRadius": "8px",
         "flexGrow": "1",
         "display": "flex",
@@ -456,7 +456,7 @@
            "name": "star",
            "icon": "star",
            "style": {
-            "color": "#CB912F",
+            "color": "var(--color-tag-yellow-fg)",
             "width": "20px",
             "height": "20px"
            }
@@ -520,7 +520,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -578,12 +578,18 @@
        },
        "children": [
         {
+         "id": "AikdH",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_1792",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -594,7 +600,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -658,7 +664,7 @@
                "name": "inbox",
                "icon": "inbox",
                "style": {
-                "color": "#0582FF",
+                "color": "var(--color-accent-blue)",
                 "width": "30px",
                 "height": "30px"
                }
@@ -754,7 +760,7 @@
                "name": "split",
                "icon": "split",
                "style": {
-                "color": "#0582FF",
+                "color": "var(--color-accent-blue)",
                 "width": "22px",
                 "height": "22px"
                }
@@ -901,7 +907,7 @@
                  "name": "mail",
                  "icon": "mail",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -928,7 +934,7 @@
                "name": "file-text",
                "icon": "file-text",
                "style": {
-                "color": "#B9B9B6",
+                "color": "var(--color-text-placeholder)",
                 "width": "14px",
                 "height": "14px"
                }
@@ -964,7 +970,7 @@
                  "name": "Text",
                  "text": "Clarify",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "fontFamily": "Inter",
                   "fontSize": "13px",
                   "fontWeight": "500",
@@ -978,7 +984,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -1020,7 +1026,7 @@
                  "name": "plus",
                  "icon": "plus",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1100,7 +1106,7 @@
                  "name": "mic",
                  "icon": "mic",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1180,7 +1186,7 @@
                  "name": "plus",
                  "icon": "plus",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1260,7 +1266,7 @@
                  "name": "message-square",
                  "icon": "message-square",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1340,7 +1346,7 @@
                  "name": "globe",
                  "icon": "globe",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1367,7 +1373,7 @@
                "name": "file-text",
                "icon": "file-text",
                "style": {
-                "color": "#B9B9B6",
+                "color": "var(--color-text-placeholder)",
                 "width": "14px",
                 "height": "14px"
                }
@@ -1431,7 +1437,7 @@
                  "name": "mail",
                  "icon": "mail",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "15px",
                   "height": "15px"
                  }
@@ -1541,7 +1547,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -1599,96 +1605,10 @@
        },
        "children": [
         {
-         "id": "D7A9Z",
-         "type": "frame",
-         "name": "Day nav",
-         "style": {
-          "display": "flex",
-          "alignItems": "center",
-          "gap": 4
-         },
-         "children": [
-          {
-           "id": "4Vgdp",
-           "type": "frame",
-           "style": {
-            "width": 28,
-            "height": 28,
-            "borderRadius": 6,
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "center",
-            "color": "var(--color-text-secondary)"
-           },
-           "children": [
-            {
-             "id": "ZZeAf",
-             "type": "icon",
-             "icon": "chevron-left",
-             "style": {
-              "width": 16,
-              "height": 16
-             },
-             "name": "chevron-left"
-            }
-           ],
-           "name": "Frame"
-          },
-          {
-           "id": "QrcHR",
-           "type": "frame",
-           "name": "Today",
-           "style": {
-            "height": 28,
-            "paddingInline": 10,
-            "borderRadius": 6,
-            "border": "1px solid var(--color-border-default)",
-            "display": "flex",
-            "alignItems": "center"
-           },
-           "children": [
-            {
-             "id": "9Jsue",
-             "type": "text",
-             "text": "Today",
-             "style": {
-              "fontFamily": "Inter",
-              "lineHeight": "normal",
-              "fontSize": 13,
-              "fontWeight": 500,
-              "color": "var(--color-text-primary)"
-             },
-             "name": "Today"
-            }
-           ]
-          },
-          {
-           "id": "CVrtU",
-           "type": "frame",
-           "style": {
-            "width": 28,
-            "height": 28,
-            "borderRadius": 6,
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "center",
-            "color": "var(--color-text-secondary)"
-           },
-           "children": [
-            {
-             "id": "XPdAs",
-             "type": "icon",
-             "icon": "chevron-right",
-             "style": {
-              "width": 16,
-              "height": 16
-             },
-             "name": "chevron-right"
-            }
-           ],
-           "name": "Frame"
-          }
-         ]
+         "id": "QPZ4F",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
         },
         {
          "id": "gEu8P",
@@ -1696,7 +1616,7 @@
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -1707,7 +1627,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -2163,7 +2083,7 @@
                  "style": {
                   "width": 12,
                   "height": 12,
-                  "color": "#fff"
+                  "color": "var(--color-text-on-accent)"
                  },
                  "name": "check"
                 }
@@ -2254,7 +2174,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -2312,96 +2232,10 @@
        },
        "children": [
         {
-         "id": "SkDFF",
-         "type": "frame",
-         "name": "Day nav",
-         "style": {
-          "display": "flex",
-          "alignItems": "center",
-          "gap": 4
-         },
-         "children": [
-          {
-           "id": "4GYVq",
-           "type": "frame",
-           "style": {
-            "width": 28,
-            "height": 28,
-            "borderRadius": 6,
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "center",
-            "color": "var(--color-text-secondary)"
-           },
-           "name": "Frame",
-           "children": [
-            {
-             "id": "2MAXA",
-             "type": "icon",
-             "icon": "chevron-left",
-             "style": {
-              "width": 16,
-              "height": 16
-             },
-             "name": "chevron-left"
-            }
-           ]
-          },
-          {
-           "id": "TBMRx",
-           "type": "frame",
-           "name": "Today",
-           "style": {
-            "height": 28,
-            "paddingInline": 10,
-            "borderRadius": 6,
-            "border": "1px solid var(--color-border-default)",
-            "display": "flex",
-            "alignItems": "center"
-           },
-           "children": [
-            {
-             "id": "UgEX3",
-             "type": "text",
-             "text": "Today",
-             "style": {
-              "fontFamily": "Inter",
-              "lineHeight": "normal",
-              "fontSize": 13,
-              "fontWeight": 500,
-              "color": "var(--color-text-primary)"
-             },
-             "name": "Today"
-            }
-           ]
-          },
-          {
-           "id": "AcRxu",
-           "type": "frame",
-           "style": {
-            "width": 28,
-            "height": 28,
-            "borderRadius": 6,
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "center",
-            "color": "var(--color-text-secondary)"
-           },
-           "name": "Frame",
-           "children": [
-            {
-             "id": "hpguE",
-             "type": "icon",
-             "icon": "chevron-right",
-             "style": {
-              "width": 16,
-              "height": 16
-             },
-             "name": "chevron-right"
-            }
-           ]
-          }
-         ]
+         "id": "QwQUB",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
         },
         {
          "id": "HPugi",
@@ -2409,7 +2243,7 @@
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -2420,7 +2254,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -2612,7 +2446,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -2669,12 +2503,18 @@
        },
        "children": [
         {
+         "id": "tAsLk",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_1886",
          "type": "icon",
          "name": "inbox",
          "icon": "inbox",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "15px",
           "height": "15px"
          }
@@ -2699,7 +2539,7 @@
          "name": "chevron-right",
          "icon": "chevron-right",
          "style": {
-          "color": "#B9B9B6",
+          "color": "var(--color-text-placeholder)",
           "width": "14px",
           "height": "14px"
          }
@@ -2812,7 +2652,7 @@
          "style": {
           "width": "114.57142639160156px",
           "height": "3px",
-          "backgroundColor": "#A9D0FF",
+          "backgroundColor": "var(--color-accent-blue-muted)",
           "borderRadius": "2px",
           "flexGrow": "1"
          }
@@ -2924,7 +2764,7 @@
                "name": "mail",
                "icon": "mail",
                "style": {
-                "color": "#91918E",
+                "color": "var(--color-text-tertiary)",
                 "width": "13px",
                 "height": "13px"
                }
@@ -3026,7 +2866,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -3162,7 +3002,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -3284,7 +3124,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -3683,7 +3523,7 @@
                          "id": "n0_1966",
                          "type": "svg",
                          "name": "path",
-                         "svg": "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 1.31C10.14 1.31 12.69 3.86 12.68 7C12.68 10.14 10.14 12.69 6.99 12.69C3.85 12.69 1.31 10.14 1.31 7C1.3 3.86 3.85 1.31 6.99 1.31\" fill=\"none\" stroke=\"#A5A5A2\" stroke-width=\"1.31\"></path></svg>",
+                         "svg": "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 1.31C10.14 1.31 12.69 3.86 12.68 7C12.68 10.14 10.14 12.69 6.99 12.69C3.85 12.69 1.31 10.14 1.31 7C1.3 3.86 3.85 1.31 6.99 1.31\" fill=\"none\" style=\"stroke:var(--color-icon-muted)\" stroke-width=\"1.31\"></path></svg>",
                          "style": {
                           "overflow": "visible",
                           "width": "14px",
@@ -3698,7 +3538,7 @@
                          "id": "n0_1967",
                          "type": "svg",
                          "name": "path",
-                         "svg": "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 7L7 3.06C8.95 3.04 10.63 4.45 10.93 6.38C11.24 8.31 10.09 10.18 8.22 10.76L7 7Z\" fill=\"#A5A5A2\"></path></svg>",
+                         "svg": "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 7L7 3.06C8.95 3.04 10.63 4.45 10.93 6.38C11.24 8.31 10.09 10.18 8.22 10.76L7 7Z\" style=\"fill:var(--color-icon-muted)\"></path></svg>",
                          "style": {
                           "overflow": "visible",
                           "width": "14px",
@@ -3730,7 +3570,7 @@
                        "name": "chevron-down",
                        "icon": "chevron-down",
                        "style": {
-                        "color": "#91918E",
+                        "color": "var(--color-text-tertiary)",
                         "width": "14px",
                         "height": "14px"
                        }
@@ -4198,7 +4038,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -4256,12 +4096,18 @@
        },
        "children": [
         {
+         "id": "Dr3mD",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_1997",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -4272,7 +4118,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -4336,7 +4182,7 @@
                "name": "list-checks",
                "icon": "list-checks",
                "style": {
-                "color": "#1F9C8E",
+                "color": "var(--color-accent-teal)",
                 "width": "30px",
                 "height": "30px"
                }
@@ -4404,7 +4250,7 @@
                  "name": "at-sign",
                  "icon": "at-sign",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -4443,7 +4289,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -4471,7 +4317,7 @@
                  "name": "clock",
                  "icon": "clock",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -4510,7 +4356,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -4538,7 +4384,7 @@
                  "name": "battery-medium",
                  "icon": "battery-medium",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -4577,7 +4423,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -5549,7 +5395,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -5607,12 +5453,18 @@
        },
        "children": [
         {
+         "id": "5LVRH",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_2052",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -5623,7 +5475,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -5695,7 +5547,7 @@
                  "id": "n0_2064",
                  "type": "svg",
                  "name": "path",
-                 "svg": "<svg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15 2.81C21.73 2.82 27.18 8.27 27.18 15C27.18 21.74 21.72 27.19 14.99 27.19C8.26 27.19 2.8 21.74 2.8 15C2.8 8.27 8.25 2.82 14.98 2.81\" fill=\"none\" stroke=\"#0582FF\" stroke-width=\"2.81\"></path></svg>",
+                 "svg": "<svg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15 2.81C21.73 2.82 27.18 8.27 27.18 15C27.18 21.74 21.72 27.19 14.99 27.19C8.26 27.19 2.8 21.74 2.8 15C2.8 8.27 8.25 2.82 14.98 2.81\" fill=\"none\" style=\"stroke:var(--color-accent-blue)\" stroke-width=\"2.81\"></path></svg>",
                  "style": {
                   "overflow": "visible",
                   "width": "30px",
@@ -5710,7 +5562,7 @@
                  "id": "n0_2065",
                  "type": "svg",
                  "name": "path",
-                 "svg": "<svg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15 15L15 6.56C18.66 6.56 21.9 8.91 23.03 12.39C24.17 15.86 22.93 19.67 19.97 21.83C17.02 23.98 13.01 23.98 10.05 21.83L15 15Z\" fill=\"#0582FF\"></path></svg>",
+                 "svg": "<svg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15 15L15 6.56C18.66 6.56 21.9 8.91 23.03 12.39C24.17 15.86 22.93 19.67 19.97 21.83C17.02 23.98 13.01 23.98 10.05 21.83L15 15Z\" style=\"fill:var(--color-accent-blue)\"></path></svg>",
                  "style": {
                   "overflow": "visible",
                   "width": "30px",
@@ -5743,7 +5595,7 @@
                "name": "ellipsis",
                "icon": "ellipsis",
                "style": {
-                "color": "#B9B9B6",
+                "color": "var(--color-text-placeholder)",
                 "width": "20px",
                 "height": "20px"
                }
@@ -5782,7 +5634,7 @@
                  "name": "box",
                  "icon": "box",
                  "style": {
-                  "color": "#5F5E5B",
+                  "color": "var(--color-text-secondary)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -5824,7 +5676,7 @@
                  "name": "flag",
                  "icon": "flag",
                  "style": {
-                  "color": "#D9730D",
+                  "color": "var(--color-tag-orange-fg)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -6570,7 +6422,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -6629,12 +6481,18 @@
        },
        "children": [
         {
+         "id": "eWfzC",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_2095",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -6645,7 +6503,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -6709,7 +6567,7 @@
                "name": "hourglass",
                "icon": "hourglass",
                "style": {
-                "color": "#D9730D",
+                "color": "var(--color-tag-orange-fg)",
                 "width": "30px",
                 "height": "30px"
                }
@@ -6931,7 +6789,7 @@
                  "style": {
                   "width": "16px",
                   "height": "16px",
-                  "border": "1.5px solid #C9C9C6",
+                  "border": "1.5px solid var(--color-border-control)",
                   "borderRadius": "4px",
                   "boxSizing": "border-box"
                  }
@@ -7030,7 +6888,7 @@
                    "name": "bell",
                    "icon": "bell",
                    "style": {
-                    "color": "#D44C47",
+                    "color": "var(--color-tag-red-fg)",
                     "width": "12px",
                     "height": "12px"
                    }
@@ -7072,7 +6930,7 @@
                    "name": "list-plus",
                    "icon": "list-plus",
                    "style": {
-                    "color": "#5F5E5B",
+                    "color": "var(--color-text-secondary)",
                     "width": "14px",
                     "height": "14px"
                    }
@@ -7117,7 +6975,7 @@
                  "style": {
                   "width": "16px",
                   "height": "16px",
-                  "border": "1.5px solid #C9C9C6",
+                  "border": "1.5px solid var(--color-border-control)",
                   "borderRadius": "4px",
                   "boxSizing": "border-box"
                  }
@@ -7142,7 +7000,7 @@
                    "name": "package",
                    "icon": "package",
                    "style": {
-                    "color": "#787774",
+                    "color": "var(--color-tag-gray-fg)",
                     "width": "15px",
                     "height": "15px"
                    }
@@ -7213,7 +7071,7 @@
                    "name": "bell",
                    "icon": "bell",
                    "style": {
-                    "color": "#D44C47",
+                    "color": "var(--color-tag-red-fg)",
                     "width": "12px",
                     "height": "12px"
                    }
@@ -7255,7 +7113,7 @@
                    "name": "list-plus",
                    "icon": "list-plus",
                    "style": {
-                    "color": "#5F5E5B",
+                    "color": "var(--color-text-secondary)",
                     "width": "14px",
                     "height": "14px"
                    }
@@ -7362,7 +7220,7 @@
                  "style": {
                   "width": "16px",
                   "height": "16px",
-                  "border": "1.5px solid #C9C9C6",
+                  "border": "1.5px solid var(--color-border-control)",
                   "borderRadius": "4px",
                   "boxSizing": "border-box"
                  }
@@ -7461,7 +7319,7 @@
                    "name": "bell",
                    "icon": "bell",
                    "style": {
-                    "color": "#5F5E5B",
+                    "color": "var(--color-text-secondary)",
                     "width": "12px",
                     "height": "12px"
                    }
@@ -7506,7 +7364,7 @@
                  "style": {
                   "width": "16px",
                   "height": "16px",
-                  "border": "1.5px solid #C9C9C6",
+                  "border": "1.5px solid var(--color-border-control)",
                   "borderRadius": "4px",
                   "boxSizing": "border-box"
                  }
@@ -7605,7 +7463,7 @@
                    "name": "bell",
                    "icon": "bell",
                    "style": {
-                    "color": "#5F5E5B",
+                    "color": "var(--color-text-secondary)",
                     "width": "12px",
                     "height": "12px"
                    }
@@ -7650,7 +7508,7 @@
                  "style": {
                   "width": "16px",
                   "height": "16px",
-                  "border": "1.5px solid #C9C9C6",
+                  "border": "1.5px solid var(--color-border-control)",
                   "borderRadius": "4px",
                   "boxSizing": "border-box"
                  }
@@ -7749,7 +7607,7 @@
                    "name": "bell",
                    "icon": "bell",
                    "style": {
-                    "color": "#5F5E5B",
+                    "color": "var(--color-text-secondary)",
                     "width": "12px",
                     "height": "12px"
                    }
@@ -7796,7 +7654,7 @@
              "name": "user-round-plus",
              "icon": "user-round-plus",
              "style": {
-              "color": "#91918E",
+              "color": "var(--color-text-tertiary)",
               "width": "14px",
               "height": "14px"
              }
@@ -7854,8 +7712,8 @@
         "position": "absolute",
         "left": "130px",
         "top": "1316px",
-        "backgroundColor": "#191918",
-        "boxShadow": "0px 8px 24px 0px rgba(15, 15, 15, 0.2)",
+        "backgroundColor": "var(--color-bg-inverse)",
+        "boxShadow": "var(--shadow-toast)",
         "borderRadius": "8px",
         "display": "flex",
         "alignItems": "center",
@@ -7871,7 +7729,7 @@
          "name": "circle-check",
          "icon": "circle-check",
          "style": {
-          "color": "#4DAB9A",
+          "color": "var(--color-success-inverse)",
           "width": "16px",
           "height": "16px"
          }
@@ -7884,7 +7742,7 @@
          "style": {
           "width": "484px",
           "flexGrow": "1",
-          "color": "#FFFFFF",
+          "color": "var(--color-text-inverse)",
           "fontFamily": "Inter",
           "fontSize": "13px",
           "fontWeight": "400",
@@ -7911,7 +7769,7 @@
            "name": "Text",
            "text": "Undo",
            "style": {
-            "color": "#7EB7F5",
+            "color": "var(--color-text-link-inverse)",
             "fontFamily": "Inter",
             "fontSize": "13px",
             "fontWeight": "600",
@@ -7957,7 +7815,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -8015,12 +7873,18 @@
        },
        "children": [
         {
+         "id": "kurud",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_2196",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -8031,7 +7895,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -8095,7 +7959,7 @@
                "name": "refresh-ccw",
                "icon": "refresh-ccw",
                "style": {
-                "color": "#A46EE0",
+                "color": "var(--color-illustration-violet)",
                 "width": "30px",
                 "height": "30px"
                }
@@ -8295,7 +8159,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "12px",
                   "height": "12px"
                  }
@@ -8384,7 +8248,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "12px",
                   "height": "12px"
                  }
@@ -8460,7 +8324,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -8562,7 +8426,7 @@
                  "name": "Text",
                  "text": "Start clarifying",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "fontFamily": "Inter",
                   "fontSize": "13px",
                   "fontWeight": "500",
@@ -8576,7 +8440,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -8671,7 +8535,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "12px",
                   "height": "12px"
                  }
@@ -8760,7 +8624,7 @@
                  "name": "check",
                  "icon": "check",
                  "style": {
-                  "color": "#FFFFFF",
+                  "color": "var(--color-text-on-accent)",
                   "width": "12px",
                   "height": "12px"
                  }
@@ -8835,7 +8699,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -8950,7 +8814,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#0B6BCB",
+                  "color": "var(--color-text-link)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -8982,7 +8846,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -9097,7 +8961,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#0B6BCB",
+                  "color": "var(--color-text-link)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -9129,7 +8993,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -9244,7 +9108,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#0B6BCB",
+                  "color": "var(--color-text-link)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -9325,7 +9189,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -9440,7 +9304,7 @@
                  "name": "arrow-right",
                  "icon": "arrow-right",
                  "style": {
-                  "color": "#0B6BCB",
+                  "color": "var(--color-text-link)",
                   "width": "13px",
                   "height": "13px"
                  }
@@ -9472,7 +9336,7 @@
                 "width": "16px",
                 "height": "16px",
                 "backgroundColor": "var(--color-bg-page)",
-                "border": "1.5px solid #C9C9C6",
+                "border": "1.5px solid var(--color-border-control)",
                 "borderRadius": "4px",
                 "display": "flex",
                 "justifyContent": "center",
@@ -9588,7 +9452,7 @@
     "width": "2560px",
     "height": "1440px",
     "backgroundColor": "var(--color-bg-page)",
-    "boxShadow": "0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 24px 60px 0px rgba(0, 0, 0, 0.08)",
+    "boxShadow": "var(--shadow-window)",
     "borderRadius": "10px",
     "overflow": "hidden",
     "display": "flex",
@@ -9647,12 +9511,18 @@
        },
        "children": [
         {
+         "id": "L4aAq",
+         "type": "ref",
+         "ref": "NwWQ4",
+         "name": "Day nav"
+        },
+        {
          "id": "n0_2313",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "16px",
           "height": "16px"
          }
@@ -9663,7 +9533,7 @@
          "name": "ellipsis",
          "icon": "ellipsis",
          "style": {
-          "color": "#91918E",
+          "color": "var(--color-text-tertiary)",
           "width": "18px",
           "height": "18px"
          }
@@ -9727,7 +9597,7 @@
                "name": "list-checks",
                "icon": "list-checks",
                "style": {
-                "color": "#1F9C8E",
+                "color": "var(--color-accent-teal)",
                 "width": "30px",
                 "height": "30px"
                }
@@ -9795,7 +9665,7 @@
                  "name": "at-sign",
                  "icon": "at-sign",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -9834,7 +9704,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -9862,7 +9732,7 @@
                  "name": "clock",
                  "icon": "clock",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -9901,7 +9771,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -9929,7 +9799,7 @@
                  "name": "battery-medium",
                  "icon": "battery-medium",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -9968,7 +9838,7 @@
                  "name": "chevron-down",
                  "icon": "chevron-down",
                  "style": {
-                  "color": "#91918E",
+                  "color": "var(--color-text-tertiary)",
                   "width": "14px",
                   "height": "14px"
                  }
@@ -10940,7 +10810,7 @@
       "position": "absolute",
       "left": "0px",
       "top": "0px",
-      "backgroundColor": "rgba(15, 15, 15, 0.35)",
+      "backgroundColor": "var(--color-overlay)",
       "display": "flex",
       "flexDirection": "column",
       "alignItems": "center",
@@ -10955,7 +10825,7 @@
        "style": {
         "width": "640px",
         "backgroundColor": "var(--color-bg-page)",
-        "boxShadow": "0px 0px 0px 1px rgba(15, 15, 15, 0.08), 0px 12px 32px 0px rgba(15, 15, 15, 0.15), 0px 40px 80px 0px rgba(15, 15, 15, 0.12)",
+        "boxShadow": "var(--shadow-dialog)",
         "borderRadius": "12px",
         "overflow": "hidden",
         "display": "flex",
@@ -10996,7 +10866,7 @@
              "name": "circle-plus",
              "icon": "circle-plus",
              "style": {
-              "color": "#0582FF",
+              "color": "var(--color-accent-blue)",
               "width": "20px",
               "height": "20px"
              }
@@ -11088,7 +10958,7 @@
                "name": "inbox",
                "icon": "inbox",
                "style": {
-                "color": "#0582FF",
+                "color": "var(--color-accent-blue)",
                 "width": "13px",
                 "height": "13px"
                }
@@ -11130,7 +11000,7 @@
                "name": "at-sign",
                "icon": "at-sign",
                "style": {
-                "color": "#91918E",
+                "color": "var(--color-text-tertiary)",
                 "width": "13px",
                 "height": "13px"
                }
@@ -11172,7 +11042,7 @@
                "name": "calendar",
                "icon": "calendar",
                "style": {
-                "color": "#91918E",
+                "color": "var(--color-text-tertiary)",
                 "width": "13px",
                 "height": "13px"
                }
@@ -11214,7 +11084,7 @@
                "name": "flag",
                "icon": "flag",
                "style": {
-                "color": "#91918E",
+                "color": "var(--color-text-tertiary)",
                 "width": "13px",
                 "height": "13px"
                }
@@ -11256,7 +11126,7 @@
                "name": "folder",
                "icon": "folder",
                "style": {
-                "color": "#91918E",
+                "color": "var(--color-text-tertiary)",
                 "width": "13px",
                 "height": "13px"
                }
