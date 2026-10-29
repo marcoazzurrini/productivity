@@ -34,13 +34,16 @@ const styles = stylex.create({
 
 /**
  * The center pane's frame: a drag strip for the window that ends with the
- * journal's day buttons, then content held to a 640 px reading column.
+ * journal's day buttons, then content held to a 640 px reading column, and
+ * an optional footer pinned below it.
  */
 export const Page = ({
   topbar,
+  footer,
   children,
 }: {
   topbar?: ReactNode;
+  footer?: ReactNode;
   children: ReactNode;
 }) => (
   <>
@@ -51,6 +54,7 @@ export const Page = ({
     <div {...stylex.props(styles.scroll)}>
       <div {...stylex.props(styles.column)}>{children}</div>
     </div>
+    {footer}
   </>
 );
 

@@ -1,5 +1,11 @@
 import type { LocalDate } from "@productivity/gtd";
-import { Button, MarkdownEditor, PageHeader } from "@productivity/ui";
+import {
+  Button,
+  MarkdownEditor,
+  PageHeader,
+  VimModeLine,
+} from "@productivity/ui";
+import type { CursorPosition, VimMode } from "@productivity/ui";
 import { color, font } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 import { useQuery } from "@tanstack/react-query";
@@ -33,6 +39,8 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
   const [status, setStatus] = useState<SaveStatus>("saved");
   // What the editor holds, once the user has typed. Before that, the page.
   const [typed, setTyped] = useState<string | null>(null);
+  const [mode, setMode] = useState<VimMode>("normal");
+  const [cursor, setCursor] = useState<CursorPosition>({ column: 1, line: 1 });
 
   const autosave = useMemo(
     () =>
@@ -85,7 +93,13 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
     );
 
   return (
-    <>
+    <Page
+      footer={
+        page.data === undefined ? null : (
+          <VimModeLine cursor={cursor} mode={mode} />
+        )
+      }
+    >
       <PageHeader
         description={<span {...stylex.props(styles.meta)}>{meta}</span>}
         icon={<NotebookPen color="#1F9C8E" size={30} />}
@@ -117,16 +131,24 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
             setTyped(markdown);
             autosave.change(markdown);
           }}
+          onCursorMove={setCursor}
+          onSave={() => {
+            void autosave.flush();
+          }}
+          onVimModeChange={setMode}
           placeholder="Write about your day…"
+          relativeLineNumbers
+          vim
         />
       )}
-    </>
+    </Page>
   );
 };
 
-/** A page per day, written in Markdown that formats as you type. */
+/**
+ * A page per day, written in Markdown that formats as you type, with vim
+ * keys and relative line numbers.
+ */
 export const JournalScreen = ({ day }: { day: LocalDate }) => (
-  <Page>
-    <JournalDay day={day} key={day} />
-  </Page>
+  <JournalDay day={day} key={day} />
 );
