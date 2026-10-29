@@ -8,6 +8,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { previewDecorations } from "../src/components/markdown-editor/live-preview.ts";
+import { relativeLabel } from "../src/components/markdown-editor/relative-line-numbers.ts";
 import { MarkdownEditor } from "../src/index.ts";
 
 /** A fully parsed editor state with the cursor at `cursor`. */
@@ -219,5 +220,153 @@ describe("MarkdownEditor", () => {
     );
 
     expect(onChange).toHaveBeenLastCalledWith("- Milk\n- ");
+  });
+});
+
+/** Presses one key in the editor, as vim reads it. */
+const press = (view: EditorView, key: string): void => {
+  view.contentDOM.dispatchEvent(
+    new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key })
+  );
+};
+
+describe("relative line numbers", () => {
+  test("show the cursor's line, and how far every other line is", () => {
+    expect([1, 2, 3, 4, 5].map((line) => relativeLabel(line, 3))).toEqual([
+      "2",
+      "1",
+      "3",
+      "1",
+      "2",
+    ]);
+  });
+
+  test("follow the cursor in the gutter", () => {
+    render(
+      <MarkdownEditor
+        initialValue={"One\nTwo\nThree\nFour"}
+        label="Journal"
+        onChange={mock()}
+        relativeLineNumbers
+      />
+    );
+
+    const view = editorOf();
+
+    // The numbers shown, without the hidden spacer that sizes the gutter.
+    const numbers = () =>
+      [
+        ...view.dom.querySelectorAll<HTMLElement>(
+          ".cm-lineNumbers .cm-gutterElement"
+        ),
+      ].flatMap((element) =>
+        element.style.visibility === "hidden" ? [] : [element.textContent]
+      );
+
+    expect(numbers()).toEqual(["1", "1", "2", "3"]);
+
+    view.dispatch({ selection: { anchor: "One\nTwo\nTh".length } });
+
+    expect(numbers()).toEqual(["2", "1", "3", "1"]);
+  });
+});
+
+describe("vim keys", () => {
+  test("start in normal mode, where keys are commands", () => {
+    const onChange = mock();
+    const onVimModeChange = mock();
+
+    render(
+      <MarkdownEditor
+        initialValue={"Keep\nDelete me\nKeep too"}
+        label="Journal"
+        onChange={onChange}
+        onVimModeChange={onVimModeChange}
+        vim
+      />
+    );
+
+    const view = editorOf();
+
+    expect(onVimModeChange).toHaveBeenLastCalledWith("normal");
+
+    view.dispatch({ selection: { anchor: "Keep\n".length } });
+    press(view, "d");
+    press(view, "d");
+
+    expect(onChange).toHaveBeenLastCalledWith("Keep\nKeep too");
+  });
+
+  test("report each change of mode", () => {
+    const onVimModeChange = mock();
+
+    render(
+      <MarkdownEditor
+        initialValue="Hello"
+        label="Journal"
+        onChange={mock()}
+        onVimModeChange={onVimModeChange}
+        vim
+      />
+    );
+
+    const view = editorOf();
+
+    press(view, "i");
+    expect(onVimModeChange).toHaveBeenLastCalledWith("insert");
+
+    press(view, "Escape");
+    press(view, "V");
+    expect(onVimModeChange).toHaveBeenLastCalledWith("visual line");
+  });
+
+  test("save with :w", () => {
+    const onSave = mock();
+
+    render(
+      <MarkdownEditor
+        initialValue="Hello"
+        label="Journal"
+        onChange={mock()}
+        onSave={onSave}
+        vim
+      />
+    );
+
+    const view = editorOf();
+
+    press(view, ":");
+
+    const prompt = view.dom.querySelector("input");
+
+    if (prompt === null) {
+      throw new Error('":" opened no prompt.');
+    }
+
+    prompt.value = "w";
+    // The prompt reads Enter by its old key code.
+    prompt.dispatchEvent(
+      new KeyboardEvent("keydown", { bubbles: true, key: "Enter", keyCode: 13 })
+    );
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+  });
+
+  test("report where the cursor is", () => {
+    const onCursorMove = mock();
+
+    render(
+      <MarkdownEditor
+        initialValue={"One\nTwo"}
+        label="Journal"
+        onChange={mock()}
+        onCursorMove={onCursorMove}
+        vim
+      />
+    );
+
+    editorOf().dispatch({ selection: { anchor: "One\nTw".length } });
+
+    expect(onCursorMove).toHaveBeenLastCalledWith({ column: 3, line: 2 });
   });
 });

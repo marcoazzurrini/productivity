@@ -47,7 +47,16 @@ export { Kbd } from "./components/kbd.tsx";
 
 export { MarkdownEditor } from "./components/markdown-editor/markdown-editor.tsx";
 
-export type { MarkdownEditorProps } from "./components/markdown-editor/markdown-editor.tsx";
+export type {
+  CursorPosition,
+  MarkdownEditorProps,
+} from "./components/markdown-editor/markdown-editor.tsx";
+
+export { VimModeLine } from "./components/markdown-editor/vim-mode-line.tsx";
+
+export type { VimModeLineProps } from "./components/markdown-editor/vim-mode-line.tsx";
+
+export type { VimMode } from "./components/markdown-editor/vim.ts";
 
 export { NavItem, NavSection } from "./components/nav.tsx";
 

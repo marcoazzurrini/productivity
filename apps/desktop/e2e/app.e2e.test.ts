@@ -94,6 +94,8 @@ describe("the journal", () => {
     const page = window.getByRole("textbox", { name: /^Journal for /u });
 
     await page.waitFor();
+    // The journal opens in vim's normal mode: "i" starts typing.
+    await window.keyboard.press("i");
     await window.keyboard.type("## Evening\nWritten right before quitting");
     // Quit at once, before the pause that triggers a normal save.
     await first.close();
@@ -110,6 +112,54 @@ describe("the journal", () => {
     ).resolves.toMatch(/^[A-Z][a-z]+day, [A-Z][a-z]+ \d+$/u);
 
     await second.close();
+  });
+});
+
+describe("the journal's vim keys", () => {
+  const dataDir = mkdtempSync(path.join(tmpdir(), "productivity-e2e-"));
+  let app: ElectronApplication;
+  let window: Page;
+
+  beforeAll(async () => {
+    app = await launch(dataDir);
+    window = await app.firstWindow();
+    await window.getByRole("heading", { level: 1, name: "Inbox" }).waitFor();
+    await window.keyboard.press("Meta+J");
+    await window.getByRole("textbox", { name: /^Journal for /u }).waitFor();
+  });
+
+  afterAll(async () => {
+    await app.close();
+    rmSync(dataDir, { force: true, recursive: true });
+  });
+
+  const mode = () =>
+    window.getByRole("status", { name: "Vim mode" }).textContent();
+
+  it("edits with vim keys and numbers lines from the cursor", async () => {
+    await expect(mode()).resolves.toBe("normal");
+
+    await window.keyboard.press("i");
+    await expect(mode()).resolves.toBe("insert");
+    await window.keyboard.type("One\nTwo\nThree");
+    await window.keyboard.press("Escape");
+    await expect(mode()).resolves.toBe("normal");
+
+    // Up one line, then delete it.
+    await window.keyboard.press("k");
+    await window.keyboard.press("d");
+    await window.keyboard.press("d");
+
+    const page = window.getByRole("textbox", { name: /^Journal for /u });
+
+    await expect(page.textContent()).resolves.toBe("OneThree");
+
+    const numbers = await window
+      .locator(".cm-lineNumbers .cm-gutterElement:not([style*='hidden'])")
+      .allTextContents();
+
+    // The cursor lands on "Three", the second line.
+    expect(numbers).toStrictEqual(["1", "2"]);
   });
 });
 
