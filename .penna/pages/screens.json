@@ -1540,7 +1540,7 @@
    ]
   },
   {
-   "id": "PWzru",
+   "id": "GybfS",
    "type": "frame",
    "name": "Screen / Journal",
    "style": {
@@ -1554,10 +1554,10 @@
     "alignItems": "flex-start"
    },
    "x": 2720,
-   "y": 6200,
+   "y": 7800,
    "children": [
     {
-     "id": "xUZQ5",
+     "id": "pwEnv",
      "type": "ref",
      "name": "Selected=Inbox",
      "ref": "Xj8Wt",
@@ -1578,7 +1578,7 @@
      }
     },
     {
-     "id": "LbucB",
+     "id": "zebST",
      "type": "frame",
      "name": "Main",
      "style": {
@@ -1590,7 +1590,7 @@
      },
      "children": [
       {
-       "id": "t6kT6",
+       "id": "GTNfz",
        "type": "frame",
        "name": "Topbar",
        "style": {
@@ -1605,13 +1605,13 @@
        },
        "children": [
         {
-         "id": "QPZ4F",
+         "id": "6AfyD",
          "type": "ref",
          "ref": "NwWQ4",
          "name": "Day nav"
         },
         {
-         "id": "gEu8P",
+         "id": "iRPq4",
          "type": "icon",
          "name": "panel-right",
          "icon": "panel-right",
@@ -1622,7 +1622,7 @@
          }
         },
         {
-         "id": "S73PG",
+         "id": "U3eRY",
          "type": "icon",
          "name": "ellipsis",
          "icon": "ellipsis",
@@ -1635,11 +1635,11 @@
        ]
       },
       {
-       "id": "jCcUY",
+       "id": "miwJE",
        "type": "frame",
        "name": "Scroll",
        "style": {
-        "height": "1336px",
+        "height": "1308px",
         "overflow": "hidden",
         "alignSelf": "stretch",
         "flexGrow": "1",
@@ -1651,7 +1651,7 @@
        },
        "children": [
         {
-         "id": "vkZdN",
+         "id": "u3R8U",
          "type": "frame",
          "name": "Column",
          "style": {
@@ -1662,7 +1662,7 @@
          },
          "children": [
           {
-           "id": "zd9wJ",
+           "id": "iSmmv",
            "type": "frame",
            "name": "Header",
            "style": {
@@ -1672,7 +1672,7 @@
            },
            "children": [
             {
-             "id": "jjrDL",
+             "id": "5dJni",
              "type": "frame",
              "name": "Title row",
              "style": {
@@ -1682,7 +1682,7 @@
              },
              "children": [
               {
-               "id": "8S5t5",
+               "id": "94B4Y",
                "type": "icon",
                "icon": "notebook-pen",
                "style": {
@@ -1693,7 +1693,7 @@
                "name": "notebook-pen"
               },
               {
-               "id": "rrkmc",
+               "id": "GmNEA",
                "type": "text",
                "name": "Title",
                "text": "Saturday, 24 October",
@@ -1709,7 +1709,7 @@
              ]
             },
             {
-             "id": "Lg4QE",
+             "id": "Vq6qn",
              "type": "text",
              "name": "Meta",
              "text": "Week 43  ·  186 words  ·  Saved",
@@ -1724,7 +1724,7 @@
            ]
           },
           {
-           "id": "Y9rU8",
+           "id": "Ruysr",
            "type": "frame",
            "name": "Editor",
            "style": {
@@ -1734,89 +1734,212 @@
            },
            "children": [
             {
-             "id": "FZ8uA",
-             "type": "text",
-             "name": "H2",
-             "text": "Morning",
+             "id": "XgKxd",
+             "type": "frame",
+             "name": "Heading line",
              "style": {
-              "fontFamily": "Inter",
-              "lineHeight": "normal",
-              "fontSize": 20,
-              "fontWeight": 600,
-              "letterSpacing": -0.3,
-              "color": "var(--color-text-primary)",
+              "position": "relative",
               "marginTop": 12
-             }
-            },
-            {
-             "id": "9UEEW",
-             "type": "text",
-             "name": "P",
-             "spans": [
+             },
+             "children": [
               {
-               "text": "Slept well and woke up before the alarm. The Inbox is at zero after yesterday's review, so the day starts "
-              },
-              {
-               "text": "clear",
+               "id": "yKSHN",
+               "type": "text",
+               "name": "H2",
+               "text": "Morning",
                "style": {
-                "fontWeight": 700
+                "fontFamily": "Inter",
+                "lineHeight": "normal",
+                "fontSize": 20,
+                "fontWeight": 600,
+                "letterSpacing": -0.3,
+                "color": "var(--color-text-primary)",
+                "marginTop": 0
                }
               },
               {
-               "text": "."
+               "id": "s6gwC",
+               "type": "text",
+               "name": "Line number",
+               "text": "6",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "24px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
-             ],
-             "style": {
-              "fontFamily": "Inter",
-              "fontSize": 16,
-              "lineHeight": "26px",
-              "color": "var(--color-text-primary)"
-             }
+             ]
             },
             {
-             "id": "BWsa2",
-             "type": "text",
-             "name": "P",
-             "spans": [
+             "id": "Y95qD",
+             "type": "frame",
+             "name": "Paragraph line",
+             "style": {
+              "position": "relative",
+              "marginTop": 0
+             },
+             "children": [
               {
-               "text": "Main thing today: finish the Q4 Planning draft before lunch."
+               "id": "6gisX",
+               "type": "text",
+               "name": "P",
+               "spans": [
+                {
+                 "text": "Slept well and woke up before the alarm. The Inbox is at zero after yesterday's review, so the day starts "
+                },
+                {
+                 "text": "clear",
+                 "style": {
+                  "fontWeight": 700
+                 }
+                },
+                {
+                 "text": "."
+                }
+               ],
+               "style": {
+                "fontFamily": "Inter",
+                "fontSize": 16,
+                "lineHeight": "26px",
+                "color": "var(--color-text-primary)",
+                "marginTop": 0
+               }
+              },
+              {
+               "id": "hW8eL",
+               "type": "text",
+               "name": "Line number",
+               "text": "5",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
-             ],
-             "style": {
-              "fontFamily": "Inter",
-              "fontSize": 16,
-              "lineHeight": "26px",
-              "color": "var(--color-text-primary)"
-             }
+             ]
             },
             {
-             "id": "cw3BX",
-             "type": "text",
-             "name": "H2",
-             "text": "Wins",
+             "id": "gxEpY",
+             "type": "frame",
+             "name": "Paragraph line",
              "style": {
-              "fontFamily": "Inter",
-              "lineHeight": "normal",
-              "fontSize": 20,
-              "fontWeight": 600,
-              "letterSpacing": -0.3,
-              "color": "var(--color-text-primary)",
+              "position": "relative",
+              "marginTop": 0
+             },
+             "children": [
+              {
+               "id": "bxHeb",
+               "type": "text",
+               "name": "P",
+               "spans": [
+                {
+                 "text": "Main thing today: finish the Q4 Planning draft before lunch."
+                }
+               ],
+               "style": {
+                "fontFamily": "Inter",
+                "fontSize": 16,
+                "lineHeight": "26px",
+                "color": "var(--color-text-primary)",
+                "marginTop": 0
+               }
+              },
+              {
+               "id": "Hi4AV",
+               "type": "text",
+               "name": "Line number",
+               "text": "4",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
+              }
+             ]
+            },
+            {
+             "id": "VSBmD",
+             "type": "frame",
+             "name": "Heading line",
+             "style": {
+              "position": "relative",
               "marginTop": 12
-             }
+             },
+             "children": [
+              {
+               "id": "tN4c4",
+               "type": "text",
+               "name": "H2",
+               "text": "Wins",
+               "style": {
+                "fontFamily": "Inter",
+                "lineHeight": "normal",
+                "fontSize": 20,
+                "fontWeight": 600,
+                "letterSpacing": -0.3,
+                "color": "var(--color-text-primary)",
+                "marginTop": 0
+               }
+              },
+              {
+               "id": "wzyzK",
+               "type": "text",
+               "name": "Line number",
+               "text": "3",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "24px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
+              }
+             ]
             },
             {
-             "id": "zwZSA",
+             "id": "vC5Eq",
              "type": "frame",
              "name": "Bullet",
              "style": {
               "display": "flex",
               "gap": 10,
               "alignItems": "flex-start",
-              "paddingLeft": 4
+              "paddingLeft": 4,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "f24Lp",
+               "id": "zAiHU",
                "type": "frame",
                "style": {
                 "width": 6,
@@ -1829,7 +1952,7 @@
                "name": "Frame"
               },
               {
-               "id": "un7QM",
+               "id": "BZD9F",
                "type": "text",
                "name": "P",
                "spans": [
@@ -1843,22 +1966,42 @@
                 "lineHeight": "26px",
                 "color": "var(--color-text-primary)"
                }
+              },
+              {
+               "id": "AE9SW",
+               "type": "text",
+               "name": "Line number",
+               "text": "2",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
              ]
             },
             {
-             "id": "5Ch6K",
+             "id": "LrQ4N",
              "type": "frame",
              "name": "Bullet",
              "style": {
               "display": "flex",
               "gap": 10,
               "alignItems": "flex-start",
-              "paddingLeft": 4
+              "paddingLeft": 4,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "HyRsu",
+               "id": "gr8Bt",
                "type": "frame",
                "style": {
                 "width": 6,
@@ -1871,7 +2014,7 @@
                "name": "Frame"
               },
               {
-               "id": "K5Eqs",
+               "id": "V9RCQ",
                "type": "text",
                "name": "P",
                "spans": [
@@ -1891,21 +2034,41 @@
                 "lineHeight": "26px",
                 "color": "var(--color-text-primary)"
                }
+              },
+              {
+               "id": "VkJu2",
+               "type": "text",
+               "name": "Line number",
+               "text": "1",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
              ]
             },
             {
-             "id": "vHYuj",
+             "id": "fsUUa",
              "type": "frame",
              "name": "Active line",
              "style": {
               "display": "flex",
               "alignItems": "center",
-              "paddingLeft": 4
+              "paddingLeft": 4,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "mvsga",
+               "id": "MUNZy",
                "type": "text",
                "name": "P",
                "spans": [
@@ -1925,7 +2088,16 @@
                  }
                 },
                 {
-                 "text": "booked",
+                 "text": "b",
+                 "style": {
+                  "fontWeight": 700,
+                  "background": "var(--color-accent-blue)",
+                  "color": "var(--color-text-on-accent)",
+                  "borderRadius": 2
+                 }
+                },
+                {
+                 "text": "ooked",
                  "style": {
                   "fontWeight": 700
                  }
@@ -1945,30 +2117,39 @@
                }
               },
               {
-               "id": "CQX4f",
-               "type": "frame",
-               "name": "Caret",
+               "id": "Xeagk",
+               "type": "text",
+               "name": "Line number",
+               "text": "7",
                "style": {
-                "width": 2,
-                "height": 22,
-                "background": "var(--color-accent-blue)",
-                "marginLeft": 1
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-accent-blue)",
+                "fontWeight": 600
                }
               }
              ]
             },
             {
-             "id": "hKqHR",
+             "id": "rfECR",
              "type": "frame",
              "name": "Quote",
              "style": {
               "borderLeft": "3px solid var(--color-border-strong)",
               "paddingLeft": 16,
-              "marginBlock": 6
+              "marginBlock": 6,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "tSK8a",
+               "id": "xzeTM",
                "type": "text",
                "name": "P",
                "spans": [
@@ -1986,37 +2167,87 @@
                 "lineHeight": "26px",
                 "color": "var(--color-text-primary)"
                }
+              },
+              {
+               "id": "dZRJi",
+               "type": "text",
+               "name": "Line number",
+               "text": "1",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -47,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
              ]
             },
             {
-             "id": "qRJrD",
-             "type": "text",
-             "name": "H2",
-             "text": "Tomorrow",
+             "id": "p7rKk",
+             "type": "frame",
+             "name": "Heading line",
              "style": {
-              "fontFamily": "Inter",
-              "lineHeight": "normal",
-              "fontSize": 20,
-              "fontWeight": 600,
-              "letterSpacing": -0.3,
-              "color": "var(--color-text-primary)",
+              "position": "relative",
               "marginTop": 12
-             }
+             },
+             "children": [
+              {
+               "id": "46Gmp",
+               "type": "text",
+               "name": "H2",
+               "text": "Tomorrow",
+               "style": {
+                "fontFamily": "Inter",
+                "lineHeight": "normal",
+                "fontSize": 20,
+                "fontWeight": 600,
+                "letterSpacing": -0.3,
+                "color": "var(--color-text-primary)",
+                "marginTop": 0
+               }
+              },
+              {
+               "id": "8kWDC",
+               "type": "text",
+               "name": "Line number",
+               "text": "2",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "24px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
+              }
+             ]
             },
             {
-             "id": "g66e8",
+             "id": "JyDgN",
              "type": "frame",
              "name": "To-do",
              "style": {
               "display": "flex",
               "gap": 10,
               "alignItems": "center",
-              "paddingLeft": 2
+              "paddingLeft": 2,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "4QuDQ",
+               "id": "A5pXZ",
                "type": "frame",
                "name": "Checkbox",
                "style": {
@@ -2032,7 +2263,7 @@
                "children": []
               },
               {
-               "id": "LVhAJ",
+               "id": "DYx5D",
                "type": "text",
                "name": "P",
                "spans": [
@@ -2047,22 +2278,42 @@
                 "lineHeight": "26px",
                 "color": "var(--color-text-primary)"
                }
+              },
+              {
+               "id": "mAV2j",
+               "type": "text",
+               "name": "Line number",
+               "text": "3",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
              ]
             },
             {
-             "id": "SYWkZ",
+             "id": "sfMWj",
              "type": "frame",
              "name": "To-do",
              "style": {
               "display": "flex",
               "gap": 10,
               "alignItems": "center",
-              "paddingLeft": 2
+              "paddingLeft": 2,
+              "position": "relative"
              },
              "children": [
               {
-               "id": "H6keS",
+               "id": "5DPtt",
                "type": "frame",
                "name": "Checkbox",
                "style": {
@@ -2077,7 +2328,7 @@
                },
                "children": [
                 {
-                 "id": "fUeDL",
+                 "id": "taSqN",
                  "type": "icon",
                  "icon": "check",
                  "style": {
@@ -2090,7 +2341,7 @@
                ]
               },
               {
-               "id": "rJwEV",
+               "id": "v3Ycj",
                "type": "text",
                "name": "P",
                "spans": [
@@ -2108,6 +2359,25 @@
                 "lineHeight": "26px",
                 "color": "var(--color-text-primary)"
                }
+              },
+              {
+               "id": "TPAvS",
+               "type": "text",
+               "name": "Line number",
+               "text": "4",
+               "style": {
+                "position": "absolute",
+                "width": 28,
+                "textAlign": "right",
+                "fontFamily": "JetBrains Mono",
+                "fontSize": 12,
+                "fontVariantNumeric": "tabular-nums",
+                "top": 0,
+                "left": -44,
+                "lineHeight": "26px",
+                "color": "var(--color-text-placeholder)",
+                "fontWeight": 400
+               }
               }
              ]
             }
@@ -2118,7 +2388,44 @@
        ]
       },
       {
-       "id": "XmBmZ",
+       "id": "9Ptmg",
+       "type": "frame",
+       "name": "Vim status",
+       "class": "flex items-center justify-between",
+       "style": {
+        "height": 28,
+        "alignSelf": "stretch",
+        "paddingInline": 20,
+        "borderTop": "1px solid var(--color-border-default)",
+        "fontFamily": "JetBrains Mono",
+        "fontSize": 11,
+        "color": "var(--color-text-tertiary)"
+       },
+       "children": [
+        {
+         "id": "aMbcq",
+         "type": "text",
+         "name": "Mode",
+         "text": "NORMAL",
+         "style": {
+          "fontWeight": 700,
+          "letterSpacing": "0.04em",
+          "color": "var(--color-accent-blue)",
+          "background": "var(--color-accent-blue-subtle)",
+          "padding": "2px 6px",
+          "borderRadius": 4
+         }
+        },
+        {
+         "id": "NjmCc",
+         "type": "text",
+         "name": "Position",
+         "text": "7:40"
+        }
+       ]
+      },
+      {
+       "id": "cEQ63",
        "type": "ref",
        "name": "Main toolbar",
        "ref": "n0_1457",
@@ -2143,7 +2450,7 @@
      ]
     },
     {
-     "id": "n7bHu",
+     "id": "YvxjR",
      "type": "ref",
      "name": "Calendar pane",
      "ref": "n0_1476",
