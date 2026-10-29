@@ -165,6 +165,13 @@ describe("the journal's vim keys", () => {
 
 /** The middle of the grid cell for a day and a half-hour slot. */
 const slotPoint = async (window: Page, day: string, time: string) => {
+  // The grid opens scrolled to the current hour, so late in the day the
+  // slot can be above the fold.
+  await window
+    .locator(`[data-time="${time}"]`)
+    .first()
+    .scrollIntoViewIfNeeded();
+
   const lane = await window
     .locator(`[data-date="${day}"]:not([data-time] *)`)
     .last()
@@ -212,7 +219,8 @@ describe("the calendar", () => {
       ].join("-");
     });
 
-    const point = await slotPoint(window, today, "10:00:00");
+    // The demo week is busy at 10 AM most days, but free at 7 AM every day.
+    const point = await slotPoint(window, today, "07:00:00");
 
     await window.mouse.click(point.x, point.y);
 
