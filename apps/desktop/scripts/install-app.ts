@@ -12,6 +12,8 @@ import path from "node:path";
  */
 import { $ } from "bun";
 
+import { signApp } from "./signing.ts";
+
 const appName = "Productivity";
 const appDir = path.resolve(import.meta.dir, "..");
 const builtApp = path.join(appDir, "release", "mac-arm64", `${appName}.app`);
@@ -109,6 +111,10 @@ step("Building");
 await $`bunx electron-vite build`.cwd(appDir);
 
 await $`bunx electron-builder --mac --dir`.cwd(appDir);
+
+step("Signing");
+
+await signApp(builtApp);
 
 await quitApp();
 

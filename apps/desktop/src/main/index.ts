@@ -2,7 +2,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 
 import { createCalendar } from "@productivity/calendar";
-import type { GoogleOptions } from "@productivity/calendar";
+import type { CalendarService, GoogleOptions } from "@productivity/calendar";
 import { openStore } from "@productivity/db";
 import {
   app,
@@ -90,31 +90,42 @@ const google: GoogleOptions | undefined =
         secrets: encryptedFile(path.join(dataDir, "google.token"), safeStorage),
       };
 
-const calendar = createCalendar({
-  google,
-  repository: store.calendarRepository,
-});
-
-ipcMain.handle(calendarChannel.call, (_event, method: string, args) =>
-  callCalendar(calendar, method, args)
-);
-
-calendar.subscribe(() => {
-  for (const window of BrowserWindow.getAllWindows()) {
-    window.webContents.send(calendarChannel.changed);
-  }
-});
-
 /** Google has no push for desktop apps, so ask for changes regularly. */
 const syncEveryMs = 2 * 60 * 1000;
 
-setInterval(() => {
-  void calendar.sync();
-}, syncEveryMs);
+/**
+ * Starts the calendar. Only once the app is ready: safeStorage cannot
+ * decrypt before then, so the saved Google sign-in would read as missing
+ * and the app would start signed out.
+ */
+const startCalendar = (): CalendarService => {
+  const calendar = createCalendar({
+    google,
+    repository: store.calendarRepository,
+  });
 
-app.on("browser-window-focus", () => {
-  void calendar.sync();
-});
+  ipcMain.handle(calendarChannel.call, (_event, method: string, args) =>
+    callCalendar(calendar, method, args)
+  );
+
+  calendar.subscribe(() => {
+    for (const window of BrowserWindow.getAllWindows()) {
+      window.webContents.send(calendarChannel.changed);
+    }
+  });
+
+  setInterval(() => {
+    void calendar.sync();
+  }, syncEveryMs);
+
+  app.on("browser-window-focus", () => {
+    void calendar.sync();
+  });
+
+  return calendar;
+};
+
+let calendar: CalendarService | null = null;
 
 ipcMain.handle(journalChannel.read, (_event, ...args) => {
   checkRead(args);
@@ -214,6 +225,7 @@ const createWindow = (): void => {
 // its own startup waiting for "ready".
 app.once("ready", () => {
   nativeTheme.themeSource = readTheme(themeFile);
+  calendar = startCalendar();
   createWindow();
 });
 
@@ -230,6 +242,6 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
-  calendar.close();
+  calendar?.close();
   store.close();
 });
