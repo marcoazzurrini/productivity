@@ -8,6 +8,7 @@ import type { Store } from "@productivity/db";
 import { createRemoteStore } from "@productivity/gtd";
 import type { StoreTransport } from "@productivity/gtd";
 import { render } from "@testing-library/react";
+import type { ReactNode } from "react";
 
 import { checkTheme } from "../src/main/appearance.ts";
 import { runCalendarMethod } from "../src/main/calendar-handler.ts";
@@ -35,7 +36,9 @@ export const fixedNow = new Date(2026, 9, 23, 14, 40);
 export const renderApp = (
   initialView?: View,
   /** Runs against the store and calendar before the app first reads them. */
-  prepare?: (store: Store, calendar: CalendarService) => void
+  prepare?: (store: Store, calendar: CalendarService) => void,
+  /** What to render inside the providers. Defaults to the whole app. */
+  ui: ReactNode = <App />
 ) => {
   const store = openStore({
     clock: () => fixedNow,
@@ -109,7 +112,7 @@ export const renderApp = (
       journal={journal}
       store={createRemoteStore(transport)}
     >
-      <App />
+      {ui}
     </Root>
   );
 

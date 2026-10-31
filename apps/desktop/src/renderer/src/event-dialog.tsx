@@ -1,4 +1,8 @@
-import type { CalendarEvent } from "@productivity/calendar";
+import type {
+  CalendarEvent,
+  CalendarInfo,
+  NewEvent,
+} from "@productivity/calendar";
 import { addDays } from "@productivity/gtd";
 import {
   Button,
@@ -67,7 +71,8 @@ interface Draft {
   /** For all-day events, the last day: the form shows it inclusive. */
   endDay: string;
   endTime: string;
-  calendarId: string;
+  /** Null until the user picks one: the main process then uses the default. */
+  calendarId: string | null;
 }
 
 const draftOf = (
@@ -75,7 +80,7 @@ const draftOf = (
   start: string,
   end: string,
   title: string,
-  calendarId: string
+  calendarId: string | null
 ): Draft => ({
   allDay,
   calendarId,
@@ -109,6 +114,20 @@ const timesOf = (draft: Draft): CalendarRange | null => {
   return complete && range.end > range.start ? range : null;
 };
 
+const defaultIdOf = (calendars: CalendarInfo[]): string =>
+  calendars.find((calendar) => calendar.isDefault)?.id ?? "local";
+
+/** Leaves the calendar out unless the user picked one. */
+const newEventOf = (draft: Draft, times: CalendarRange): NewEvent => {
+  const event: NewEvent = { ...times, title: draft.title };
+
+  if (draft.calendarId !== null) {
+    event.calendarId = draft.calendarId;
+  }
+
+  return event;
+};
+
 /** Creates or edits a calendar event. */
 export const EventDialog = ({
   target,
@@ -121,8 +140,9 @@ export const EventDialog = ({
   const calendars = useCalendars().data ?? [];
   const writable = calendars.filter((calendar) => calendar.writable);
 
-  const fallback =
-    writable.find((calendar) => calendar.isDefault)?.id ?? "local";
+  // The list may still be loading when the dialog opens, so the draft only
+  // records a calendar the user picks, and shows the default until then.
+  const fallback = defaultIdOf(writable);
 
   const [draft, setDraft] = useState<Draft>(() =>
     target.kind === "create"
@@ -131,7 +151,7 @@ export const EventDialog = ({
           target.range.start,
           target.range.end,
           "",
-          fallback
+          null
         )
       : draftOf(
           target.event.allDay,
@@ -159,11 +179,7 @@ export const EventDialog = ({
   const save = useCalendarAction(
     (calendar, input: { draft: Draft; times: CalendarRange }) =>
       event === null
-        ? calendar.createEvent({
-            ...input.times,
-            calendarId: input.draft.calendarId,
-            title: input.draft.title,
-          })
+        ? calendar.createEvent(newEventOf(input.draft, input.times))
         : calendar.updateEvent(event.id, {
             ...input.times,
             title: input.draft.title,
@@ -242,6 +258,9 @@ export const EventDialog = ({
             keyEvent.key === "Enter" &&
             (keyEvent.metaKey || event === null)
           ) {
+            // The dialog closes and hands focus back, often to a header
+            // button; without this, the same Enter would press that button.
+            keyEvent.preventDefault();
             submit();
           }
         }}
@@ -306,7 +325,7 @@ export const EventDialog = ({
               label: calendar.name,
               value: calendar.id,
             }))}
-            value={draft.calendarId}
+            value={draft.calendarId ?? fallback}
           />
         </div>
       ) : null}

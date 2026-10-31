@@ -167,6 +167,8 @@ const TaskEditor = ({ task, onClose }: { task: Task; onClose: () => void }) => {
         label="Title"
         onKeyDown={(event) => {
           if (event.key === "Enter" && event.metaKey) {
+            // Keeps the Enter from pressing the button that gets focus back.
+            event.preventDefault();
             submit();
           }
         }}
