@@ -36,7 +36,7 @@ const launch = (
     args: [appDir],
     colorScheme,
     cwd: appDir,
-    env: childEnv({ PRODUCTIVITY_DATA_DIR: dataDir }),
+    env: childEnv({ PRODUCTIVITY_DATA_DIR: dataDir, PRODUCTIVITY_HIDDEN: "1" }),
     executablePath: String(electronPath),
   });
 
