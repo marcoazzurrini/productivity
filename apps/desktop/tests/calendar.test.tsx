@@ -1,7 +1,8 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
+import { EventDialog } from "../src/renderer/src/event-dialog.tsx";
 import { renderApp } from "./harness.tsx";
 
 const week = () => screen.getByRole("complementary", { name: "Week" });
@@ -94,6 +95,88 @@ describe("the week calendar", () => {
     await expect(
       screen.findByRole("dialog", { name: "Edit to-do" })
     ).resolves.toBeDefined();
+  });
+
+  it("saves with Enter and stops that Enter from pressing anything else", async () => {
+    const onClose = vi.fn<() => void>();
+
+    renderApp(
+      undefined,
+      undefined,
+      <EventDialog
+        onClose={onClose}
+        target={{
+          kind: "create",
+          range: {
+            allDay: false,
+            end: "2026-10-23T16:00",
+            start: "2026-10-23T15:00",
+          },
+        }}
+      />
+    );
+
+    const title = within(
+      await screen.findByRole("dialog", { name: "New event" })
+    ).getByRole("textbox", { name: "Title" });
+
+    fireEvent.change(title, { target: { value: "Lunch" } });
+
+    // The dialog closes and focus returns to the button that had it, such
+    // as Google Calendar in the header. In Chromium that button would take
+    // the same Enter as a click, unless the Enter's default is cancelled.
+    const notCancelled = fireEvent.keyDown(title, { key: "Enter" });
+
+    expect(notCancelled).toBeFalsy();
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("puts a new event on the default calendar, even before calendars load", async () => {
+    const { calendar } = renderApp(
+      undefined,
+      (store) => {
+        store.calendarRepository.saveCalendar({
+          color: "#039BE5",
+          id: "google:me@example.com",
+          name: "Events",
+          position: 1,
+          primary: true,
+          remoteId: "me@example.com",
+          source: "google",
+          syncToken: null,
+          writable: true,
+        });
+      },
+      <EventDialog
+        onClose={vi.fn<() => void>()}
+        target={{
+          kind: "create",
+          range: {
+            allDay: false,
+            end: "2026-10-23T16:00",
+            start: "2026-10-23T15:00",
+          },
+        }}
+      />
+    );
+
+    const user = userEvent.setup();
+
+    const dialog = await screen.findByRole("dialog", { name: "New event" });
+
+    await user.type(
+      within(dialog).getByRole("textbox", { name: "Title" }),
+      "Call the bank"
+    );
+    await user.click(within(dialog).getByRole("button", { name: "Save" }));
+
+    await waitFor(() => {
+      expect(
+        calendar
+          .listEvents("2026-10-23", "2026-10-24")
+          .filter((event) => event.title === "Call the bank")
+      ).toMatchObject([{ calendarId: "google:me@example.com" }]);
+    });
   });
 
   it("hides Google when the app has no Google client", async () => {
