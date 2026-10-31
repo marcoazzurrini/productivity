@@ -44,10 +44,6 @@ export const markdownTheme = EditorView.theme({
   },
   // As thin as the browser's own caret, which vim mode replaces.
   ".cm-cursor": { borderLeftColor: color.accent, borderLeftWidth: "1px" },
-  ".cm-gutterElement.cm-md-current-line": {
-    color: color.accent,
-    fontWeight: font.weightSemibold,
-  },
   ".cm-gutters": {
     backgroundColor: "transparent",
     border: "none",
@@ -60,8 +56,16 @@ export const markdownTheme = EditorView.theme({
     fontVariantNumeric: "tabular-nums",
     lineHeight: "26px",
     minWidth: "20px",
-    padding: "0 10px 0 0",
+    // Faint, and far from the text, so the numbers stay out of the way.
+    opacity: 0.6,
+    padding: "0 40px 0 0",
     textAlign: "right",
+  },
+  // The cursor's line stands out a little, without colour that draws the eye.
+  ".cm-lineNumbers .cm-gutterElement.cm-md-current-line": {
+    color: color.textTertiary,
+    fontWeight: font.weightMedium,
+    opacity: 1,
   },
   // A heading's number lines up with the heading, which sits lower.
   ".cm-lineNumbers .cm-gutterElement.cm-md-gutter-h1": { paddingTop: "13px" },
