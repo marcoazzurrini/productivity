@@ -10,6 +10,9 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  /* No scrollbars anywhere. Areas still scroll with the trackpad, wheel and
+     keys; the bar itself is visual noise on a calm, document-like screen. */
+  scrollbar-width: none;
 }
 
 html,
