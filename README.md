@@ -65,7 +65,15 @@ bun run install-app          # build and install /Applications/Productivity.app
 bun run install-app --open   # the same, then open it
 ```
 
-Run it again whenever you want the latest version. It quits the running app, backs up the database, and replaces the app. There is no installer, code signing or auto-update: the app is built for this Mac only.
+Run it again whenever you want the latest version. It quits the running app, backs up the database, and replaces the app. There is no installer, notarization or auto-update: the app is built for this Mac only.
+
+The script signs the app with your free "Apple Development" certificate. macOS lets each new build read the app's keychain items, such as the key that protects the Google sign-in, only when the builds share an Apple team. Without a team, every build looks like a new app and the Google sign-in is lost. To get the certificate once:
+
+1. Install Xcode from the App Store.
+2. In Xcode, open **Settings → Apple Accounts** and sign in with your Apple ID.
+3. Open your **Personal Team**, click **Manage Certificates…**, then **+** and **Apple Development**.
+
+If `security find-identity -v -p codesigning` does not list it as valid, install Apple's current intermediate certificate, `AppleWWDRCAG3.cer`, from [Apple's certificate authority page](https://www.apple.com/certificateauthority/).
 
 The app icon is `apps/desktop/resources/icon.svg`, built from the logo in `apps/desktop/resources/logo.svg`. After editing it, run `bun run --filter @productivity/desktop make-icon` to rebuild `icon.icns`, then reinstall.
 

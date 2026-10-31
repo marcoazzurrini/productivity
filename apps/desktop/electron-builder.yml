@@ -17,8 +17,11 @@ mac:
   category: public.app-category.productivity
   # Made from resources/icon.svg by `bun run make-icon`.
   icon: icon.icns
-  # Ad-hoc signature: enough to run on the Mac that built it. The hardened
-  # runtime only matters for Apple notarization, and with an ad-hoc
-  # signature it can stop the app from launching.
+  # Ad-hoc signature: enough to run on the Mac that built it. install-app
+  # then re-signs with the free Apple Development certificate
+  # (scripts/signing.ts), so the keychain keeps trusting the app across
+  # rebuilds. The hardened
+  # runtime only matters for Apple notarization, and without a Developer ID
+  # it can stop the app from launching.
   identity: "-"
   hardenedRuntime: false
