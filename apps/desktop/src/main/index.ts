@@ -37,6 +37,16 @@ const dataDir =
   process.env.PRODUCTIVITY_DATA_DIR ??
   path.join(app.getPath("appData"), "Productivity");
 
+/**
+ * PRODUCTIVITY_HIDDEN keeps the window and the Dock icon off screen, so
+ * end-to-end tests run without popping the app up on the desktop.
+ */
+const isHidden = process.env.PRODUCTIVITY_HIDDEN === "1";
+
+if (isHidden) {
+  app.dock?.hide();
+}
+
 const store = openStore({
   path: path.join(
     dataDir,
@@ -150,6 +160,9 @@ const createWindow = (): void => {
     titleBarStyle: "hiddenInset",
     trafficLightPosition: { x: 18, y: 18 },
     webPreferences: {
+      // A hidden window would otherwise slow its timers, such as the
+      // journal's save after a pause.
+      backgroundThrottling: !isHidden,
       contextIsolation: true,
       preload: path.join(import.meta.dirname, "../preload/index.cjs"),
       sandbox: true,
@@ -158,7 +171,9 @@ const createWindow = (): void => {
   });
 
   window.once("ready-to-show", () => {
-    window.show();
+    if (!isHidden) {
+      window.show();
+    }
   });
 
   // Web and email links open in the browser or mail app, never inside the
