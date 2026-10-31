@@ -68,6 +68,40 @@ describe("WeekCalendar", () => {
     expect(screen.getByLabelText("Done")).toBeDefined();
   });
 
+  test("shows a short entry on one line, with its start time", () => {
+    const standup: CalendarEntry = {
+      allDay: false,
+      color: "#039BE5",
+      editable: true,
+      end: "2026-10-21T09:15",
+      id: "standup",
+      kind: "event",
+      start: "2026-10-21T09:00",
+      title: "Team standup",
+    };
+
+    render(calendar({ entries: [standup] }));
+
+    expect(screen.getByText("Team standup")).toBeDefined();
+    expect(screen.getByText("9:00")).toBeDefined();
+  });
+
+  test("shows a whole day, one row per hour", () => {
+    const { container } = render(calendar());
+
+    const times = [
+      ...new Set(
+        [...container.querySelectorAll<HTMLElement>("[data-time]")].map(
+          (slot) => slot.dataset.time
+        )
+      ),
+    ];
+
+    expect(times).toHaveLength(24);
+    expect(times[0]).toBe("00:00:00");
+    expect(times.at(-1)).toBe("23:00:00");
+  });
+
   test("navigates between weeks", async () => {
     const onNext = mock();
     const onPrevious = mock();

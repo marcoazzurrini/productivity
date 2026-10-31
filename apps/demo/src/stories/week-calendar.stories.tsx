@@ -32,8 +32,10 @@ const event = (
 
 const initialEntries: CalendarEntry[] = [
   ...[19, 20, 21, 22, 23].map((day) =>
-    event(`standup-${day}`, "Team standup", day, "09:00", "09:30")
+    event(`standup-${day}`, "Team standup", day, "09:00", "09:15")
   ),
+  event("olivia", "1:1 with Olivia", 20, "10:00", "10:45"),
+  event("james", "1:1 with James", 23, "10:00", "10:30"),
   event("roadmap", "Deep work: roadmap", 19, "14:00", "16:00", purple),
   event("dentist", "Dentist", 21, "16:00", "17:00", green),
   event("sync", "Design sync", 22, "11:30", "12:30"),

@@ -105,6 +105,7 @@ export const font = stylex.defineVars({
   family:
     '"Inter Variable", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   mono: 'ui-monospace, "SF Mono", Menlo, monospace',
+  size10: "10px",
   size11: "11px",
   size12: "12px",
   size13: "13px",

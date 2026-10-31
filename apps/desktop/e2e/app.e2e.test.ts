@@ -163,7 +163,7 @@ describe("the journal's vim keys", () => {
   });
 });
 
-/** The middle of the grid cell for a day and a half-hour slot. */
+/** The middle of the grid cell for a day and an hour slot. */
 const slotPoint = async (window: Page, day: string, time: string) => {
   // The grid opens scrolled to the current hour, so late in the day the
   // slot can be above the fold.
