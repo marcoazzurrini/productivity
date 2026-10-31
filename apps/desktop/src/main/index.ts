@@ -1,3 +1,4 @@
+import { mkdirSync } from "node:fs";
 import path from "node:path";
 
 import { createCalendar } from "@productivity/calendar";
@@ -25,17 +26,28 @@ import { callStore } from "./store-handler.ts";
 
 const isDev = !app.isPackaged;
 
-// Development uses its own database filled with sample data, so trying the
-// app never touches real tasks.
 /**
- * Where the database lives: ~/Library/Application Support/Productivity on
- * macOS. Pinned by name, so renaming the app never moves or loses the data,
- * and outside the app bundle, so reinstalling never touches it.
- * PRODUCTIVITY_DATA_DIR lets end-to-end tests use a throwaway folder.
+ * Where everything the app keeps lives: on macOS,
+ * ~/Library/Application Support/Productivity for the installed app and
+ * "Productivity Dev" beside it for development. So development never shares
+ * a file with the installed app: not the database, the Google sign-in, the
+ * Theme setting, nor the cookies and caches Electron keeps. Pinned by name,
+ * so renaming the app never moves or loses the data, and outside the app
+ * bundle, so reinstalling never touches it. PRODUCTIVITY_DATA_DIR lets
+ * end-to-end tests use a throwaway folder.
  */
 const dataDir =
   process.env.PRODUCTIVITY_DATA_DIR ??
-  path.join(app.getPath("appData"), "Productivity");
+  path.join(
+    app.getPath("appData"),
+    isDev ? "Productivity Dev" : "Productivity"
+  );
+
+// The database cannot open in a missing folder, as on a first run.
+mkdirSync(dataDir, { recursive: true });
+
+// Electron's own storage follows. It must be set before the app is ready.
+app.setPath("userData", dataDir);
 
 /**
  * PRODUCTIVITY_HIDDEN keeps the window and the Dock icon off screen, so
@@ -48,10 +60,8 @@ if (isHidden) {
 }
 
 const store = openStore({
-  path: path.join(
-    dataDir,
-    isDev ? "productivity-dev.sqlite" : "productivity.sqlite"
-  ),
+  path: path.join(dataDir, "productivity.sqlite"),
+  // Development starts with sample data, so trying the app is quick.
   sample: isDev,
 });
 
@@ -77,10 +87,7 @@ const google: GoogleOptions | undefined =
         client: { clientId: googleClientId, clientSecret: googleClientSecret },
         listenForRedirect,
         openBrowser: (url) => shell.openExternal(url),
-        secrets: encryptedFile(
-          path.join(dataDir, isDev ? "google-dev.token" : "google.token"),
-          safeStorage
-        ),
+        secrets: encryptedFile(path.join(dataDir, "google.token"), safeStorage),
       };
 
 const calendar = createCalendar({
@@ -133,7 +140,7 @@ ipcMain.on(journalChannel.writeNow, (event, ...args) => {
   }
 });
 
-/** The Theme setting, shared by development and the installed app. */
+/** The Theme setting. */
 const themeFile = path.join(dataDir, "theme");
 
 ipcMain.handle(appearanceChannel.getTheme, () => nativeTheme.themeSource);
