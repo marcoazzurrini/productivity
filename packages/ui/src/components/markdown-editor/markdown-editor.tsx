@@ -52,7 +52,7 @@ export interface MarkdownEditorProps {
 
 const styles = stylex.create({
   // The numbers hang in the margin, so the text lines up with the page.
-  numbered: { marginInlineStart: -30, width: "calc(100% + 30px)" },
+  numbered: { marginInlineStart: -60, width: "calc(100% + 60px)" },
   root: { minHeight: 26, width: "100%" },
 });
 
