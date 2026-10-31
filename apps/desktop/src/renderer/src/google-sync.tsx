@@ -78,10 +78,6 @@ export const GoogleSync = () => {
     calendar.disconnectGoogle()
   );
 
-  const sync = useCalendarAction<undefined, SyncStatus>((calendar) =>
-    calendar.sync()
-  );
-
   if (status === undefined || status.state === "unavailable") {
     return null;
   }
@@ -139,25 +135,20 @@ export const GoogleSync = () => {
                 onClick={() => {
                   connect.mutate(undefined, {
                     onError,
-                    onSuccess: reportError,
+                    onSuccess: (next) => {
+                      reportError(next);
+
+                      // Syncing is automatic from here on: nothing to click.
+                      if (next.state === "connected") {
+                        setOpen(false);
+                      }
+                    },
                   });
                 }}
                 size="small"
                 variant="primary"
               >
                 Connect Google
-              </Button>
-            ) : null}
-            {connected ? (
-              <Button
-                disabled={status.syncing}
-                onClick={() => {
-                  sync.mutate(undefined, { onError, onSuccess: reportError });
-                }}
-                size="small"
-                variant="primary"
-              >
-                Sync now
               </Button>
             ) : null}
           </>
@@ -174,8 +165,9 @@ export const GoogleSync = () => {
         <p {...stylex.props(styles.body)}>{describe(status)}</p>
         {connected ? (
           <p {...stylex.props(styles.body)}>
-            Disconnecting removes Google’s events from this Mac. They stay in
-            Google Calendar. Changes not yet synced are lost.
+            Changes sync automatically, every few minutes and soon after you
+            make them. Disconnecting removes Google’s events from this Mac. They
+            stay in Google Calendar. Changes not yet synced are lost.
           </p>
         ) : null}
         {error === null ? null : (
