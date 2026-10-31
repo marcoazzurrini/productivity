@@ -1272,10 +1272,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "24px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1328,10 +1329,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1375,10 +1377,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1420,10 +1423,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "24px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1482,10 +1486,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1550,10 +1555,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1631,10 +1637,10 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
-                "color": "var(--color-accent-blue)",
-                "fontWeight": 600
+                "color": "var(--color-text-tertiary)",
+                "fontWeight": 500
                }
               }
              ]
@@ -1683,10 +1689,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -47,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1728,10 +1735,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "24px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1794,10 +1802,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
@@ -1875,10 +1884,11 @@
                 "fontSize": 12,
                 "fontVariantNumeric": "tabular-nums",
                 "top": 0,
-                "left": -44,
+                "left": -68,
                 "lineHeight": "26px",
                 "color": "var(--color-text-placeholder)",
-                "fontWeight": 400
+                "fontWeight": 400,
+                "opacity": 0.6
                }
               }
              ]
