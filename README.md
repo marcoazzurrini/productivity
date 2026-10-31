@@ -95,6 +95,6 @@ Limits:
 
 ## Data
 
-The packaged app stores its database in Electron's user-data folder. Development uses a separate `productivity-dev.sqlite` filled with sample data. Set `PRODUCTIVITY_DATA_DIR` to use another folder.
+The installed app keeps everything in `~/Library/Application Support/Productivity`: the database, the Google sign-in, the Theme setting, and Electron's own storage. Development uses its own `Productivity Dev` folder beside it, with a database filled with sample data, so it never shares a file with the installed app. Set `PRODUCTIVITY_DATA_DIR` to use another folder.
 
 If your terminal sets `ELECTRON_RUN_AS_NODE=1`, unset it before `bun run dev`, or Electron starts as plain Node.
