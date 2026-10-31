@@ -1,4 +1,4 @@
-import { Calendar as FullCalendar } from "@fullcalendar/react";
+import { Calendar as FullCalendar, formatDate } from "@fullcalendar/react";
 import type {
   CalendarRef,
   DateClickInfo,
@@ -75,7 +75,24 @@ export interface WeekCalendarProps {
 }
 
 const snapMinutes = 15;
-const slotMinutes = 30;
+
+/** One row per hour, like Google Calendar. Shorter times show in event heights. */
+const slotMinutes = 60;
+
+/**
+ * Rows stretch to fill the pane, so the whole day shows without scrolling.
+ * Below this height an hour row stops shrinking and the grid scrolls.
+ */
+const hourMinHeight = 20;
+
+/** A click starts an event on the half hour under the pointer. */
+const clickSnapMinutes = 30;
+
+/** Entries this short or shorter always fit on one line, "Title, 9:00". */
+const shortMinutes = 30;
+
+/** Entries this short or shorter also use a smaller font, to fit their height. */
+const tinyMinutes = 15;
 
 /** A click on an empty slot proposes this long an event, like Google Calendar. */
 const clickMinutes = 60;
@@ -90,6 +107,13 @@ const styles = stylex.create({
     overflow: "hidden",
     paddingBlock: 2,
     paddingInline: 4,
+  },
+  // One line, "Title, 9:00", for entries too short for two.
+  contentShort: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 4,
+    paddingBlock: 0,
   },
   // The weekday sits above the number, so narrow columns still fit.
   dayHeader: {
@@ -125,6 +149,8 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
+  // The start time after a short entry's title.
+  detailShort: { flexShrink: 0 },
   grid: {
     // The theme's colors, from the design tokens.
     "--fc-breezy-background": color.bgPage,
@@ -170,6 +196,11 @@ const styles = stylex.create({
     borderWidth: 1,
     color: color.textLink,
   },
+  // Text small enough for a 15-minute entry.
+  textTiny: {
+    fontSize: font.size10,
+    lineHeight: 1,
+  },
   title: {
     color: color.textPrimary,
     fontSize: font.size15,
@@ -188,6 +219,11 @@ const styles = stylex.create({
   titleText: {
     overflow: "hidden",
     textOverflow: "ellipsis",
+  },
+  // The comma in "Team standup, 9:00". It is drawn, not text, so the title
+  // reads the same to screen readers and tests.
+  titleTextShort: {
+    "::after": { content: '","' },
   },
 });
 
@@ -220,6 +256,55 @@ const toEventInput = (entry: CalendarEntry): EventInput => ({
   title: entry.title,
 });
 
+/** "9:00", the start of a short entry. */
+const shortTimeFormat = {
+  hour: "numeric",
+  meridiem: false,
+  minute: "2-digit",
+} as const;
+
+/**
+ * How much room an entry has. Short entries fit on one line, and tiny ones
+ * also use a smaller font.
+ */
+const sizeOf = (info: EventDisplayInfo, allDay: boolean) => {
+  const { start, end } = info.event;
+
+  if (allDay || start === null || end === null) {
+    return { isShort: false, isTiny: false };
+  }
+
+  const minutes = (end.getTime() - start.getTime()) / 60_000;
+
+  return {
+    // FullCalendar also calls an entry short when its box is too low for two
+    // lines, such as a 45-minute entry in a short window.
+    isShort: info.isShort || minutes <= shortMinutes,
+    isTiny: minutes <= tinyMinutes,
+  };
+};
+
+/**
+ * The line under the title: the times and the entry's detail. A short entry
+ * shows only its start time, after the title, like Google Calendar's
+ * "Team standup, 9:00".
+ */
+const detailOf = (
+  info: EventDisplayInfo,
+  entry: CalendarEntry | undefined,
+  isShort: boolean
+): string => {
+  const { start } = info.event;
+
+  if (isShort && start !== null) {
+    return formatDate(start, shortTimeFormat);
+  }
+
+  return [info.timeText, entry?.detail]
+    .filter((part) => part !== undefined && part !== "")
+    .join(" · ");
+};
+
 const EntryContent = ({ info }: { info: EventDisplayInfo }) => {
   // SAFETY: events come from toEventInput, which stores the entry here. The
   // preview of a new selection has none.
@@ -227,26 +312,43 @@ const EntryContent = ({ info }: { info: EventDisplayInfo }) => {
   const isTask = entry?.kind === "task";
   const allDay = entry?.allDay ?? info.event.allDay;
   const title = entry?.title ?? info.event.title;
-
-  const detail = [info.timeText, entry?.detail]
-    .filter((part) => part !== undefined && part !== "")
-    .join(" · ");
+  const { isShort, isTiny } = sizeOf(info, allDay);
+  const detail = detailOf(info, entry, isShort);
 
   return (
-    <div {...stylex.props(styles.content, isTask && styles.task)}>
-      <span {...stylex.props(styles.titleLine)}>
+    <div
+      {...stylex.props(
+        styles.content,
+        isShort && styles.contentShort,
+        isTask && styles.task
+      )}
+    >
+      <span {...stylex.props(styles.titleLine, isTiny && styles.textTiny)}>
         {isTask &&
           (entry?.done === true ? (
             <SquareCheck aria-label="Done" size={11} />
           ) : (
             <Square aria-hidden size={11} />
           ))}
-        <span {...stylex.props(styles.titleText)}>
+        <span
+          {...stylex.props(
+            styles.titleText,
+            isShort && detail !== "" && styles.titleTextShort
+          )}
+        >
           {title === "" ? "(No title)" : title}
         </span>
       </span>
       {allDay || detail === "" ? null : (
-        <span {...stylex.props(styles.detail)}>{detail}</span>
+        <span
+          {...stylex.props(
+            styles.detail,
+            isShort && styles.detailShort,
+            isTiny && styles.textTiny
+          )}
+        >
+          {detail}
+        </span>
       )}
     </div>
   );
@@ -360,7 +462,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
         const start = new Date(info.date);
 
         start.setMinutes(
-          Math.floor(start.getMinutes() / slotMinutes) * slotMinutes
+          Math.floor(start.getMinutes() / clickSnapMinutes) * clickSnapMinutes
         );
         latest.current.onSelectRange?.(
           rangeOf(
@@ -450,6 +552,8 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
           borderlessBottom
           borderlessX
           dateClick={handlers.dateClick}
+          columnEventClass="week-calendar-event"
+          columnEventInnerClass="week-calendar-event-inner"
           dayHeaderContent={handlers.dayHeaderContent}
           editable
           eventClick={handlers.eventClick}
@@ -457,6 +561,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
           eventDrop={handlers.eventDrop}
           eventResize={handlers.eventResize}
           events={events}
+          expandRows
           firstDay={1}
           headerToolbar={false}
           height="100%"
@@ -470,8 +575,10 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
           selectMinDistance={5}
           selectMirror
           selectable
-          slotDuration={`00:${slotMinutes}:00`}
-          snapDuration={`00:${snapMinutes}:00`}
+          slotDuration={{ minutes: slotMinutes }}
+          slotHeaderInnerClass="week-calendar-hour-label"
+          slotMinHeight={hourMinHeight}
+          snapDuration={{ minutes: snapMinutes }}
         />
       </div>
     </section>

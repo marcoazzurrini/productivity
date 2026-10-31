@@ -6,6 +6,26 @@
 @import "@fullcalendar/react/themes/breezy/theme.css";
 @import "@fullcalendar/react/themes/breezy/palettes/indigo.css";
 
+/* WeekCalendar fits a whole day in the pane, so an hour row can be about
+   30px tall. These rules trim the theme's spacing to fit it, and sit here
+   because StyleX's layered rules can't override the unlayered theme. */
+
+/* Entries sit 1px apart, so a 15-minute entry keeps most of its height. */
+.week-calendar-event {
+  border-radius: 4px;
+  margin-block: 0 1px;
+}
+
+.week-calendar-event-inner {
+  padding: 0;
+}
+
+/* The hour label hangs centered on its line without making the row taller. */
+.week-calendar-hour-label {
+  margin-block: 0;
+  top: -8px;
+}
+
 *,
 *::before,
 *::after {
