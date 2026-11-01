@@ -2,6 +2,7 @@ import { color, font, radius, space } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 
+import { AgentToggle } from "./agent-toggle.tsx";
 import { DayNav } from "./day-nav.tsx";
 
 const styles = stylex.create({
@@ -50,6 +51,7 @@ export const Page = ({
     <div className="drag-region" {...stylex.props(styles.topbar)}>
       {topbar}
       <DayNav />
+      <AgentToggle />
     </div>
     <div {...stylex.props(styles.scroll)}>
       <div {...stylex.props(styles.column)}>{children}</div>

@@ -370,3 +370,139 @@ describe("vim keys", () => {
     expect(onCursorMove).toHaveBeenLastCalledWith({ column: 3, line: 2 });
   });
 });
+
+/** Presses ⌘K in the editor: Ctrl-K where the test DOM is not a Mac. */
+const pressInlineEdit = (view: EditorView): void => {
+  const mac = /Mac/u.test(navigator.platform);
+
+  view.contentDOM.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      ctrlKey: !mac,
+      key: "k",
+      metaKey: mac,
+    })
+  );
+};
+
+describe("⌘K edits", () => {
+  const page = "## Wins\n- Shipped\n- Ran 8 km\n\nTomorrow";
+
+  test("rewrite the paragraph around the cursor, after the user accepts", async () => {
+    const onChange = mock();
+    const onInlineEditAccepted = mock();
+
+    const onInlineEdit = mock(() =>
+      Promise.resolve("- [ ] Shipped\n- [ ] Ran 8 km")
+    );
+
+    render(
+      <MarkdownEditor
+        initialValue={page}
+        label="Journal"
+        onChange={onChange}
+        onInlineEdit={onInlineEdit}
+        onInlineEditAccepted={onInlineEditAccepted}
+      />
+    );
+
+    const view = editorOf();
+    const user = userEvent.setup();
+
+    view.dispatch({ selection: { anchor: "## Wins\n- Sh".length } });
+    pressInlineEdit(view);
+    await user.type(
+      await screen.findByRole("textbox", { name: "What should change?" }),
+      "Make checkboxes{Enter}"
+    );
+
+    await screen.findByRole("button", { name: "Accept" });
+
+    expect(onInlineEdit).toHaveBeenCalledWith({
+      from: 0,
+      instruction: "Make checkboxes",
+      markdown: page,
+      to: "## Wins\n- Shipped\n- Ran 8 km".length,
+    });
+    // The new text is in place, so it shows formatted while the user decides.
+    expect(view.state.doc.toString()).toBe(
+      "- [ ] Shipped\n- [ ] Ran 8 km\n\nTomorrow"
+    );
+
+    await user.click(screen.getByRole("button", { name: "Accept" }));
+
+    expect(onInlineEditAccepted).toHaveBeenCalledWith("Make checkboxes");
+    expect(screen.queryByRole("region", { name: "Edit with AI" })).toBeNull();
+    expect(view.state.doc.toString()).toBe(
+      "- [ ] Shipped\n- [ ] Ran 8 km\n\nTomorrow"
+    );
+  });
+
+  test("put the old text back on Discard", async () => {
+    render(
+      <MarkdownEditor
+        initialValue={page}
+        label="Journal"
+        onChange={mock()}
+        onInlineEdit={() => Promise.resolve("Gone")}
+      />
+    );
+
+    const view = editorOf();
+    const user = userEvent.setup();
+
+    view.dispatch({ selection: { anchor: page.length - 1 } });
+    pressInlineEdit(view);
+    await user.type(
+      await screen.findByRole("textbox", { name: "What should change?" }),
+      "Delete it{Enter}"
+    );
+    await screen.findByRole("button", { name: "Discard" });
+
+    expect(view.state.doc.toString()).toBe(
+      "## Wins\n- Shipped\n- Ran 8 km\n\nGone"
+    );
+
+    await user.click(screen.getByRole("button", { name: "Discard" }));
+
+    expect(view.state.doc.toString()).toBe(page);
+  });
+
+  test("show why a request failed, and let the user try again", async () => {
+    render(
+      <MarkdownEditor
+        initialValue={page}
+        label="Journal"
+        onChange={mock()}
+        onInlineEdit={() =>
+          Promise.reject(new Error("Claude Code is not installed."))
+        }
+      />
+    );
+
+    const view = editorOf();
+    const user = userEvent.setup();
+
+    pressInlineEdit(view);
+    await user.type(
+      await screen.findByRole("textbox", { name: "What should change?" }),
+      "Tidy{Enter}"
+    );
+
+    const alert = await screen.findByRole("alert");
+
+    expect(alert.textContent).toBe("Claude Code is not installed.");
+    expect(view.state.doc.toString()).toBe(page);
+  });
+
+  test("do nothing when the editor has no ⌘K handler", () => {
+    render(
+      <MarkdownEditor initialValue={page} label="Journal" onChange={mock()} />
+    );
+
+    pressInlineEdit(editorOf());
+
+    expect(screen.queryByRole("region", { name: "Edit with AI" })).toBeNull();
+  });
+});

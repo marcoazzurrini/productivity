@@ -36,7 +36,12 @@ const launch = (
     args: [appDir],
     colorScheme,
     cwd: appDir,
-    env: childEnv({ PRODUCTIVITY_DATA_DIR: dataDir, PRODUCTIVITY_HIDDEN: "1" }),
+    env: childEnv({
+      // The agent plays a script, so the suite needs no Claude login.
+      PRODUCTIVITY_AGENT_RUNTIME: "scripted",
+      PRODUCTIVITY_DATA_DIR: dataDir,
+      PRODUCTIVITY_HIDDEN: "1",
+    }),
     executablePath: String(electronPath),
   });
 
@@ -290,6 +295,43 @@ describe("the theme", () => {
         .getByRole("button", { name: "Dark" })
         .getAttribute("aria-pressed")
     ).resolves.toBe("true");
+
+    await second.close();
+  });
+});
+
+describe("the agent", () => {
+  const dataDir = mkdtempSync(path.join(tmpdir(), "productivity-e2e-"));
+
+  afterAll(() => {
+    rmSync(dataDir, { force: true, recursive: true });
+  });
+
+  it("keeps its one conversation after a restart", async () => {
+    const first = await launch(dataDir);
+    const window = await first.firstWindow();
+
+    await window.getByRole("heading", { level: 1, name: "Inbox" }).waitFor();
+    await window.keyboard.press("Meta+l");
+
+    const input = window.getByRole("textbox", { name: "Message the agent" });
+
+    await input.fill("Hello there");
+    await input.press("Enter");
+    await window.getByText("You said: Hello there").waitFor();
+    await first.close();
+
+    const second = await launch(dataDir);
+    const reopened = await second.firstWindow();
+
+    await reopened.getByRole("heading", { level: 1, name: "Inbox" }).waitFor();
+    await reopened.getByRole("button", { name: "Open the agent (⌘L)" }).click();
+
+    const kept = reopened.getByText("You said: Hello there");
+
+    await kept.waitFor();
+
+    await expect(kept.count()).resolves.toBe(1);
 
     await second.close();
   });

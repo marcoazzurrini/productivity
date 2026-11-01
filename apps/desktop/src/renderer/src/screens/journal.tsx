@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NotebookPen } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { useAgent, useAgentContext } from "../agent-context.tsx";
 import { createAutosave } from "../autosave.ts";
 import type { SaveStatus } from "../autosave.ts";
 import { fullDate, weekNumber, wordCount } from "../format.ts";
@@ -34,8 +35,9 @@ const statusLabel: Record<SaveStatus, string> = {
  * refetches never replace what the user is typing. Edits save after a
  * pause, on blur, on leaving the page, and as the window closes.
  */
-const JournalDay = ({ day }: { day: LocalDate }) => {
+const JournalDay = ({ day, version }: { day: LocalDate; version: number }) => {
   const journal = useJournal();
+  const agent = useAgent();
   const [status, setStatus] = useState<SaveStatus>("saved");
   // What the editor holds, once the user has typed. Before that, the page.
   const [typed, setTyped] = useState<string | null>(null);
@@ -55,7 +57,9 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
   const page = useQuery({
     gcTime: 0,
     queryFn: () => journal.read(day),
-    queryKey: ["journal", day],
+    // The version changes when the agent rewrites the page, so a reload
+    // never starts from the page as it was before.
+    queryKey: ["journal", day, version],
     refetchOnWindowFocus: false,
     staleTime: Number.POSITIVE_INFINITY,
   });
@@ -132,6 +136,10 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
             autosave.change(markdown);
           }}
           onCursorMove={setCursor}
+          onInlineEdit={(request) => agent.inlineEdit({ ...request, day })}
+          onInlineEditAccepted={(instruction) => {
+            void agent.recordInlineEdit(day, instruction);
+          }}
           onSave={() => {
             void autosave.flush();
           }}
@@ -147,8 +155,11 @@ const JournalDay = ({ day }: { day: LocalDate }) => {
 
 /**
  * A page per day, written in Markdown that formats as you type, with vim
- * keys and relative line numbers.
+ * keys and relative line numbers. ⌘K asks the agent to rewrite a part.
  */
-export const JournalScreen = ({ day }: { day: LocalDate }) => (
-  <JournalDay day={day} key={day} />
-);
+export const JournalScreen = ({ day }: { day: LocalDate }) => {
+  // The agent's applied edits and undos reload the page.
+  const version = useAgentContext().journalVersion(day);
+
+  return <JournalDay day={day} key={`${day}:${version}`} version={version} />;
+};

@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 
 import {
   Avatar,
+  ChatText,
   ChoiceCards,
   NavItem,
   ProgressSteps,
@@ -208,5 +209,25 @@ describe("small pieces", () => {
     await userEvent.type(screen.getByRole("textbox", { name: "Title" }), "a");
 
     expect(onValueChange).toHaveBeenCalledWith("a");
+  });
+});
+
+describe("ChatText", () => {
+  test("shows paragraphs, lists and inline styles", () => {
+    const { container } = render(
+      <ChatText
+        text={
+          "I found **two** things:\n\n- Call *Diane*\n- Book `flights`\n\n1. First\n2. Second"
+        }
+      />
+    );
+
+    expect(container.querySelector("strong")?.textContent).toBe("two");
+    expect(
+      [...container.querySelectorAll("ul li")].map((item) => item.textContent)
+    ).toEqual(["Call Diane", "Book flights"]);
+    expect(container.querySelectorAll("ol li")).toHaveLength(2);
+    expect(container.querySelector("em")?.textContent).toBe("Diane");
+    expect(container.querySelector("code")?.textContent).toBe("flights");
   });
 });

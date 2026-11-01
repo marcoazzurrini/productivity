@@ -1,3 +1,5 @@
+import { createAgent, createScriptedRuntime } from "@productivity/agent";
+import type { AgentEvent, ScriptedRuntimeOptions } from "@productivity/agent";
 import { createCalendar } from "@productivity/calendar";
 import type {
   CalendarService,
@@ -10,6 +12,7 @@ import type { StoreTransport } from "@productivity/gtd";
 import { render } from "@testing-library/react";
 import type { ReactNode } from "react";
 
+import { callAgent } from "../src/main/agent-handler.ts";
 import { checkTheme } from "../src/main/appearance.ts";
 import { runCalendarMethod } from "../src/main/calendar-handler.ts";
 import { checkRead, checkWrite } from "../src/main/journal-handler.ts";
@@ -17,6 +20,7 @@ import { runStoreMethod } from "../src/main/store-handler.ts";
 import { App } from "../src/renderer/src/app.tsx";
 import type { View } from "../src/renderer/src/navigation.tsx";
 import { Root, createQueryClient } from "../src/renderer/src/root.tsx";
+import type { AgentBridge } from "../src/shared/agent.ts";
 import type { AppearanceBridge, Theme } from "../src/shared/appearance.ts";
 import type { CalendarBridge } from "../src/shared/calendar.ts";
 import type { JournalBridge } from "../src/shared/journal.ts";
@@ -38,7 +42,9 @@ export const renderApp = (
   /** Runs against the store and calendar before the app first reads them. */
   prepare?: (store: Store, calendar: CalendarService) => void,
   /** What to render inside the providers. Defaults to the whole app. */
-  ui: ReactNode = <App />
+  ui: ReactNode = <App />,
+  /** What the agent's scripted model does. It repeats the user by default. */
+  script?: ScriptedRuntimeOptions
 ) => {
   const store = openStore({
     clock: () => fixedNow,
@@ -88,6 +94,34 @@ export const renderApp = (
     onChanged: (listener) => calendar.subscribe(listener),
   };
 
+  // The agent, on a scripted model, behind the same checks as its IPC channel.
+  const runtime = createScriptedRuntime(script);
+
+  const agent = createAgent({
+    clock: () => fixedNow,
+    gtd: store,
+    journal: store.journal,
+    repository: store.agentRepository,
+    runtime,
+  });
+
+  const agentBridge: AgentBridge = {
+    call: async (method, args) => {
+      const result: unknown = await callAgent(
+        agent,
+        method,
+        structuredClone(args)
+      );
+
+      // SAFETY: callAgent ran `method`, so this is that method's result.
+      return structuredClone(result) as never;
+    },
+    onEvent: (listener) =>
+      agent.subscribe((event: AgentEvent) => {
+        listener(structuredClone(event));
+      }),
+  };
+
   // The theme main/index.ts would save; prefers-color-scheme is not emulated.
   const appearance: SavedAppearance = { theme: "system" };
 
@@ -105,6 +139,7 @@ export const renderApp = (
 
   render(
     <Root
+      agent={agentBridge}
       appearance={appearanceBridge}
       calendar={calendarBridge}
       client={createQueryClient()}
@@ -116,5 +151,5 @@ export const renderApp = (
     </Root>
   );
 
-  return { appearance, calendar, store };
+  return { agent, appearance, calendar, runtime, store };
 };

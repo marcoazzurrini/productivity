@@ -1,5 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 
+import type { AgentRepository } from "@productivity/agent";
 import type { CalendarRepository } from "@productivity/calendar";
 import {
   isReviewDue,
@@ -39,6 +40,7 @@ import {
 import type { SQL } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-sqlite";
 
+import { createAgentRepository } from "./agent.ts";
 import { createCalendarRepository } from "./calendar.ts";
 import { createJournal } from "./journal.ts";
 import type { JournalStore } from "./journal.ts";
@@ -69,6 +71,8 @@ export interface Store extends GtdStore {
   journal: JournalStore;
   /** Storage for @productivity/calendar, kept in the same database. */
   calendarRepository: CalendarRepository;
+  /** Storage for @productivity/agent, kept in the same database. */
+  agentRepository: AgentRepository;
   close: () => void;
 }
 
@@ -292,6 +296,8 @@ export const openStore = (options: StoreOptions): Store => {
 
       return findTask(taskId);
     },
+
+    agentRepository: createAgentRepository(db),
 
     calendarRepository: createCalendarRepository(db),
 

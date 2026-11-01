@@ -1,6 +1,12 @@
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
+import { createAgent, createScriptedRuntime } from "@productivity/agent";
+import type { Agent, AgentMethod } from "@productivity/agent";
+import {
+  createClaudeRuntime,
+  findClaudeExecutable,
+} from "@productivity/agent/claude";
 import { createCalendar } from "@productivity/calendar";
 import type { CalendarService, GoogleOptions } from "@productivity/calendar";
 import { openStore } from "@productivity/db";
@@ -13,10 +19,12 @@ import {
   shell,
 } from "electron";
 
+import { agentChannel } from "../shared/agent.ts";
 import { appearanceChannel } from "../shared/appearance.ts";
 import { calendarChannel } from "../shared/calendar.ts";
 import { storeChannel } from "../shared/channel.ts";
 import { journalChannel } from "../shared/journal.ts";
+import { callAgent } from "./agent-handler.ts";
 import { checkTheme, readTheme, writeTheme } from "./appearance.ts";
 import { callCalendar } from "./calendar-handler.ts";
 import { canOpenExternally } from "./external-links.ts";
@@ -151,6 +159,50 @@ ipcMain.on(journalChannel.writeNow, (event, ...args) => {
   }
 });
 
+/** Where Claude Code works for the agent. Its transcripts are filed under it. */
+const agentDir = path.join(dataDir, "agent");
+
+mkdirSync(agentDir, { recursive: true });
+
+let claudePath: string | null = null;
+
+/** Finds the user's `claude` once, then keeps it. Retries until found. */
+const findClaude = async (): Promise<string | null> => {
+  claudePath ??= await findClaudeExecutable(process.env.PRODUCTIVITY_CLAUDE);
+
+  return claudePath;
+};
+
+/**
+ * The agent runs on the user's own Claude Code login. End-to-end tests set
+ * PRODUCTIVITY_AGENT_RUNTIME=scripted, which needs no login.
+ */
+const agent = createAgent({
+  gtd: store,
+  inlineModel: "haiku",
+  journal: store.journal,
+  onError: (error) => {
+    console.error("The agent recovered from an error.", error);
+  },
+  repository: store.agentRepository,
+  runtime:
+    process.env.PRODUCTIVITY_AGENT_RUNTIME === "scripted"
+      ? createScriptedRuntime()
+      : createClaudeRuntime({ cwd: agentDir, env: process.env, findClaude }),
+});
+
+ipcMain.handle(
+  agentChannel.call,
+  (_event, method: string, args: Parameters<Agent[AgentMethod]>) =>
+    callAgent(agent, method, args)
+);
+
+agent.subscribe((event) => {
+  for (const window of BrowserWindow.getAllWindows()) {
+    window.webContents.send(agentChannel.event, event);
+  }
+});
+
 /** The Theme setting. */
 const themeFile = path.join(dataDir, "theme");
 
@@ -242,6 +294,7 @@ app.on("window-all-closed", () => {
 });
 
 app.on("will-quit", () => {
+  agent.stop();
   calendar?.close();
   store.close();
 });

@@ -1,5 +1,6 @@
 import type { StoreTransport } from "@productivity/gtd";
 
+import type { AgentBridge } from "../../shared/agent.ts";
 import type { AppearanceBridge } from "../../shared/appearance.ts";
 import type { CalendarBridge } from "../../shared/calendar.ts";
 import type { JournalBridge } from "../../shared/journal.ts";
@@ -14,5 +15,7 @@ declare global {
     calendar: CalendarBridge;
     /** Set by the preload script. Reads and changes the Theme setting. */
     appearance: AppearanceBridge;
+    /** Set by the preload script. The renderer's only door to the agent. */
+    agent: AgentBridge;
   }
 }

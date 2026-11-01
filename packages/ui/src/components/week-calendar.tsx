@@ -59,6 +59,8 @@ export interface WeekCalendarProps {
   actions?: ReactNode;
   /** The hour the grid scrolls to first. */
   firstHour?: number;
+  /** A week of columns, or one day. */
+  days?: 1 | 7;
   onPrevious: () => void;
   onNext: () => void;
   onToday: () => void;
@@ -419,7 +421,18 @@ const timeAtPoint = (
  * bottom edge to change their length.
  */
 export const WeekCalendar = (props: WeekCalendarProps) => {
-  const { title, subtitle, date, entries, actions, firstHour = 7 } = props;
+  const {
+    title,
+    subtitle,
+    date,
+    entries,
+    actions,
+    firstHour = 7,
+    days = 7,
+  } = props;
+
+  const view = days === 1 ? "timeGridDay" : "timeGridWeek";
+  const unit = days === 1 ? "day" : "week";
   const calendar = useRef<CalendarRef>(null);
   const grid = useRef<HTMLDivElement>(null);
 
@@ -432,8 +445,8 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
   });
 
   useEffect(() => {
-    calendar.current?.getApi().gotoDate(date);
-  }, [date]);
+    calendar.current?.getApi().changeView(view, date);
+  }, [date, view]);
 
   const events = useMemo(() => entries.map(toEventInput), [entries]);
 
@@ -529,12 +542,12 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
         </Button>
         <IconButton
           icon={<ChevronLeft size={16} />}
-          label="Previous week"
+          label={unit === "day" ? "Show the previous day" : "Previous week"}
           onClick={props.onPrevious}
         />
         <IconButton
           icon={<ChevronRight size={16} />}
-          label="Next week"
+          label={unit === "day" ? "Show the next day" : "Next week"}
           onClick={props.onNext}
         />
       </div>
@@ -566,7 +579,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
           headerToolbar={false}
           height="100%"
           initialDate={date}
-          initialView="timeGridWeek"
+          initialView={view}
           nowIndicator
           plugins={[themePlugin, timeGridPlugin, interactionPlugin]}
           ref={calendar}
