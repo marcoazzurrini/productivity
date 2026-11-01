@@ -14,6 +14,10 @@ export type {
   ButtonVariant,
 } from "./components/button.tsx";
 
+export { ChatText } from "./components/chat-text.tsx";
+
+export type { ChatTextProps } from "./components/chat-text.tsx";
+
 export { Checkbox } from "./components/checkbox.tsx";
 
 export type { CheckboxProps } from "./components/checkbox.tsx";
@@ -49,6 +53,7 @@ export { MarkdownEditor } from "./components/markdown-editor/markdown-editor.tsx
 
 export type {
   CursorPosition,
+  InlineEditRequest,
   MarkdownEditorProps,
 } from "./components/markdown-editor/markdown-editor.tsx";
 

@@ -52,6 +52,12 @@ export const markdownTheme = EditorView.theme({
     fontSize: "11px",
   },
   ".cm-line": { padding: 0 },
+  // The lines a ⌘K edit covers, then its proposed new text.
+  ".cm-line.cm-inline-edit-line": { backgroundColor: color.bgHover },
+  ".cm-line.cm-inline-edit-preview": {
+    backgroundColor: color.bgToday,
+    boxShadow: `inset 2px 0 0 ${color.accent}`,
+  },
   ".cm-lineNumbers .cm-gutterElement": {
     fontVariantNumeric: "tabular-nums",
     lineHeight: "26px",

@@ -1,6 +1,8 @@
 import { color } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 
+import { useAgentContext } from "./agent-context.tsx";
+import { AgentPane } from "./agent-pane.tsx";
 import { CalendarPane } from "./calendar-pane.tsx";
 import { useNavigation } from "./navigation.tsx";
 import { ClarifyScreen } from "./screens/clarify.tsx";
@@ -15,6 +17,15 @@ import { WaitingScreen } from "./screens/waiting.tsx";
 import { Sidebar } from "./sidebar.tsx";
 
 const styles = stylex.create({
+  // The agent is as wide as the page beside it.
+  agent: {
+    borderInlineEndColor: color.borderDefault,
+    borderInlineEndStyle: "solid",
+    borderInlineEndWidth: 1,
+    flexBasis: "clamp(420px, 34vw, 860px)",
+    flexShrink: 1,
+    minWidth: 360,
+  },
   calendar: {
     flexBasis: 0,
     flexGrow: 1,
@@ -82,15 +93,30 @@ const CurrentScreen = () => {
   }
 };
 
-/** Lists on the left, the chosen list in the middle, the week on the right. */
-export const App = () => (
-  <div {...stylex.props(styles.shell)}>
-    <Sidebar />
-    <main {...stylex.props(styles.main)}>
-      <CurrentScreen />
-    </main>
-    <aside aria-label="Week" {...stylex.props(styles.calendar)}>
-      <CalendarPane />
-    </aside>
-  </div>
-);
+/**
+ * Lists on the left, the chosen list in the middle, the week on the right.
+ * With the agent open, it sits beside the page and the week shrinks to today.
+ */
+export const App = () => {
+  const { open, generation } = useAgentContext();
+
+  return (
+    <div {...stylex.props(styles.shell)}>
+      <Sidebar />
+      <main {...stylex.props(styles.main)}>
+        <CurrentScreen />
+      </main>
+      {open ? (
+        <aside aria-label="Agent" {...stylex.props(styles.agent)}>
+          <AgentPane key={generation} />
+        </aside>
+      ) : null}
+      <aside
+        aria-label={open ? "Day" : "Week"}
+        {...stylex.props(styles.calendar)}
+      >
+        <CalendarPane days={open ? 1 : 7} />
+      </aside>
+    </div>
+  );
+};

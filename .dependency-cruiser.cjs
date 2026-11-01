@@ -59,11 +59,47 @@ module.exports = {
       to: { path: "^packages/", pathNot: "^packages/calendar/" },
     },
     {
-      comment: "db stores data for gtd and calendar, and knows nothing else.",
+      comment:
+        "db stores data for gtd, calendar and agent, and knows nothing else.",
       from: { path: "^packages/db/" },
-      name: "db-only-depends-on-gtd-and-calendar",
+      name: "db-only-depends-on-gtd-calendar-and-agent",
       severity: "error",
-      to: { path: "^packages/", pathNot: "^packages/(db|gtd|calendar)/" },
+      to: { path: "^packages/", pathNot: "^packages/(db|gtd|calendar|agent)/" },
+    },
+    {
+      comment:
+        "db stores the agent's data; only its tests run the agent itself.",
+      from: { path: "^packages/db/src/" },
+      name: "db-uses-only-agent-types",
+      severity: "error",
+      to: { dependencyTypesNot: ["type-only"], path: "^packages/agent/" },
+    },
+    {
+      comment:
+        "The agent works on GTD data through ports; storage is passed in.",
+      from: { path: "^packages/agent/" },
+      name: "agent-only-depends-on-gtd",
+      severity: "error",
+      to: { path: "^packages/", pathNot: "^packages/(agent|gtd)/" },
+    },
+    {
+      comment:
+        "Only the Claude runtime talks to Claude Code, so tests never start it.",
+      from: {
+        path: "^packages/agent/src/",
+        pathNot: "^packages/agent/src/claude-runtime\\.ts$",
+      },
+      name: "only-the-claude-runtime-uses-the-sdk",
+      severity: "error",
+      to: { path: "@anthropic-ai/claude-agent-sdk" },
+    },
+    {
+      comment:
+        "The agent runs in the main process; the renderer only uses its types.",
+      from: { path: "^apps/desktop/src/(renderer|shared|preload)/" },
+      name: "renderer-uses-only-agent-types",
+      severity: "error",
+      to: { dependencyTypesNot: ["type-only"], path: "^packages/agent/" },
     },
     {
       comment: "The design system knows nothing about GTD or storage.",

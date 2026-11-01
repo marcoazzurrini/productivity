@@ -1,4 +1,9 @@
-import { addDays, toLocalDate, weekDays } from "@productivity/gtd";
+import {
+  addDays,
+  parseLocalDate,
+  toLocalDate,
+  weekDays,
+} from "@productivity/gtd";
 import type { LocalDate, ProjectDetail, Task } from "@productivity/gtd";
 import { useToast, WeekCalendar } from "@productivity/ui";
 import type { CalendarEntry, CalendarRange } from "@productivity/ui";
@@ -15,7 +20,7 @@ import {
 } from "./data.ts";
 import { EventDialog } from "./event-dialog.tsx";
 import type { EventDialogTarget } from "./event-dialog.tsx";
-import { monthLabel, weekNumber } from "./format.ts";
+import { monthLabel, shortDate, weekNumber } from "./format.ts";
 import { GoogleSync } from "./google-sync.tsx";
 import { useLookups } from "./lookups.ts";
 import { useTaskDialog } from "./task-dialog.tsx";
@@ -49,7 +54,11 @@ const addMinutes = (start: string, minutes: number): string => {
 const eventPrefix = "event:";
 const taskPrefix = "task:";
 
-export const CalendarPane = () => {
+/** "Thursday" and "Oct 23", for the one-day view's header. */
+const weekdayLong = new Intl.DateTimeFormat("en-US", { weekday: "long" });
+
+/** The week, or with the agent open, one day. */
+export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
   const toast = useToast();
   // Until the overview loads, today is the day the pane opened.
   const [openedOn, setOpenedOn] = useState(() => toLocalDate(new Date()));
@@ -177,10 +186,10 @@ export const CalendarPane = () => {
           }
         }}
         onNext={() => {
-          setAnchor(addDays(day, 7));
+          setAnchor(addDays(day, shown));
         }}
         onPrevious={() => {
-          setAnchor(addDays(day, -7));
+          setAnchor(addDays(day, -shown));
         }}
         onSelectRange={(range) => {
           setDialog({ kind: "create", range });
@@ -189,8 +198,13 @@ export const CalendarPane = () => {
           setAnchor(null);
           setOpenedOn(toLocalDate(new Date()));
         }}
-        subtitle={`Week ${weekNumber(day)}`}
-        title={monthLabel(monday)}
+        days={shown}
+        subtitle={shown === 1 ? shortDate(day) : `Week ${weekNumber(day)}`}
+        title={
+          shown === 1
+            ? weekdayLong.format(parseLocalDate(day))
+            : monthLabel(monday)
+        }
       />
       {dialog === null ? null : (
         <EventDialog

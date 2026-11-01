@@ -1,3 +1,11 @@
+import type {
+  AgentNote,
+  AgentStateKey,
+  Change,
+  MessageRole,
+  Proposal,
+  StoredBlock,
+} from "@productivity/agent";
 import type { CalendarSource, PendingChange } from "@productivity/calendar";
 import type {
   CaptureSource,
@@ -137,4 +145,41 @@ export const journalPages = sqliteTable("journal_pages", {
   day: text("day").$type<LocalDate>().primaryKey(),
   markdown: text("markdown").notNull(),
   updatedAt: text("updated_at").$type<LocalDateTime>().notNull(),
+});
+
+/** The agent's one conversation. Cleared messages stay, hidden. */
+export const agentMessages = sqliteTable("agent_messages", {
+  blocks: text("blocks", { mode: "json" }).$type<StoredBlock[]>().notNull(),
+  createdAt: text("created_at").notNull(),
+  hidden: integer("hidden", { mode: "boolean" }).notNull().default(false),
+  id: text("id").primaryKey(),
+  role: text("role").$type<MessageRole>().notNull(),
+  seq: integer("seq").notNull().unique(),
+});
+
+/** The agent's session, summary and other single values. */
+export const agentState = sqliteTable("agent_state", {
+  key: text("key").$type<AgentStateKey>().primaryKey(),
+  value: text("value").notNull(),
+});
+
+/** Changes the agent proposed. The whole proposal is one JSON value. */
+export const agentProposals = sqliteTable("agent_proposals", {
+  id: text("id").primaryKey(),
+  proposal: text("proposal", { mode: "json" }).$type<Proposal>().notNull(),
+});
+
+/** Changes made, and how to undo them. */
+export const agentChanges = sqliteTable("agent_changes", {
+  change: text("change", { mode: "json" }).$type<Change>().notNull(),
+  id: text("id").primaryKey(),
+});
+
+/** What the agent remembers about the user, and its open loops. */
+export const agentNotes = sqliteTable("agent_notes", {
+  createdAt: text("created_at").notNull(),
+  doneAt: text("done_at"),
+  id: text("id").primaryKey(),
+  kind: text("kind").$type<AgentNote["kind"]>().notNull(),
+  text: text("text").notNull(),
 });

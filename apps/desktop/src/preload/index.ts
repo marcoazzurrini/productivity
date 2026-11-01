@@ -1,6 +1,9 @@
 import type { StoreTransport } from "@productivity/gtd";
 import { contextBridge, ipcRenderer } from "electron";
+import type { IpcRendererEvent } from "electron";
 
+import { agentChannel } from "../shared/agent.ts";
+import type { AgentBridge } from "../shared/agent.ts";
 import { appearanceChannel } from "../shared/appearance.ts";
 import type { AppearanceBridge } from "../shared/appearance.ts";
 import { calendarChannel } from "../shared/calendar.ts";
@@ -37,6 +40,24 @@ const calendar: CalendarBridge = {
   },
 };
 
+const agent: AgentBridge = {
+  call: (method, args) => ipcRenderer.invoke(agentChannel.call, method, args),
+  onEvent: (listener) => {
+    const forward = (
+      _event: IpcRendererEvent,
+      event: Parameters<typeof listener>[0]
+    ) => {
+      listener(event);
+    };
+
+    ipcRenderer.on(agentChannel.event, forward);
+
+    return () => {
+      ipcRenderer.off(agentChannel.event, forward);
+    };
+  },
+};
+
 const appearance: AppearanceBridge = {
   getTheme: () => ipcRenderer.invoke(appearanceChannel.getTheme),
   setTheme: (theme) => ipcRenderer.invoke(appearanceChannel.setTheme, theme),
@@ -50,3 +71,5 @@ contextBridge.exposeInMainWorld("journal", journal);
 contextBridge.exposeInMainWorld("calendar", calendar);
 
 contextBridge.exposeInMainWorld("appearance", appearance);
+
+contextBridge.exposeInMainWorld("agent", agent);
