@@ -1,7 +1,7 @@
 import { Progress } from "@base-ui/react/progress";
 import * as stylex from "@stylexjs/stylex";
 
-import { color, font, radius, space } from "../tokens.stylex.ts";
+import { color, font, motion, radius, space } from "../tokens.stylex.ts";
 
 export interface ProgressStepsProps {
   /** Names the progress for screen readers: "Clarifying the inbox". */
@@ -62,6 +62,71 @@ export const ProgressSteps = ({
     </Progress.Track>
     {caption === undefined ? null : (
       <span {...stylex.props(styles.caption)}>{caption}</span>
+    )}
+  </Progress.Root>
+);
+
+export interface ProgressBarProps {
+  /** Names the progress for screen readers: "Weekly Review progress". */
+  label: string;
+  /** Steps finished so far. */
+  done: number;
+  total: number;
+  /** Shown on the right, such as "4 of 10 steps". */
+  caption?: string;
+  /** "violet" is the Weekly Review's color. */
+  tone?: "accent" | "violet";
+}
+
+const barStyles = stylex.create({
+  accent: { backgroundColor: color.accent },
+  caption: {
+    color: color.textSecondary,
+    fontFamily: font.family,
+    fontSize: font.size12,
+    fontWeight: font.weightMedium,
+    whiteSpace: "nowrap",
+  },
+  fill: {
+    borderRadius: radius.full,
+    height: "100%",
+    transitionDuration: motion.normal,
+    transitionProperty: "width",
+  },
+  root: {
+    alignItems: "center",
+    display: "flex",
+    gap: space.s3,
+  },
+  track: {
+    backgroundColor: color.bgHover,
+    borderRadius: radius.full,
+    flexGrow: 1,
+    height: 6,
+    overflow: "hidden",
+  },
+  violet: { backgroundColor: color.illustrationViolet },
+});
+
+/** One bar that fills as steps get done, for a checklist of many steps. */
+export const ProgressBar = ({
+  label,
+  done,
+  total,
+  caption,
+  tone = "accent",
+}: ProgressBarProps) => (
+  <Progress.Root
+    aria-label={label}
+    max={total}
+    value={done}
+    {...stylex.props(barStyles.root)}
+  >
+    <Progress.Track {...stylex.props(barStyles.track)}>
+      <Progress.Indicator {...stylex.props(barStyles.fill, barStyles[tone])} />
+    </Progress.Track>
+    {caption === undefined ? null : (
+      <span {...stylex.props(barStyles.caption)}>{caption}</span>
     )}
   </Progress.Root>
 );

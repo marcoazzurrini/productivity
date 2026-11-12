@@ -39,6 +39,8 @@ const styles = stylex.create({
   title: {
     flexGrow: 1,
     fontSize: font.size13,
+    // The title is a heading to screen readers, but reads as a sentence.
+    fontWeight: font.weightRegular,
     margin: 0,
   },
   viewport: {
@@ -51,33 +53,56 @@ const styles = stylex.create({
     transform: "translateX(-50%)",
     width: 600,
   },
+  // Inside the main pane: centered over the list, clear of the toolbar.
+  viewportInMain: {
+    maxWidth: "calc(100% - 32px)",
+    position: "absolute",
+    zIndex: 1,
+  },
 });
 
-const ToastList = () => {
+/**
+ * The toasts, placed in the page's main pane when it has one: a toast
+ * reports on the list beside it, so it sits under that list rather than in
+ * the middle of the window. The pane must be a positioned element.
+ */
+const ToastLayer = () => {
   const { toasts } = Toast.useToastManager();
+  const main = toasts.length === 0 ? null : document.querySelector("main");
 
-  return toasts.map((toast) => (
-    <Toast.Root key={toast.id} toast={toast} {...stylex.props(styles.root)}>
-      <span aria-hidden {...stylex.props(styles.icon)}>
-        <CircleCheck size={16} />
-      </span>
-      <Toast.Title {...stylex.props(styles.title)} />
-      {toast.actionProps === undefined ? null : (
-        <Toast.Action {...stylex.props(styles.action)} />
-      )}
-    </Toast.Root>
-  ));
+  return (
+    <Toast.Portal container={main ?? undefined}>
+      <Toast.Viewport
+        {...stylex.props(
+          styles.viewport,
+          main !== null && styles.viewportInMain
+        )}
+      >
+        {toasts.map((toast) => (
+          <Toast.Root
+            key={toast.id}
+            toast={toast}
+            {...stylex.props(styles.root)}
+          >
+            <span aria-hidden {...stylex.props(styles.icon)}>
+              <CircleCheck size={16} />
+            </span>
+            <Toast.Title {...stylex.props(styles.title)} />
+            {toast.actionProps === undefined ? null : (
+              <Toast.Action {...stylex.props(styles.action)} />
+            )}
+          </Toast.Root>
+        ))}
+      </Toast.Viewport>
+    </Toast.Portal>
+  );
 };
 
 /** Wrap the app once. Toasts announce results politely to screen readers. */
 export const ToastProvider = ({ children }: { children: ReactNode }) => (
   <Toast.Provider timeout={6000}>
     {children}
-    <Toast.Portal>
-      <Toast.Viewport {...stylex.props(styles.viewport)}>
-        <ToastList />
-      </Toast.Viewport>
-    </Toast.Portal>
+    <ToastLayer />
   </Toast.Provider>
 );
 

@@ -13,6 +13,8 @@ export interface FilterOption {
 export interface FilterSelectProps {
   /** What is being filtered, shown before the value: "Context", "Time". */
   label: string;
+  /** Keep the label for screen readers but show only the value. */
+  hideLabel?: boolean;
   icon?: ReactNode;
   value: string;
   options: readonly FilterOption[];
@@ -41,7 +43,7 @@ const styles = stylex.create({
   itemHighlighted: {
     backgroundColor: color.bgHover,
   },
-  label: { color: color.textTertiary },
+  label: { color: color.textTertiary, fontWeight: font.weightRegular },
   popup: {
     backgroundColor: color.bgCard,
     borderRadius: radius.lg,
@@ -53,7 +55,7 @@ const styles = stylex.create({
   trigger: {
     alignItems: "center",
     backgroundColor: { ":hover": color.bgHover, default: color.bgPage },
-    borderColor: color.borderDefault,
+    borderColor: color.borderStrong,
     borderRadius: radius.md,
     borderStyle: "solid",
     borderWidth: 1,
@@ -65,9 +67,9 @@ const styles = stylex.create({
     fontSize: font.size13,
     fontWeight: font.weightMedium,
     gap: 6,
-    height: 28,
+    height: 30,
     outline: "none",
-    paddingInline: space.s2,
+    paddingInline: 10,
   },
   triggerIcon: { color: color.textTertiary, display: "flex" },
 });
@@ -75,6 +77,7 @@ const styles = stylex.create({
 /** A compact dropdown for narrowing a list, such as Next Actions by context. */
 export const FilterSelect = ({
   label,
+  hideLabel = false,
   icon,
   value,
   options,
@@ -95,7 +98,7 @@ export const FilterSelect = ({
           {icon}
         </span>
       )}
-      <span {...stylex.props(styles.label)}>{label}</span>
+      {hideLabel ? null : <span {...stylex.props(styles.label)}>{label}</span>}
       <Select.Value />
       <Select.Icon {...stylex.props(styles.triggerIcon)}>
         <ChevronDown aria-hidden size={14} />

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { FileText, Star } from "lucide-react";
-import type { DragEvent, ReactNode } from "react";
+import type { DragEvent, MouseEvent, ReactNode } from "react";
 
 import {
   color,
@@ -36,8 +36,15 @@ export interface TaskRowProps {
   /** Show the actions only while the row is hovered or focused. */
   revealActions?: boolean;
   selected?: boolean;
+  /**
+   * Selects the row. With it, a click selects and a double click, or Enter
+   * on the title, opens. Without it, a click on the title opens.
+   */
+  onSelect?: () => void;
   /** Opens the task. Makes the title a button. */
   onOpen?: () => void;
+  /** "medium" is a little taller, for rows without a checkbox. */
+  size?: "default" | "medium";
   /** Lets the row be dragged onto the calendar with this id. */
   dragId?: string;
 }
@@ -49,6 +56,8 @@ const styles = stylex.create({
     flexShrink: 0,
     gap: space.s2,
   },
+  // Shown in place of the meta text while the row is hovered or focused.
+  // It stays in the layout, so the keyboard can still reach its buttons.
   hidden: {
     opacity: {
       default: 0,
@@ -56,7 +65,15 @@ const styles = stylex.create({
       [stylex.when.ancestor(":focus-within")]: 1,
     },
   },
-  leading: { display: "flex", flexShrink: 0 },
+  leading: {
+    alignItems: "center",
+    color: color.textTertiary,
+    display: "flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    minWidth: 16,
+  },
+  medium: { minHeight: 40, paddingInline: 10 },
   meta: {
     color: color.textTertiary,
     flexShrink: 1,
@@ -66,14 +83,22 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
+  // Gives way to the actions that appear over it.
+  metaHidden: {
+    opacity: {
+      default: 1,
+      [stylex.when.ancestor(":hover")]: 0,
+      [stylex.when.ancestor(":focus-within")]: 0,
+    },
+  },
   notes: { color: color.textPlaceholder, display: "flex", flexShrink: 0 },
   row: {
     alignItems: "center",
-    backgroundColor: { ":hover": color.bgSidebar, default: "transparent" },
+    backgroundColor: { ":hover": color.bgHover, default: "transparent" },
     borderRadius: radius.md,
     display: "flex",
     fontFamily: font.family,
-    gap: space.s3,
+    gap: 10,
     listStyle: "none",
     minHeight: 36,
     paddingInline: space.s2,
@@ -94,7 +119,16 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
-  tall: { minHeight: 56 },
+  // The meta text and the actions share one cell, right-aligned, so the
+  // actions can take the meta's place without moving anything else.
+  swap: {
+    alignItems: "center",
+    display: "grid",
+    flexShrink: 0,
+    justifyItems: "end",
+  },
+  swapCell: { gridArea: "1 / 1" },
+  tall: { gap: space.s3, minHeight: 56 },
   text: {
     display: "flex",
     flexDirection: "column",
@@ -111,6 +145,7 @@ const styles = stylex.create({
     cursor: "default",
     fontFamily: font.family,
     fontSize: font.size14,
+    lineHeight: "20px",
     outline: "none",
     overflow: "hidden",
     padding: 0,
@@ -118,10 +153,7 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
-  titleDone: {
-    color: color.textTertiary,
-    textDecoration: "line-through",
-  },
+  titleDone: { color: color.textTertiary },
   titleLine: {
     alignItems: "center",
     display: "flex",
@@ -129,6 +161,92 @@ const styles = stylex.create({
     minWidth: 0,
   },
 });
+
+/** True for a click on the checkbox or an action, which do their own thing. */
+const isOnControl = (event: MouseEvent<HTMLLIElement>): boolean => {
+  const control =
+    event.target instanceof HTMLElement
+      ? event.target.closest<HTMLElement>("button, [role='checkbox']")
+      : null;
+
+  return control !== null && control.dataset.rowTitle === undefined;
+};
+
+/** The title, as a button when the row can be opened. */
+const RowTitle = ({
+  title,
+  isDone,
+  onSelect,
+  onOpen,
+}: Pick<TaskRowProps, "title" | "onSelect" | "onOpen"> & {
+  isDone: boolean;
+}) => {
+  const titleStyle = stylex.props(styles.title, isDone && styles.titleDone);
+
+  if (onOpen === undefined) {
+    return <span {...titleStyle}>{title}</span>;
+  }
+
+  return (
+    <button
+      data-row-title
+      onClick={(event) => {
+        // A selectable row opens from the keyboard (a click with no
+        // pointer) or a double click; a plain click only selects.
+        if (onSelect === undefined || event.detail === 0) {
+          onOpen();
+        }
+      }}
+      onFocus={onSelect}
+      type="button"
+      {...titleStyle}
+    >
+      {title}
+    </button>
+  );
+};
+
+/** What follows the title: quiet text, tags and actions. */
+const RowEnd = ({
+  meta,
+  tags,
+  actions,
+  revealActions,
+}: Pick<TaskRowProps, "meta" | "tags" | "actions" | "revealActions">) => {
+  if (revealActions === true) {
+    return (
+      <>
+        {tags}
+        <span {...stylex.props(styles.swap)}>
+          {meta === undefined ? null : (
+            <span
+              {...stylex.props(styles.meta, styles.swapCell, styles.metaHidden)}
+            >
+              {meta}
+            </span>
+          )}
+          <span
+            {...stylex.props(styles.actions, styles.swapCell, styles.hidden)}
+          >
+            {actions}
+          </span>
+        </span>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {meta === undefined ? null : (
+        <span {...stylex.props(styles.meta)}>{meta}</span>
+      )}
+      {tags}
+      {actions === undefined ? null : (
+        <span {...stylex.props(styles.actions)}>{actions}</span>
+      )}
+    </>
+  );
+};
 
 /** One task in a list. Use inside TaskList. */
 export const TaskRow = ({
@@ -144,11 +262,12 @@ export const TaskRow = ({
   actions,
   revealActions = false,
   selected = false,
+  onSelect,
   onOpen,
+  size = "default",
   dragId,
 }: TaskRowProps) => {
   const isDone = done === true;
-  const titleStyle = stylex.props(styles.title, isDone && styles.titleDone);
 
   const startDrag = (event: DragEvent<HTMLLIElement>): void => {
     if (dragId === undefined) {
@@ -160,16 +279,28 @@ export const TaskRow = ({
   };
 
   return (
-    // Dragging onto the calendar is a mouse shortcut; the app offers a
-    // keyboard way to schedule too.
-    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    // Dragging onto the calendar, and clicking anywhere on the row, are
+    // mouse shortcuts. The keyboard selects a row by moving focus to its
+    // title, opens it with Enter, and schedules it from the task dialog.
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
     <li
       aria-current={selected ? "true" : undefined}
       draggable={dragId !== undefined}
+      onClick={(event) => {
+        if (!isOnControl(event)) {
+          onSelect?.();
+        }
+      }}
+      onDoubleClick={(event) => {
+        if (onSelect !== undefined && !isOnControl(event)) {
+          onOpen?.();
+        }
+      }}
       onDragStart={startDrag}
       {...stylex.props(
         styles.row,
         stylex.defaultMarker(),
+        size === "medium" && styles.medium,
         subtitle !== undefined && styles.tall,
         selected && styles.selected
       )}
@@ -186,22 +317,21 @@ export const TaskRow = ({
       )}
       {starred ? (
         <span {...stylex.props(styles.star)}>
-          <Star aria-hidden fill="currentColor" size={14} />
+          <Star aria-hidden fill="currentColor" size={16} />
           <VisuallyHidden>Starred</VisuallyHidden>
         </span>
       ) : null}
       <span {...stylex.props(styles.text)}>
         <span {...stylex.props(styles.titleLine)}>
-          {onOpen === undefined ? (
-            <span {...titleStyle}>{title}</span>
-          ) : (
-            <button onClick={onOpen} type="button" {...titleStyle}>
-              {title}
-            </button>
-          )}
+          <RowTitle
+            isDone={isDone}
+            onOpen={onOpen}
+            onSelect={onSelect}
+            title={title}
+          />
           {hasNotes ? (
             <span {...stylex.props(styles.notes)}>
-              <FileText aria-hidden size={13} />
+              <FileText aria-hidden size={14} />
               <VisuallyHidden>Has notes</VisuallyHidden>
             </span>
           ) : null}
@@ -210,15 +340,12 @@ export const TaskRow = ({
           <span {...stylex.props(styles.subtitle)}>{subtitle}</span>
         )}
       </span>
-      {meta === undefined ? null : (
-        <span {...stylex.props(styles.meta)}>{meta}</span>
-      )}
-      {tags}
-      {actions === undefined ? null : (
-        <span {...stylex.props(styles.actions, revealActions && styles.hidden)}>
-          {actions}
-        </span>
-      )}
+      <RowEnd
+        actions={actions}
+        meta={meta}
+        revealActions={revealActions}
+        tags={tags}
+      />
     </li>
   );
 };
@@ -227,19 +354,27 @@ const listStyles = stylex.create({
   list: {
     display: "flex",
     flexDirection: "column",
+    gap: 2,
     margin: 0,
     padding: 0,
   },
+  tight: { gap: 0 },
 });
 
 export const TaskList = ({
   label,
+  tight = false,
   children,
 }: {
   label: string;
+  /** No gap between rows, for two-line rows that already have air. */
+  tight?: boolean;
   children: ReactNode;
 }) => (
-  <ul aria-label={label} {...stylex.props(listStyles.list)}>
+  <ul
+    aria-label={label}
+    {...stylex.props(listStyles.list, tight && listStyles.tight)}
+  >
     {children}
   </ul>
 );

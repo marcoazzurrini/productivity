@@ -7,14 +7,16 @@ import {
   SectionHeading,
   TaskList,
 } from "@productivity/ui";
-import { BatteryMedium, Clock, ListChecks, MapPin } from "lucide-react";
+import { color, font } from "@productivity/ui/tokens.stylex";
+import * as stylex from "@stylexjs/stylex";
+import { AtSign, BatteryMedium, Clock, ListChecks } from "lucide-react";
 import { useState } from "react";
 
 import { useNextActions, useOverview } from "../data.ts";
 import { useLookups } from "../lookups.ts";
 import { useNavigation } from "../navigation.tsx";
 import { energyOptions, none, toEnergy, toMinutes } from "../options.ts";
-import { Page, Row, Section } from "../page.tsx";
+import { Page, Section } from "../page.tsx";
 import { TaskItem } from "../task-item.tsx";
 
 const timeOptions = [
@@ -24,6 +26,22 @@ const timeOptions = [
   { label: "≤ 30 min", value: "30" },
   { label: "≤ 1 hour", value: "60" },
 ];
+
+const styles = stylex.create({
+  // How many actions pass the filters, at the far end of their row.
+  count: {
+    color: color.textTertiary,
+    fontSize: font.size13,
+    marginInlineStart: "auto",
+    whiteSpace: "nowrap",
+  },
+  filters: {
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+});
 
 export const NextActionsScreen = ({
   contextId,
@@ -47,17 +65,20 @@ export const NextActionsScreen = ({
   const shown = groups.reduce((sum, group) => sum + group.tasks.length, 0);
   const context = lookups.context(contextId);
 
+  const showOnly = (id: string) => () => {
+    go({ contextId: id, kind: "next" });
+  };
+
   return (
     <Page>
       <PageHeader
-        aside={`${shown} of ${tasks.length}`}
         description="Every concrete next step, grouped by where you can do it. Filter by the time and energy you have right now."
         icon={<ListChecks color="#1F9C8E" size={30} />}
         title={context === undefined ? "Next Actions" : context.name}
       >
-        <Row>
+        <div {...stylex.props(styles.filters)}>
           <FilterSelect
-            icon={<MapPin size={13} />}
+            icon={<AtSign size={14} />}
             label="Context"
             onValueChange={(value) => {
               go({ contextId: value === none ? null : value, kind: "next" });
@@ -72,20 +93,23 @@ export const NextActionsScreen = ({
             value={contextId ?? none}
           />
           <FilterSelect
-            icon={<Clock size={13} />}
+            icon={<Clock size={14} />}
             label="Time"
             onValueChange={setMinutes}
             options={timeOptions}
             value={minutes}
           />
           <FilterSelect
-            icon={<BatteryMedium size={13} />}
+            icon={<BatteryMedium size={14} />}
             label="Energy"
             onValueChange={setEnergy}
             options={[{ label: "Any", value: none }, ...energyOptions.slice(1)]}
             value={energy}
           />
-        </Row>
+          <span {...stylex.props(styles.count)}>
+            {`${shown} of ${tasks.length}`}
+          </span>
+        </div>
       </PageHeader>
       {groups.length === 0 ? (
         <EmptyState
@@ -100,7 +124,27 @@ export const NextActionsScreen = ({
 
           return (
             <Section key={group.context?.id ?? "none"} label={title}>
-              <SectionHeading count={group.tasks.length} title={title} />
+              <SectionHeading
+                count={group.tasks.length}
+                menu={
+                  group.context === null
+                    ? undefined
+                    : [
+                        contextId === group.context.id
+                          ? {
+                              label: "Show all contexts",
+                              onSelect: () => {
+                                go({ contextId: null, kind: "next" });
+                              },
+                            }
+                          : {
+                              label: `Show only ${group.context.name}`,
+                              onSelect: showOnly(group.context.id),
+                            },
+                      ]
+                }
+                title={title}
+              />
               <TaskList label={title}>
                 {group.tasks.map((task) => (
                   <TaskItem

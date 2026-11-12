@@ -1,12 +1,11 @@
-import type { TagColor } from "@productivity/gtd";
+import { IconButton, NavItem, NavSection } from "@productivity/ui";
 import {
-  CountBadge,
-  IconButton,
-  NavItem,
-  NavSection,
-  Tag,
-} from "@productivity/ui";
-import { color, space } from "@productivity/ui/tokens.stylex";
+  color,
+  font,
+  radius,
+  space,
+  tag,
+} from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 import {
   Archive,
@@ -17,20 +16,41 @@ import {
   ListChecks,
   Plus,
   RefreshCcw,
+  Search,
 } from "lucide-react";
-import { useState } from "react";
 
 import { useAreas, useOverview } from "./data.ts";
 import { dayLabel } from "./format.ts";
 import { useLookups } from "./lookups.ts";
 import { useNavigation } from "./navigation.tsx";
-import { NewProjectDialog } from "./new-project-dialog.tsx";
+import { useNewProject } from "./new-project-dialog.tsx";
 import { ProjectPie } from "./project-pie.tsx";
 import { useQuickCapture } from "./quick-capture.tsx";
+import { useQuickFind } from "./quick-find.tsx";
 import { ThemeSetting } from "./theme-setting.tsx";
 
 const styles = stylex.create({
-  dot: { borderRadius: "50%", height: 8, width: 8 },
+  actions: { alignItems: "center", display: "flex", gap: 6 },
+  dot: {
+    backgroundColor: "currentColor",
+    borderRadius: "50%",
+    height: 8,
+    width: 8,
+  },
+  // Smaller than a Tag, so it fits the row without making it taller.
+  due: {
+    alignItems: "center",
+    backgroundColor: tag.purpleBg,
+    borderRadius: radius.sm,
+    color: tag.purpleFg,
+    display: "inline-flex",
+    flexShrink: 0,
+    fontSize: font.size11,
+    fontWeight: font.weightSemibold,
+    height: 20,
+    paddingInline: 6,
+  },
+  dueDone: { backgroundColor: tag.grayBg, color: tag.grayFg },
   footer: {
     borderTopColor: color.borderDefault,
     borderTopStyle: "solid",
@@ -41,6 +61,7 @@ const styles = stylex.create({
     padding: space.s2,
   },
   gap: { height: space.s2 },
+  icon: { display: "flex" },
   nav: {
     display: "flex",
     flexDirection: "column",
@@ -71,17 +92,33 @@ const styles = stylex.create({
   },
 });
 
-const contextDot = {
-  blue: "#337EA9",
-  brown: "#9F6B53",
-  gray: "#787774",
-  green: "#448361",
-  orange: "#D9730D",
-  pink: "#C14C8A",
-  purple: "#9065B0",
-  red: "#D44C47",
-  yellow: "#CB912F",
-} as const satisfies Record<TagColor, string>;
+const dark = "@media (prefers-color-scheme: dark)";
+
+/**
+ * Icon colors, as the design draws them in each theme. They are brighter
+ * than the text tokens of the same hue, which are darkened to be readable.
+ */
+const tint = stylex.create({
+  area: { color: { [dark]: "#7F7F7C", default: "#91918E" } },
+  inbox: { color: { [dark]: "#2E86F5", default: "#0582FF" } },
+  next: { color: { [dark]: "#3DB5A6", default: "#1F9C8E" } },
+  review: { color: { [dark]: "#B285EA", default: "#A46EE0" } },
+  someday: { color: { [dark]: "#DAB45A", default: "#CB912F" } },
+  upcoming: { color: { [dark]: "#EC7A74", default: "#D44C47" } },
+  waiting: { color: { [dark]: "#E79A55", default: "#D9730D" } },
+});
+
+const contextDot = stylex.create({
+  blue: { color: { [dark]: "#62A8D4", default: "#337EA9" } },
+  brown: { color: { [dark]: "#C08D76", default: "#9F6B53" } },
+  gray: { color: { [dark]: "#9B9B98", default: "#787774" } },
+  green: { color: { [dark]: "#6DB38A", default: "#448361" } },
+  orange: { color: { [dark]: "#E79A55", default: "#D9730D" } },
+  pink: { color: { [dark]: "#DA78AC", default: "#C14C8A" } },
+  purple: { color: { [dark]: "#AE90D0", default: "#9065B0" } },
+  red: { color: { [dark]: "#EC7A74", default: "#D44C47" } },
+  yellow: { color: { [dark]: "#DAB45A", default: "#CB912F" } },
+});
 
 export const Sidebar = () => {
   const { view, go } = useNavigation();
@@ -89,7 +126,8 @@ export const Sidebar = () => {
   const areas = useAreas().data ?? [];
   const lookups = useLookups();
   const openCapture = useQuickCapture();
-  const [creatingProject, setCreatingProject] = useState(false);
+  const openQuickFind = useQuickFind();
+  const openNewProject = useNewProject();
 
   const contextCount = (id: string): number =>
     overview?.contexts.find((entry) => entry.id === id)?.count ?? 0;
@@ -110,17 +148,28 @@ export const Sidebar = () => {
   return (
     <nav aria-label="Lists" {...stylex.props(styles.root)}>
       <div className="drag-region" {...stylex.props(styles.titlebar)}>
-        <IconButton
-          icon={<Plus size={18} />}
-          label="New to-do (⌘N)"
-          onClick={openCapture}
-          tone="accent"
-        />
+        <span {...stylex.props(styles.actions)}>
+          <IconButton
+            icon={<Search size={16} />}
+            label="Quick find (⌘P)"
+            onClick={openQuickFind}
+          />
+          <IconButton
+            icon={<Plus size={18} />}
+            label="New to-do (⌘N)"
+            onClick={openCapture}
+            tone="accent"
+          />
+        </span>
       </div>
       <div {...stylex.props(styles.nav)}>
         <NavItem
           count={overview?.inbox}
-          icon={<Inbox color="#0582FF" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.inbox)}>
+              <Inbox size={16} />
+            </span>
+          }
           label="Inbox"
           onSelect={() => {
             go({ kind: "inbox" });
@@ -130,7 +179,11 @@ export const Sidebar = () => {
         <div {...stylex.props(styles.gap)} />
         <NavItem
           count={overview?.nextActions}
-          icon={<ListChecks color="#1F9C8E" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.next)}>
+              <ListChecks size={16} />
+            </span>
+          }
           label="Next Actions"
           onSelect={() => {
             go({ contextId: null, kind: "next" });
@@ -138,7 +191,11 @@ export const Sidebar = () => {
           selected={view.kind === "next" && view.contextId === null}
         />
         <NavItem
-          icon={<CalendarDays color="#D44C47" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.upcoming)}>
+              <CalendarDays size={16} />
+            </span>
+          }
           label="Upcoming"
           onSelect={() => {
             go({ kind: "upcoming" });
@@ -146,16 +203,12 @@ export const Sidebar = () => {
           selected={view.kind === "upcoming"}
         />
         <NavItem
-          badge={
-            overview !== undefined && overview.waitingDue > 0 ? (
-              <CountBadge
-                count={overview.waitingDue}
-                label={`${overview.waitingDue} to follow up`}
-              />
-            ) : undefined
-          }
           count={overview?.waiting}
-          icon={<Hourglass color="#D9730D" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.waiting)}>
+              <Hourglass size={16} />
+            </span>
+          }
           label="Waiting For"
           onSelect={() => {
             go({ kind: "waiting" });
@@ -164,7 +217,11 @@ export const Sidebar = () => {
         />
         <NavItem
           count={overview?.someday}
-          icon={<Archive color="#CB912F" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.someday)}>
+              <Archive size={16} />
+            </span>
+          }
           label="Someday / Maybe"
           onSelect={() => {
             go({ kind: "someday" });
@@ -178,10 +235,7 @@ export const Sidebar = () => {
             count={contextCount(context.id)}
             emphasis="quiet"
             icon={
-              <span
-                {...stylex.props(styles.dot)}
-                style={{ backgroundColor: contextDot[context.color] }}
-              />
+              <span {...stylex.props(styles.dot, contextDot[context.color])} />
             }
             key={context.id}
             label={context.name}
@@ -198,7 +252,11 @@ export const Sidebar = () => {
             {group.area === null ? null : (
               <NavItem
                 emphasis="strong"
-                icon={<Box color="#91918E" size={16} />}
+                icon={
+                  <span {...stylex.props(styles.icon, tint.area)}>
+                    <Box size={16} />
+                  </span>
+                }
                 label={group.area.name}
               />
             )}
@@ -228,14 +286,23 @@ export const Sidebar = () => {
         <NavItem
           badge={
             overview === undefined ? undefined : (
-              <Tag tone={overview.review.due ? "purple" : "gray"}>
+              <span
+                {...stylex.props(
+                  styles.due,
+                  !overview.review.due && styles.dueDone
+                )}
+              >
                 {overview.review.due
                   ? `Due ${dayLabel(overview.review.dueOn).split(" ")[0] ?? ""}`
                   : "Done"}
-              </Tag>
+              </span>
             )
           }
-          icon={<RefreshCcw color="#A46EE0" size={16} />}
+          icon={
+            <span {...stylex.props(styles.icon, tint.review)}>
+              <RefreshCcw size={16} />
+            </span>
+          }
           label="Weekly Review"
           onSelect={() => {
             go({ kind: "review" });
@@ -243,21 +310,12 @@ export const Sidebar = () => {
           selected={view.kind === "review"}
         />
         <NavItem
-          emphasis="quiet"
+          emphasis="action"
           icon={<Plus size={16} />}
           label="New Project"
-          onSelect={() => {
-            setCreatingProject(true);
-          }}
+          onSelect={openNewProject}
         />
       </div>
-      {creatingProject ? (
-        <NewProjectDialog
-          onClose={() => {
-            setCreatingProject(false);
-          }}
-        />
-      ) : null}
     </nav>
   );
 };

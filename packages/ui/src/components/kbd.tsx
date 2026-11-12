@@ -6,9 +6,12 @@ import { color, font, radius } from "../tokens.stylex.ts";
 const styles = stylex.create({
   kbd: {
     alignItems: "center",
-    backgroundColor: color.bgHover,
+    backgroundColor: color.bgPage,
+    borderColor: color.borderDefault,
     borderRadius: radius.sm,
-    color: color.textTertiary,
+    borderStyle: "solid",
+    borderWidth: 1,
+    color: color.textSecondary,
     display: "inline-flex",
     fontFamily: font.family,
     fontSize: font.size11,

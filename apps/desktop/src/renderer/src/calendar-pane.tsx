@@ -1,22 +1,26 @@
 import {
   addDays,
   parseLocalDate,
+  startOfWeek,
   toLocalDate,
-  weekDays,
 } from "@productivity/gtd";
 import type { LocalDate, ProjectDetail, Task } from "@productivity/gtd";
 import { useToast, WeekCalendar } from "@productivity/ui";
-import type { CalendarEntry, CalendarRange } from "@productivity/ui";
+import type {
+  CalendarEntry,
+  CalendarRange,
+  CalendarView,
+} from "@productivity/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
 import {
   errorText,
+  useBlocks,
   useCalendarAction,
   useEvents,
   useOverview,
   useStoreAction,
-  useWeek,
 } from "./data.ts";
 import { EventDialog } from "./event-dialog.tsx";
 import type { EventDialogTarget } from "./event-dialog.tsx";
@@ -50,6 +54,65 @@ const addMinutes = (start: string, minutes: number): string => {
   return `${toLocalDate(date)}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
+const firstOfMonth = (day: LocalDate): LocalDate => `${day.slice(0, 8)}01`;
+
+/** The month's grid always shows six weeks, like a wall calendar. */
+const monthGridDays = 42;
+
+/** The days a view shows around a day: from the first, up to but not including the last. */
+const shownDays = (view: CalendarView, day: LocalDate) => {
+  if (view === "day") {
+    return { from: day, to: addDays(day, 1) };
+  }
+
+  if (view === "week") {
+    const monday = startOfWeek(day);
+
+    return { from: monday, to: addDays(monday, 7) };
+  }
+
+  const from = startOfWeek(firstOfMonth(day));
+
+  return { from, to: addDays(from, monthGridDays) };
+};
+
+/** The Monday of every week that has a day in [from, to). */
+const mondaysIn = (from: LocalDate, to: LocalDate): LocalDate[] => {
+  const mondays: LocalDate[] = [];
+
+  for (
+    let monday = startOfWeek(from);
+    monday < to;
+    monday = addDays(monday, 7)
+  ) {
+    mondays.push(monday);
+  }
+
+  return mondays;
+};
+
+/** The day to show after stepping one day, week or month. */
+const stepFrom = (
+  view: CalendarView,
+  day: LocalDate,
+  direction: 1 | -1
+): LocalDate => {
+  if (view === "day") {
+    return addDays(day, direction);
+  }
+
+  if (view === "week") {
+    return addDays(day, 7 * direction);
+  }
+
+  // The first of the month, so a step from the 31st never skips a month.
+  const first = parseLocalDate(firstOfMonth(day));
+
+  first.setMonth(first.getMonth() + direction);
+
+  return toLocalDate(first);
+};
+
 /** Entries carry their source in the ID, so a click knows what it opened. */
 const eventPrefix = "event:";
 const taskPrefix = "task:";
@@ -65,11 +128,14 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
   const today = useOverview().data?.today ?? openedOn;
   const [anchor, setAnchor] = useState<LocalDate | null>(null);
   const [dialog, setDialog] = useState<EventDialogTarget | null>(null);
+  const [chosenView, setChosenView] = useState<CalendarView>("week");
+  const oneDay = shown === 1;
+  const view = oneDay ? "day" : chosenView;
   const day = anchor ?? today;
-  const days = weekDays(day);
-  const monday = days[0] ?? day;
-  const blocks = useWeek(day).data?.blocks;
-  const events = useEvents(monday, addDays(monday, 7)).data;
+  const { from, to } = shownDays(view, day);
+  const mondays = useMemo(() => mondaysIn(from, to), [from, to]);
+  const blocks = useBlocks(mondays);
+  const events = useEvents(from, to).data;
   const lookups = useLookups();
   const openTask = useTaskDialog();
   const findTask = useFindLoadedTask();
@@ -100,7 +166,7 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
         start: event.start,
         title: event.title,
       })),
-      ...(blocks ?? []).flatMap((task) =>
+      ...blocks.flatMap((task) =>
         task.block === null
           ? []
           : [
@@ -149,6 +215,22 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
     );
   };
 
+  // One day names itself: "Thursday", "Oct 23". A month spans several
+  // weeks, so only the week names its number. The month's grid starts in
+  // the month before, so it is named for the day it was opened for.
+  const title =
+    view === "day"
+      ? weekdayLong.format(parseLocalDate(day))
+      : monthLabel(view === "week" ? from : day);
+
+  const subtitles = {
+    day: shortDate(day),
+    month: undefined,
+    week: `Week ${weekNumber(day)}`,
+  };
+
+  const subtitle = subtitles[view];
+
   return (
     <>
       <WeekCalendar
@@ -166,7 +248,7 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
         onEntryChange={changeEntry}
         onEntryOpen={(id) => {
           if (id.startsWith(taskPrefix)) {
-            const task = blocks?.find(
+            const task = blocks.find(
               (block) => block.id === id.slice(taskPrefix.length)
             );
 
@@ -186,10 +268,10 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
           }
         }}
         onNext={() => {
-          setAnchor(addDays(day, shown));
+          setAnchor(stepFrom(view, day, 1));
         }}
         onPrevious={() => {
-          setAnchor(addDays(day, -shown));
+          setAnchor(stepFrom(view, day, -1));
         }}
         onSelectRange={(range) => {
           setDialog({ kind: "create", range });
@@ -198,13 +280,12 @@ export const CalendarPane = ({ days: shown = 7 }: { days?: 1 | 7 }) => {
           setAnchor(null);
           setOpenedOn(toLocalDate(new Date()));
         }}
-        days={shown}
-        subtitle={shown === 1 ? shortDate(day) : `Week ${weekNumber(day)}`}
-        title={
-          shown === 1
-            ? weekdayLong.format(parseLocalDate(day))
-            : monthLabel(monday)
-        }
+        // With the agent open the pane is one day wide, so the switch to
+        // other views is put away.
+        onViewChange={oneDay ? undefined : setChosenView}
+        subtitle={subtitle}
+        title={title}
+        view={view}
       />
       {dialog === null ? null : (
         <EventDialog

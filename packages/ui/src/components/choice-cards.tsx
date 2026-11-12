@@ -12,14 +12,18 @@ import {
   shadow,
   space,
 } from "../tokens.stylex.ts";
-import { Kbd } from "./kbd.tsx";
 
 export interface Choice {
   value: string;
   title: string;
   description?: string;
   icon?: ReactNode;
-  /** Extra controls shown under the selected card, such as a project picker. */
+  /**
+   * One compact control shown inside the selected card, at the end of its
+   * row, such as a project picker.
+   */
+  aside?: ReactNode;
+  /** Extra fields shown under the selected card, such as a new project's name. */
   detail?: ReactNode;
 }
 
@@ -34,8 +38,9 @@ export interface ChoiceCardsProps {
 }
 
 const styles = stylex.create({
+  aside: { display: "flex", flexShrink: 0 },
   card: {
-    alignItems: "flex-start",
+    alignItems: "stretch",
     backgroundColor: { ":hover": color.bgSidebar, default: color.bgPage },
     borderColor: color.borderDefault,
     borderRadius: radius.lg,
@@ -44,21 +49,24 @@ const styles = stylex.create({
     cursor: "pointer",
     display: "flex",
     flexDirection: "column",
-    gap: space.s2,
-    padding: space.s3,
+    gap: space.s3,
+    paddingBlock: space.s3,
+    paddingInline: 14,
     transitionDuration: motion.fast,
     transitionProperty: "background-color, border-color",
   },
+  // The inset shadow thickens the border to 1.5px without moving the text.
   cardSelected: {
     backgroundColor: {
       ":hover": color.accentSubtle,
       default: color.accentSubtle,
     },
     borderColor: color.accent,
+    boxShadow: `inset 0 0 0 0.5px ${color.accent}`,
   },
   description: {
-    color: color.textSecondary,
-    fontSize: font.size13,
+    color: color.textTertiary,
+    fontSize: font.size12,
     margin: 0,
   },
   dot: {
@@ -80,9 +88,26 @@ const styles = stylex.create({
     width: "100%",
   },
   icon: { color: color.textSecondary, display: "flex" },
+  // The number key that picks the card. Outlined, so it stays quiet.
+  key: {
+    alignItems: "center",
+    borderColor: color.borderDefault,
+    borderRadius: radius.sm,
+    borderStyle: "solid",
+    borderWidth: 1,
+    color: color.textTertiary,
+    display: "inline-flex",
+    flexShrink: 0,
+    fontFamily: font.family,
+    fontSize: font.size11,
+    fontWeight: font.weightMedium,
+    height: 22,
+    justifyContent: "center",
+    width: 22,
+  },
   radio: {
     alignItems: "center",
-    backgroundColor: color.bgPage,
+    backgroundColor: "transparent",
     borderColor: color.borderStrong,
     borderRadius: radius.full,
     borderStyle: "solid",
@@ -90,14 +115,20 @@ const styles = stylex.create({
     boxShadow: { ":focus-visible": shadow.focus, default: null },
     display: "flex",
     flexShrink: 0,
-    height: 16,
+    height: 18,
     justifyContent: "center",
     outline: "none",
     padding: 0,
-    width: 16,
+    width: 18,
   },
   radioSelected: { borderColor: color.accent },
-  text: { display: "flex", flexDirection: "column", flexGrow: 1, gap: 2 },
+  text: {
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
+    gap: 2,
+    minWidth: 0,
+  },
   title: {
     color: color.textPrimary,
     fontSize: font.size14,
@@ -190,7 +221,12 @@ export const ChoiceCards = ({
                   </span>
                 )}
               </span>
-              {numberShortcuts && index < 9 ? <Kbd>{index + 1}</Kbd> : null}
+              {selected && choice.aside !== undefined ? (
+                <span {...stylex.props(styles.aside)}>{choice.aside}</span>
+              ) : null}
+              {numberShortcuts && index < 9 ? (
+                <kbd {...stylex.props(styles.key)}>{index + 1}</kbd>
+              ) : null}
             </span>
             {selected ? choice.detail : null}
           </label>

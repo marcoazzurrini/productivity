@@ -8,6 +8,7 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => ({
   deadline: null,
   energy: null,
   followUpOn: null,
+  headingId: null,
   id: overrides.id ?? crypto.randomUUID(),
   list: "next",
   minutes: null,

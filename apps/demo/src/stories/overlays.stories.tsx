@@ -19,6 +19,7 @@ type Story = StoryObj<typeof meta>;
 const CaptureDialog = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [notes, setNotes] = useState("");
 
   return (
     <>
@@ -49,6 +50,15 @@ const CaptureDialog = () => {
           onValueChange={setTitle}
           placeholder="What's on your mind?"
           value={title}
+        />
+        <TextField
+          appearance="quiet"
+          hideLabel
+          label="Notes"
+          multiline
+          onValueChange={setNotes}
+          placeholder="Notes"
+          value={notes}
         />
       </Dialog>
     </>

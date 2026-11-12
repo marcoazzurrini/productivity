@@ -13,7 +13,8 @@ export type Tone =
   | "purple"
   | "pink"
   | "red"
-  | "accent";
+  | "accent"
+  | "neutral";
 
 /** Soft background with a matching foreground, for each tone. */
 export const toneStyles = stylex.create({
@@ -22,6 +23,8 @@ export const toneStyles = stylex.create({
   brown: { backgroundColor: tag.brownBg, color: tag.brownFg },
   gray: { backgroundColor: tag.grayBg, color: tag.grayFg },
   green: { backgroundColor: tag.greenBg, color: tag.greenFg },
+  // A plain fact, such as a date or a count: no hue, and darker text.
+  neutral: { backgroundColor: color.bgHover, color: color.textSecondary },
   orange: { backgroundColor: tag.orangeBg, color: tag.orangeFg },
   pink: { backgroundColor: tag.pinkBg, color: tag.pinkFg },
   purple: { backgroundColor: tag.purpleBg, color: tag.purpleFg },
@@ -36,6 +39,7 @@ export const toneInk = stylex.create({
   brown: { color: tag.brownFg },
   gray: { color: tag.grayFg },
   green: { color: tag.greenFg },
+  neutral: { color: color.textSecondary },
   orange: { color: tag.orangeFg },
   pink: { color: tag.pinkFg },
   purple: { color: tag.purpleFg },

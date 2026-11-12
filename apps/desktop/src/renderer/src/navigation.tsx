@@ -1,6 +1,8 @@
 import type { LocalDate } from "@productivity/gtd";
-import { createContext, use, useMemo, useState } from "react";
+import { createContext, use, useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+
+import { useSelection } from "./selection.tsx";
 
 /** Every place the center pane can show. */
 export type View =
@@ -29,7 +31,19 @@ export const NavigationProvider = ({
   children: ReactNode;
 }) => {
   const [view, setView] = useState<View>(initial ?? { kind: "inbox" });
-  const value = useMemo(() => ({ go: setView, view }), [view]);
+  const { select } = useSelection();
+
+  // A selected to-do belongs to the list it was picked in, so leaving the
+  // list drops it. Whoever wants one selected on arrival selects after go.
+  const go = useCallback(
+    (next: View) => {
+      select(null);
+      setView(next);
+    },
+    [select]
+  );
+
+  const value = useMemo(() => ({ go, view }), [go, view]);
 
   return <NavigationContext value={value}>{children}</NavigationContext>;
 };

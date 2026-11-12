@@ -21,7 +21,7 @@ const styles = stylex.create({
   },
   mode: {
     backgroundColor: color.accentSubtle,
-    borderRadius: radius.xs,
+    borderRadius: radius.sm,
     color: color.accent,
     fontWeight: font.weightBold,
     letterSpacing: "0.04em",

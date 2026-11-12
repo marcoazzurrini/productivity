@@ -8,6 +8,7 @@ import {
   ChatText,
   ChoiceCards,
   NavItem,
+  ProgressBar,
   ProgressSteps,
   SegmentedControl,
   TaskList,
@@ -48,6 +49,61 @@ describe("TaskRow", () => {
 
     expect(onOpen).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("checkbox")).toBeNull();
+  });
+
+  test("a selectable row selects on a click and opens on a double click", async () => {
+    const onOpen = mock();
+    const onSelect = mock();
+    const user = userEvent.setup();
+
+    render(
+      <TaskList label="Next">
+        <TaskRow
+          done={false}
+          onOpen={onOpen}
+          onSelect={onSelect}
+          title="Book flights"
+        />
+      </TaskList>
+    );
+
+    const title = screen.getByRole("button", { name: "Book flights" });
+
+    await user.click(title);
+
+    expect(onSelect).toHaveBeenCalled();
+    expect(onOpen).not.toHaveBeenCalled();
+
+    await user.dblClick(title);
+
+    expect(onOpen).toHaveBeenCalledTimes(1);
+  });
+
+  test("a selectable row opens with Enter and ignores its checkbox", async () => {
+    const onOpen = mock();
+    const onSelect = mock();
+    const user = userEvent.setup();
+
+    render(
+      <TaskList label="Next">
+        <TaskRow
+          done={false}
+          onOpen={onOpen}
+          onSelect={onSelect}
+          title="Book flights"
+        />
+      </TaskList>
+    );
+
+    await user.click(screen.getByRole("checkbox"));
+
+    expect(onSelect).not.toHaveBeenCalled();
+
+    screen.getByRole("button", { name: "Book flights" }).focus();
+    await user.keyboard("{Enter}");
+
+    expect(onSelect).toHaveBeenCalled();
+    expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
   test("announces stars and notes", () => {
@@ -200,6 +256,24 @@ describe("small pieces", () => {
 
     expect(bar.getAttribute("aria-valuenow")).toBe("2");
     expect(bar.getAttribute("aria-valuemax")).toBe("7");
+  });
+
+  test("a progress bar exposes its value and caption", () => {
+    render(
+      <ProgressBar
+        caption="4 of 10 steps"
+        done={4}
+        label="Weekly Review progress"
+        total={10}
+      />
+    );
+
+    const bar = screen.getByRole("progressbar", {
+      name: "Weekly Review progress",
+    });
+
+    expect(bar.getAttribute("aria-valuenow")).toBe("4");
+    expect(screen.getByText("4 of 10 steps")).toBeDefined();
   });
 
   test("a text field reports typed text", async () => {

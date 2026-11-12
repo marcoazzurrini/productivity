@@ -19,7 +19,7 @@ const styles = stylex.create({
       ":hover": color.bgHover,
       default: color.bgPage,
     },
-    borderColor: color.borderStrong,
+    borderColor: color.borderControl,
     borderRadius: radius.sm,
     borderStyle: "solid",
     borderWidth: 1.5,

@@ -242,7 +242,7 @@ describe("sample data", () => {
 
     expect(store.overview()).toMatchObject({
       inbox: 7,
-      nextActions: 14,
+      nextActions: 17,
       someday: 4,
       waiting: 5,
       waitingDue: 2,
@@ -268,6 +268,189 @@ describe("sample data", () => {
       "Pick up dry cleaning",
       "Read chapter 4 of Getting Things Done",
     ]);
+  });
+});
+
+const newProject = (): string =>
+  store.createProject({
+    areaId: null,
+    deadline: null,
+    name: "Prepare Presentation",
+    outcome: "Deck shared",
+  }).id;
+
+const actionIn = (projectId: string, title: string): string => {
+  const item = store.capture({ title });
+
+  store.clarify(item.id, {
+    kind: "action",
+    owner: { kind: "me" },
+    project: { kind: "existing", projectId },
+    title,
+    when: anytime,
+  });
+
+  return item.id;
+};
+
+describe("projects and headings", () => {
+  test("headings keep the order they were added in, with trimmed titles", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+
+    store.createHeading(projectId, "  Slides  ");
+    store.createHeading(projectId, "Preparation");
+
+    expect(
+      store.getProject(projectId)?.headings.map((heading) => heading.title)
+    ).toEqual(["Slides", "Preparation"]);
+  });
+
+  test("a heading needs a title and a project", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+    const heading = store.createHeading(projectId, "Slides");
+
+    expect(() => store.createHeading(projectId, "   ")).toThrow(RangeError);
+    expect(() => store.renameHeading(heading.id, "")).toThrow(RangeError);
+    expect(() => store.createHeading("missing", "Slides")).toThrow(
+      NotFoundError
+    );
+    expect(() => store.renameHeading("missing", "Slides")).toThrow(
+      NotFoundError
+    );
+  });
+
+  test("renaming a heading keeps its to-dos under it", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+    const heading = store.createHeading(projectId, "Slides");
+    const taskId = actionIn(projectId, "Draft outline");
+
+    store.updateTask(taskId, { headingId: heading.id });
+
+    expect(store.renameHeading(heading.id, "Slides and notes")).toEqual({
+      id: heading.id,
+      projectId,
+      title: "Slides and notes",
+    });
+    expect(store.getProject(projectId)?.tasks[0]?.headingId).toBe(heading.id);
+  });
+
+  test("deleting a heading keeps its to-dos in the project", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+    const heading = store.createHeading(projectId, "Slides");
+    const taskId = actionIn(projectId, "Draft outline");
+
+    store.updateTask(taskId, { headingId: heading.id });
+    store.deleteHeading(heading.id);
+
+    const detail = store.getProject(projectId);
+
+    expect(detail?.headings).toEqual([]);
+    expect(detail?.tasks).toMatchObject([
+      { headingId: null, id: taskId, projectId },
+    ]);
+  });
+
+  test("a to-do that moves to another project leaves its heading", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+    const heading = store.createHeading(projectId, "Slides");
+    const taskId = actionIn(projectId, "Draft outline");
+
+    const other = store.createProject({
+      areaId: null,
+      deadline: null,
+      name: "Q4 Planning",
+      outcome: "",
+    });
+
+    store.updateTask(taskId, { headingId: heading.id });
+
+    // Other edits leave the heading alone.
+    expect(store.updateTask(taskId, { starred: true }).headingId).toBe(
+      heading.id
+    );
+    expect(store.updateTask(taskId, { projectId: other.id })).toMatchObject({
+      headingId: null,
+      projectId: other.id,
+    });
+  });
+
+  test("a to-do only goes under a heading of its own project", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+
+    const other = store.createProject({
+      areaId: null,
+      deadline: null,
+      name: "Q4 Planning",
+      outcome: "",
+    });
+
+    const foreign = store.createHeading(other.id, "Budget");
+    const taskId = actionIn(projectId, "Draft outline");
+
+    expect(() => store.updateTask(taskId, { headingId: foreign.id })).toThrow(
+      RangeError
+    );
+    expect(() => store.updateTask(taskId, { headingId: "missing" })).toThrow(
+      NotFoundError
+    );
+    // Moving project and heading together is one valid change.
+    expect(
+      store.updateTask(taskId, { headingId: foreign.id, projectId: other.id })
+    ).toMatchObject({ headingId: foreign.id, projectId: other.id });
+  });
+
+  test("a project's notes can be edited, and nothing else changes", () => {
+    store = memoryStore();
+
+    const projectId = newProject();
+
+    expect(store.getProject(projectId)?.project.notes).toBe("");
+    expect(
+      store.updateProject(projectId, { notes: "Keep it simple." })
+    ).toMatchObject({
+      name: "Prepare Presentation",
+      notes: "Keep it simple.",
+      outcome: "Deck shared",
+    });
+    expect(() => store.updateProject("missing", { notes: "" })).toThrow(
+      NotFoundError
+    );
+  });
+
+  test("the sample project has the design's headings", () => {
+    store = memoryStore(true);
+
+    const detail = store.getProject("prepare-presentation");
+
+    expect(detail?.headings.map((heading) => heading.title)).toEqual([
+      "Slides and notes",
+      "Preparation",
+    ]);
+    expect(
+      detail?.tasks
+        .filter((task) => task.headingId === "slides-and-notes")
+        .map((task) => task.title)
+    ).toEqual([
+      "Draft slide outline",
+      "Simplify slide layouts",
+      "Review quarterly data with Olivia",
+      "Print handouts for attendees",
+    ]);
+    expect(
+      detail?.tasks.filter((task) => task.completedAt !== null)
+    ).toHaveLength(6);
   });
 });
 

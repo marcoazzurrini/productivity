@@ -13,8 +13,11 @@ export interface TextFieldProps {
   placeholder?: string;
   description?: string;
   type?: "text" | "date" | "time" | "number";
-  /** "bare" has no border, for the main field of a dialog. */
-  appearance?: "boxed" | "bare";
+  /**
+   * "bare" has no border, for the main field of a dialog. "quiet" has none
+   * either, at body size, for a secondary field such as notes.
+   */
+  appearance?: "boxed" | "bare" | "quiet";
   multiline?: boolean;
   autoFocus?: boolean;
   onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
@@ -24,7 +27,7 @@ const styles = stylex.create({
   bare: {
     backgroundColor: "transparent",
     borderStyle: "none",
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: font.weightMedium,
     padding: 0,
   },
@@ -66,6 +69,14 @@ const styles = stylex.create({
     fontWeight: font.weightMedium,
   },
   multiline: { lineHeight: "20px", minHeight: 60 },
+  quiet: {
+    backgroundColor: "transparent",
+    borderStyle: "none",
+    fontSize: font.size14,
+    padding: 0,
+  },
+  // A quiet multiline field starts one line tall and grows as you type.
+  quietMultiline: { fieldSizing: "content", minHeight: 20 },
   root: {
     display: "flex",
     flexDirection: "column",
@@ -89,8 +100,9 @@ export const TextField = ({
 }: TextFieldProps) => {
   const controlStyle = stylex.props(
     styles.control,
-    appearance === "boxed" ? styles.boxed : styles.bare,
-    multiline && styles.multiline
+    styles[appearance],
+    multiline && styles.multiline,
+    multiline && appearance === "quiet" && styles.quietMultiline
   );
 
   return (

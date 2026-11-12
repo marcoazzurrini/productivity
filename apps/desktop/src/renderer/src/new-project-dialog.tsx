@@ -1,7 +1,8 @@
 import { Button, Dialog, FilterSelect, TextField } from "@productivity/ui";
 import { space } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "react";
+import { createContext, use, useCallback, useState } from "react";
+import type { ReactNode } from "react";
 
 import { useAreas, useStoreAction } from "./data.ts";
 import { useNavigation } from "./navigation.tsx";
@@ -14,7 +15,7 @@ const styles = stylex.create({
 });
 
 /** A project is any outcome that needs more than one action. */
-export const NewProjectDialog = ({ onClose }: { onClose: () => void }) => {
+const NewProjectDialog = ({ onClose }: { onClose: () => void }) => {
   const { go } = useNavigation();
   const areas = useAreas().data ?? [];
   const [name, setName] = useState("");
@@ -107,4 +108,39 @@ export const NewProjectDialog = ({ onClose }: { onClose: () => void }) => {
       </div>
     </Dialog>
   );
+};
+
+const NewProjectContext = createContext<(() => void) | null>(null);
+
+/** Lets the sidebar and the "…" menu open the same New project dialog. */
+export const NewProjectProvider = ({ children }: { children: ReactNode }) => {
+  const [open, setOpen] = useState(false);
+
+  const show = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  return (
+    <NewProjectContext value={show}>
+      {children}
+      {open ? (
+        <NewProjectDialog
+          onClose={() => {
+            setOpen(false);
+          }}
+        />
+      ) : null}
+    </NewProjectContext>
+  );
+};
+
+/** Opens the New project dialog. */
+export const useNewProject = (): (() => void) => {
+  const show = use(NewProjectContext);
+
+  if (show === null) {
+    throw new Error("useNewProject needs a NewProjectProvider above it.");
+  }
+
+  return show;
 };

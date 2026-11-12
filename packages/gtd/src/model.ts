@@ -39,6 +39,8 @@ export interface Task {
   source: CaptureSource;
   capturedAt: LocalDateTime;
   projectId: string | null;
+  /** The heading it sits under in its project. Null outside a project. */
+  headingId: string | null;
   contextId: string | null;
   minutes: number | null;
   energy: Energy | null;
@@ -72,6 +74,15 @@ export interface Project {
   areaId: string | null;
   /** What "done" looks like, so the user knows when to stop. */
   outcome: string;
+  /** Free text about the project, shown under its title. */
+  notes: string;
   deadline: LocalDate | null;
   status: ProjectStatus;
+}
+
+/** A titled group of to-dos inside one project. */
+export interface Heading {
+  id: string;
+  projectId: string;
+  title: string;
 }

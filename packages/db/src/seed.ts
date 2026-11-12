@@ -3,7 +3,9 @@ import type {
   CaptureSource,
   Context,
   Energy,
+  Heading,
   LocalDate,
+  LocalDateTime,
   TaskList,
 } from "@productivity/gtd";
 
@@ -26,6 +28,7 @@ export interface SeedProject {
   name: string;
   areaId: string;
   outcome: string;
+  notes?: string;
   deadline: LocalDate | null;
 }
 
@@ -34,6 +37,7 @@ export interface SeedTask {
   list: TaskList;
   source?: CaptureSource;
   projectId?: string;
+  headingId?: string;
   contextId?: string;
   minutes?: number;
   energy?: Energy;
@@ -44,10 +48,24 @@ export interface SeedTask {
   followUpOn?: LocalDate;
   notes?: string;
   block?: { start: string; end: string };
+  completedAt?: LocalDateTime;
 }
 
-/** An event on the local calendar, in its stored form. */
+/**
+ * A sample calendar. Each has its own color, so the week shows meetings,
+ * focus time and personal plans apart, as the design does.
+ */
+export interface SeedCalendar {
+  id: string;
+  name: string;
+  /** A CSS hex color. */
+  color: string;
+}
+
+/** An event in its stored form. */
 export interface SeedEvent {
+  /** One of the sample calendars. */
+  calendarId: string;
   title: string;
   allDay: boolean;
   /** A UTC instant, or for all-day events a day. */
@@ -58,7 +76,11 @@ export interface SeedEvent {
 
 export interface SampleData {
   projects: SeedProject[];
+  /** In the order each project shows them. */
+  headings: Heading[];
   tasks: SeedTask[];
+  /** Kept on this Mac, beside the built-in calendar new events go on. */
+  calendars: SeedCalendar[];
   events: SeedEvent[];
 }
 
@@ -73,55 +95,79 @@ export const sampleData = (today: LocalDate): SampleData => {
   const at = (weekday: number, time: string): string =>
     parseLocalDateTime(`${addDays(monday, weekday)}T${time}`).toISOString();
 
-  const timed = (
-    weekday: number,
-    from: string,
-    until: string,
-    title: string
-  ) => ({
-    allDay: false,
-    end: at(weekday, until),
-    start: at(weekday, from),
-    title,
-  });
+  /** Makes timed events on one of the sample calendars. */
+  const timedOn =
+    (calendarId: string) =>
+    (weekday: number, from: string, until: string, title: string) => ({
+      allDay: false,
+      calendarId,
+      end: at(weekday, until),
+      start: at(weekday, from),
+      title,
+    });
+
+  const meeting = timedOn("sample-work");
+  const focus = timedOn("sample-focus");
+  const personal = timedOn("sample-personal");
 
   return {
+    // The tag palette's blue, purple, green and pink.
+    calendars: [
+      { color: "#337EA9", id: "sample-work", name: "Work" },
+      { color: "#9065B0", id: "sample-focus", name: "Focus" },
+      { color: "#448361", id: "sample-personal", name: "Personal" },
+      { color: "#C14C8A", id: "sample-birthdays", name: "Birthdays" },
+    ],
     events: [
       ...[0, 1, 2, 3, 4].map((weekday) =>
-        timed(weekday, "09:00", "09:30", "Team standup")
+        meeting(weekday, "09:00", "09:30", "Team standup")
       ),
       {
         allDay: true,
+        calendarId: "sample-focus",
         end: addDays(monday, 5),
         start: monday,
         title: "Q4 planning week",
       },
       {
         allDay: true,
+        calendarId: "sample-birthdays",
         end: addDays(monday, 6),
         start: addDays(monday, 5),
         title: "Eve's birthday",
       },
-      timed(0, "11:00", "12:00", "Design review"),
-      timed(0, "14:00", "16:00", "Deep work: roadmap"),
-      timed(0, "19:00", "20:00", "Gym"),
-      timed(1, "10:00", "10:30", "1:1 with Olivia"),
-      timed(1, "15:00", "16:00", "Eng sync"),
-      timed(2, "10:00", "12:00", "Writing: Q4 goals"),
-      timed(2, "13:00", "14:00", "Product review"),
-      timed(2, "16:00", "17:00", "Dentist"),
-      timed(3, "10:00", "11:00", "Design Weekly"),
-      timed(3, "12:00", "13:00", "Eng Kickoff"),
-      timed(3, "13:00", "14:00", "Lunch with Diane"),
-      timed(3, "14:00", "15:30", "Deep work: Q4 budget"),
-      timed(3, "16:00", "17:00", "Product Updates"),
-      timed(3, "19:00", "20:00", "Gym"),
-      timed(4, "10:00", "10:30", "1:1 with James"),
-      timed(4, "12:30", "13:30", "Team lunch"),
-      timed(4, "18:00", "19:30", "Team drinks"),
-      timed(5, "10:00", "11:00", "Farmers market"),
-      timed(5, "19:30", "21:30", "Dinner with Eve"),
-      timed(6, "08:00", "09:30", "Long run"),
+      meeting(0, "11:00", "12:00", "Design review"),
+      focus(0, "14:00", "16:00", "Deep work: roadmap"),
+      personal(0, "19:00", "20:00", "Gym"),
+      meeting(1, "10:00", "10:30", "1:1 with Olivia"),
+      meeting(1, "15:00", "16:00", "Eng sync"),
+      focus(2, "10:00", "12:00", "Writing: Q4 goals"),
+      meeting(2, "13:00", "14:00", "Product review"),
+      personal(2, "16:00", "17:00", "Dentist"),
+      meeting(3, "10:00", "11:00", "Design Weekly"),
+      meeting(3, "12:00", "13:00", "Eng Kickoff"),
+      personal(3, "13:00", "14:00", "Lunch with Diane"),
+      focus(3, "14:00", "15:30", "Deep work: Q4 budget"),
+      meeting(3, "16:00", "17:00", "Product Updates"),
+      personal(3, "19:00", "20:00", "Gym"),
+      meeting(4, "10:00", "10:30", "1:1 with James"),
+      personal(4, "12:30", "13:30", "Team lunch"),
+      personal(4, "18:00", "19:30", "Team drinks"),
+      personal(5, "10:00", "11:00", "Farmers market"),
+      personal(5, "19:30", "21:30", "Dinner with Eve"),
+      personal(6, "08:00", "09:30", "Long run"),
+    ],
+    headings: [
+      {
+        id: "slides-and-notes",
+        projectId: "prepare-presentation",
+        title: "Slides and notes",
+      },
+      {
+        id: "preparation",
+        projectId: "prepare-presentation",
+        title: "Preparation",
+      },
     ],
     projects: [
       {
@@ -129,7 +175,10 @@ export const sampleData = (today: LocalDate): SampleData => {
         deadline: day(14),
         id: "prepare-presentation",
         name: "Prepare Presentation",
-        outcome: "Slides approved by Olivia and rehearsed once end to end.",
+        notes:
+          "Keep the talk and slides simple: what are the three things about this that everyone should remember?",
+        outcome:
+          "The team leaves knowing the three key takeaways, and the deck is shared in Drive.",
       },
       {
         areaId: "work",
@@ -185,11 +234,19 @@ export const sampleData = (today: LocalDate): SampleData => {
         block: { end: at(3, "12:00"), start: at(3, "11:00") },
         contextId: "computer",
         energy: "high",
+        headingId: "slides-and-notes",
         list: "next",
         minutes: 60,
         notes: "Start from last quarter's deck.",
         projectId: "prepare-presentation",
         title: "Draft slide outline",
+      },
+      {
+        contextId: "computer",
+        headingId: "slides-and-notes",
+        list: "next",
+        projectId: "prepare-presentation",
+        title: "Simplify slide layouts",
       },
       {
         contextId: "computer",
@@ -224,11 +281,56 @@ export const sampleData = (today: LocalDate): SampleData => {
       {
         block: { end: at(3, "18:00"), start: at(3, "17:30") },
         contextId: "calls",
+        headingId: "preparation",
         list: "next",
         minutes: 15,
         projectId: "prepare-presentation",
         title: "Call Diane about venue",
       },
+      {
+        contextId: "office",
+        headingId: "preparation",
+        list: "next",
+        minutes: 60,
+        projectId: "prepare-presentation",
+        title: "Time a full rehearsal",
+      },
+      {
+        contextId: "office",
+        headingId: "preparation",
+        list: "next",
+        projectId: "prepare-presentation",
+        title: "Do a practice run with Eric",
+      },
+      // Ticked today, so they stay in place on the project's page.
+      {
+        completedAt: `${today}T09:10`,
+        contextId: "computer",
+        headingId: "preparation",
+        list: "next",
+        projectId: "prepare-presentation",
+        title: "Revise introduction",
+      },
+      {
+        completedAt: `${today}T09:25`,
+        contextId: "computer",
+        headingId: "preparation",
+        list: "next",
+        projectId: "prepare-presentation",
+        title: "Email John for presentation tips",
+      },
+      // Ticked days ago: behind "Show completed to-dos".
+      ...[
+        "Agree on the talk's goal with Olivia",
+        "Reserve the auditorium",
+        "Collect last quarter's numbers",
+        "Send the invitation to the team",
+      ].map((title) => ({
+        completedAt: `${day(-3)}T16:30`,
+        list: "next" as const,
+        projectId: "prepare-presentation",
+        title,
+      })),
       {
         contextId: "calls",
         list: "next",
@@ -238,6 +340,7 @@ export const sampleData = (today: LocalDate): SampleData => {
       },
       {
         contextId: "office",
+        headingId: "slides-and-notes",
         list: "next",
         minutes: 30,
         projectId: "prepare-presentation",
@@ -270,6 +373,7 @@ export const sampleData = (today: LocalDate): SampleData => {
       {
         contextId: "errands",
         deadline: day(21),
+        headingId: "slides-and-notes",
         list: "next",
         minutes: 15,
         projectId: "prepare-presentation",

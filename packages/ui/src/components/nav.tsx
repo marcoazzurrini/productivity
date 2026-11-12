@@ -18,12 +18,22 @@ export interface NavItemProps {
   /** Something more urgent than the count, such as a red badge or a due date. */
   badge?: ReactNode;
   selected?: boolean;
-  /** Group headings (an area) are bold and cannot be selected. */
-  emphasis?: "default" | "strong" | "quiet";
+  /**
+   * Group headings (an area) are "strong": bold, and cannot be selected.
+   * "quiet" is for many small destinations, such as contexts. "action" is
+   * for a command that lives in the sidebar, such as New Project.
+   */
+  emphasis?: "default" | "strong" | "quiet" | "action";
   onSelect?: () => void;
 }
 
 const styles = stylex.create({
+  action: {
+    color: color.textSecondary,
+    fontWeight: font.weightRegular,
+    gap: space.s2,
+    height: 32,
+  },
   count: {
     color: color.textTertiary,
     fontSize: font.size13,
@@ -74,16 +84,22 @@ const styles = stylex.create({
     fontWeight: font.weightRegular,
     height: 28,
   },
+  // A 28 px band with the label on its bottom edge, so the gap above a
+  // group is the same whatever the font's line height.
   section: {
+    alignItems: "flex-end",
     color: color.textTertiary,
+    display: "flex",
+    flexShrink: 0,
     fontFamily: font.family,
     fontSize: font.size11,
     fontWeight: font.weightSemibold,
-    letterSpacing: "0.03em",
+    height: 28,
+    letterSpacing: "0.3px",
+    lineHeight: "14px",
     margin: 0,
     paddingBottom: 6,
     paddingInline: 10,
-    paddingTop: space.s4,
     textTransform: "uppercase",
   },
   selected: {
@@ -137,6 +153,7 @@ export const NavItem = ({
       {...stylex.props(
         styles.item,
         emphasis === "quiet" && styles.quiet,
+        emphasis === "action" && styles.action,
         selected && styles.selected
       )}
     >

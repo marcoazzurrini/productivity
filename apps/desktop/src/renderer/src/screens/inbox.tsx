@@ -8,6 +8,7 @@ import {
   TaskList,
   TaskRow,
 } from "@productivity/ui";
+import * as stylex from "@stylexjs/stylex";
 import {
   ArrowRight,
   Globe,
@@ -15,20 +16,20 @@ import {
   Mail,
   MessageSquare,
   Mic,
-  PenLine,
+  Plus,
   Split,
 } from "lucide-react";
 import { useEffect } from "react";
 
 import { useInbox, useOverview } from "../data.ts";
-import { shortDate, timeLabel } from "../format.ts";
+import { recentDay, timeLabel } from "../format.ts";
 import { useNavigation } from "../navigation.tsx";
 import { Page, Section } from "../page.tsx";
 
 const sourceIcon: Record<CaptureSource, typeof Mail> = {
   chat: MessageSquare,
   mail: Mail,
-  manual: PenLine,
+  manual: Plus,
   voice: Mic,
   web: Globe,
 };
@@ -40,6 +41,12 @@ const sourceName: Record<CaptureSource, string> = {
   voice: "Voice note",
   web: "Web",
 };
+
+const styles = stylex.create({
+  // The row's own button: a little lower than a small button, with the
+  // arrow close to the word.
+  clarify: { gap: 4, height: 26, paddingInline: 10 },
+});
 
 export const InboxScreen = () => {
   const { go } = useNavigation();
@@ -85,14 +92,14 @@ export const InboxScreen = () => {
                 onClick={() => {
                   go({ kind: "clarify", taskId: null });
                 }}
-                shortcut="C"
                 variant="primary"
               >
                 Start clarifying
               </Button>
             }
+            actionHint="or press C"
             description="Go through them one at a time. For each, decide what it is and what happens next."
-            icon={<Split size={18} />}
+            icon={<Split size={22} />}
             title={`${items.length} ${items.length === 1 ? "item" : "items"} to clarify`}
           />
           <Section label="Unclarified items">
@@ -100,30 +107,35 @@ export const InboxScreen = () => {
               {items.map((item) => {
                 const Icon = sourceIcon[item.source];
 
+                const day = datePart(item.capturedAt);
+
+                // A time for today, then "Yesterday", a weekday, a date.
                 const when =
-                  today !== undefined && datePart(item.capturedAt) === today
+                  today === undefined || day === today
                     ? timeLabel(item.capturedAt)
-                    : shortDate(datePart(item.capturedAt));
+                    : recentDay(day, today);
 
                 return (
                   <TaskRow
                     actions={
                       <Button
-                        icon={<ArrowRight size={14} />}
                         onClick={() => {
                           go({ kind: "clarify", taskId: item.id });
                         }}
                         size="small"
                         variant="primary"
+                        xstyle={styles.clarify}
                       >
                         Clarify
+                        <ArrowRight aria-hidden size={13} />
                       </Button>
                     }
                     hasNotes={item.notes.length > 0}
                     key={item.id}
-                    leading={<Icon aria-hidden color="#91918E" size={15} />}
+                    leading={<Icon aria-hidden size={15} />}
                     meta={`${sourceName[item.source]} · ${when}`}
                     revealActions
+                    size="medium"
                     title={item.title}
                   />
                 );

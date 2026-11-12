@@ -22,16 +22,19 @@ const styles = stylex.create({
     inset: 0,
     position: "fixed",
   },
-  body: { padding: 16 },
+  body: { paddingBottom: 16, paddingInline: 20, paddingTop: 20 },
+  // A grey strip, so hints and buttons read as apart from the fields.
   footer: {
     alignItems: "center",
+    backgroundColor: color.bgSidebar,
     borderTopColor: color.borderDefault,
     borderTopStyle: "solid",
     borderTopWidth: 1,
     display: "flex",
-    gap: 12,
-    paddingBlock: 10,
-    paddingInline: 16,
+    gap: 16,
+    minHeight: 48,
+    paddingBlock: 8,
+    paddingInline: 20,
   },
   hiddenTitle: {
     clip: "rect(0 0 0 0)",
@@ -42,13 +45,15 @@ const styles = stylex.create({
     width: 1,
   },
   popup: {
-    backgroundColor: color.bgCard,
+    backgroundColor: color.bgPage,
     borderRadius: radius.xl,
-    boxShadow: shadow.popover,
+    boxShadow: shadow.dialog,
     fontFamily: font.family,
     left: "50%",
     maxWidth: "calc(100vw - 48px)",
     outline: "none",
+    // Keeps the footer's grey inside the rounded corners.
+    overflow: "hidden",
     position: "fixed",
     top: "22%",
     transform: "translateX(-50%)",
@@ -58,8 +63,8 @@ const styles = stylex.create({
     fontSize: font.size15,
     fontWeight: font.weightSemibold,
     margin: 0,
-    paddingInline: 16,
-    paddingTop: 16,
+    paddingInline: 20,
+    paddingTop: 20,
   },
 });
 

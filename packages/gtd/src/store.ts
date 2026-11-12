@@ -5,6 +5,7 @@ import type {
   CaptureSource,
   Context,
   Energy,
+  Heading,
   Project,
   Task,
   TimeBlock,
@@ -22,7 +23,10 @@ export interface TaskChanges {
   title?: string;
   notes?: string;
   contextId?: string | null;
+  /** Moving a task to another project takes it out of its heading. */
   projectId?: string | null;
+  /** A heading of the task's project, or null for none. */
+  headingId?: string | null;
   minutes?: number | null;
   energy?: Energy | null;
   startOn?: LocalDate | null;
@@ -36,6 +40,11 @@ export interface NewProject {
   areaId: string | null;
   outcome: string;
   deadline: LocalDate | null;
+}
+
+/** Fields the user can edit on a project after creating it. */
+export interface ProjectChanges {
+  notes?: string;
 }
 
 export interface Overview {
@@ -57,6 +66,8 @@ export interface ProjectSummary extends Project {
 export interface ProjectDetail {
   project: Project;
   area: Area | null;
+  /** In the order the user sees them. */
+  headings: Heading[];
   tasks: Task[];
 }
 
@@ -100,6 +111,13 @@ export interface GtdStore {
   listProjects: () => ProjectSummary[];
   getProject: (projectId: string) => ProjectDetail | null;
   createProject: (project: NewProject) => Project;
+  updateProject: (projectId: string, changes: ProjectChanges) => Project;
+
+  /** Adds a heading at the end of a project. */
+  createHeading: (projectId: string, title: string) => Heading;
+  renameHeading: (headingId: string, title: string) => Heading;
+  /** Removes the heading. Its to-dos stay in the project, without a heading. */
+  deleteHeading: (headingId: string) => void;
 
   getWeek: (day: LocalDate) => Week;
   /** Places a task on the calendar, or removes it with null. */
@@ -135,6 +153,10 @@ export const gtdStoreMethods = [
   "listProjects",
   "getProject",
   "createProject",
+  "updateProject",
+  "createHeading",
+  "renameHeading",
+  "deleteHeading",
   "getWeek",
   "scheduleBlock",
   "getReview",
@@ -173,7 +195,9 @@ export const createRemoteStore = (
   activate: (...args) => transport("activate", args),
   capture: (...args) => transport("capture", args),
   clarify: (...args) => transport("clarify", args),
+  createHeading: (...args) => transport("createHeading", args),
   createProject: (...args) => transport("createProject", args),
+  deleteHeading: (...args) => transport("deleteHeading", args),
   deleteTask: (...args) => transport("deleteTask", args),
   finishReview: (...args) => transport("finishReview", args),
   followUp: (...args) => transport("followUp", args),
@@ -189,8 +213,10 @@ export const createRemoteStore = (
   listUpcoming: (...args) => transport("listUpcoming", args),
   listWaiting: (...args) => transport("listWaiting", args),
   overview: (...args) => transport("overview", args),
+  renameHeading: (...args) => transport("renameHeading", args),
   scheduleBlock: (...args) => transport("scheduleBlock", args),
   setCompleted: (...args) => transport("setCompleted", args),
   setReviewStep: (...args) => transport("setReviewStep", args),
+  updateProject: (...args) => transport("updateProject", args),
   updateTask: (...args) => transport("updateTask", args),
 });

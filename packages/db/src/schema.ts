@@ -48,9 +48,24 @@ export const projects = sqliteTable("projects", {
   deadline: text("deadline").$type<LocalDate>(),
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  notes: text("notes").notNull().default(""),
   outcome: text("outcome").notNull().default(""),
   status: text("status").$type<ProjectStatus>().notNull().default("active"),
 });
+
+/** Titled groups of to-dos inside a project, in the user's order. */
+export const headings = sqliteTable(
+  "headings",
+  {
+    id: text("id").primaryKey(),
+    position: integer("position").notNull(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+  },
+  (table) => [index("headings_by_project").on(table.projectId)]
+);
 
 export const tasks = sqliteTable(
   "tasks",
@@ -65,6 +80,10 @@ export const tasks = sqliteTable(
     deadline: text("deadline").$type<LocalDate>(),
     energy: text("energy").$type<Energy>(),
     followUpOn: text("follow_up_on").$type<LocalDate>(),
+    // A deleted heading leaves its to-dos in the project, without a heading.
+    headingId: text("heading_id").references(() => headings.id, {
+      onDelete: "set null",
+    }),
     id: text("id").primaryKey(),
     list: text("list").$type<TaskList>().notNull(),
     minutes: integer("minutes"),

@@ -5,7 +5,7 @@ import * as stylex from "@stylexjs/stylex";
 import { createContext, use, useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-import { useStoreAction } from "./data.ts";
+import { useProject, useStoreAction } from "./data.ts";
 import { useLookups } from "./lookups.ts";
 import {
   contextOptions,
@@ -55,6 +55,7 @@ interface Draft {
   notes: string;
   contextId: string;
   projectId: string;
+  headingId: string;
   minutes: string;
   energy: string;
   startOn: string;
@@ -69,6 +70,7 @@ const draftOf = (task: Task): Draft => ({
   contextId: task.contextId ?? none,
   deadline: task.deadline ?? "",
   energy: task.energy ?? none,
+  headingId: task.headingId ?? none,
   minutes: task.minutes === null ? none : String(task.minutes),
   notes: task.notes,
   projectId: task.projectId ?? none,
@@ -86,6 +88,37 @@ const addMinutes = (start: string, minutes: number): string => {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
+/**
+ * Picks the heading a to-do sits under in its project. Shows nothing for a
+ * project without headings.
+ */
+const HeadingSelect = ({
+  projectId,
+  value,
+  onValueChange,
+}: {
+  projectId: string;
+  value: string;
+  onValueChange: (value: string) => void;
+}) => {
+  const headings = useProject(projectId).data?.headings ?? [];
+
+  return headings.length === 0 ? null : (
+    <FilterSelect
+      label="Heading"
+      onValueChange={onValueChange}
+      options={[
+        { label: "None", value: none },
+        ...headings.map((heading) => ({
+          label: heading.title,
+          value: heading.id,
+        })),
+      ]}
+      value={value}
+    />
+  );
+};
+
 const TaskEditor = ({ task, onClose }: { task: Task; onClose: () => void }) => {
   const lookups = useLookups();
   const [draft, setDraft] = useState(() => draftOf(task));
@@ -99,6 +132,7 @@ const TaskEditor = ({ task, onClose }: { task: Task; onClose: () => void }) => {
       contextId: toId(current.contextId),
       deadline: toDate(current.deadline),
       energy: toEnergy(current.energy),
+      headingId: toId(current.headingId),
       minutes: toMinutes(current.minutes),
       notes: current.notes,
       projectId: toId(current.projectId),
@@ -192,10 +226,21 @@ const TaskEditor = ({ task, onClose }: { task: Task; onClose: () => void }) => {
         />
         <FilterSelect
           label="Project"
-          onValueChange={set("projectId")}
+          onValueChange={(projectId) => {
+            // Headings belong to one project, so a new project starts
+            // without one.
+            setDraft((current) => ({ ...current, headingId: none, projectId }));
+          }}
           options={projectOptions(lookups)}
           value={draft.projectId}
         />
+        {draft.projectId === none ? null : (
+          <HeadingSelect
+            onValueChange={set("headingId")}
+            projectId={draft.projectId}
+            value={draft.headingId}
+          />
+        )}
         <FilterSelect
           label="Time"
           onValueChange={set("minutes")}

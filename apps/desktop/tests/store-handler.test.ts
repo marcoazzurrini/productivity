@@ -18,6 +18,26 @@ describe(callStore, () => {
     store.close();
   });
 
+  it("runs the heading methods, which the renderer's project page calls", async () => {
+    const store = openStore({ path: ":memory:" });
+
+    const project = store.createProject({
+      areaId: null,
+      deadline: null,
+      name: "Talk",
+      outcome: "",
+    });
+
+    const heading = await callStore(store, "createHeading", [
+      project.id,
+      "Slides",
+    ]);
+
+    expect(heading).toMatchObject({ projectId: project.id, title: "Slides" });
+    expect(store.getProject(project.id)?.headings).toStrictEqual([heading]);
+    store.close();
+  });
+
   it("refuses anything that is not a store method", () => {
     const store = openStore({ path: ":memory:" });
 

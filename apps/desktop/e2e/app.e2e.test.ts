@@ -114,7 +114,7 @@ describe("the journal", () => {
 
     await expect(
       reopened.getByRole("heading", { level: 1 }).textContent()
-    ).resolves.toMatch(/^[A-Z][a-z]+day, [A-Z][a-z]+ \d+$/u);
+    ).resolves.toMatch(/^[A-Z][a-z]+day, \d+ [A-Z][a-z]+$/u);
 
     await second.close();
   });

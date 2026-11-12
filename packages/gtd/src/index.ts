@@ -6,6 +6,8 @@ export * from "./lists.ts";
 
 export * from "./model.ts";
 
+export * from "./projects.ts";
+
 export * from "./review.ts";
 
 export * from "./store.ts";
