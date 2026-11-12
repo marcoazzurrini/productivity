@@ -10,12 +10,17 @@ import type { JournalBridge } from "../../shared/journal.ts";
 import { AgentProvider } from "./agent-context.tsx";
 import { AppearanceProvider } from "./appearance-context.tsx";
 import { CalendarProvider } from "./calendar-context.tsx";
+import { CommandProvider } from "./commands.tsx";
 import { JournalProvider } from "./journal-context.tsx";
 import { NavigationProvider } from "./navigation.tsx";
 import type { View } from "./navigation.tsx";
+import { NewProjectProvider } from "./new-project-dialog.tsx";
 import { QuickCaptureProvider } from "./quick-capture.tsx";
+import { QuickFindProvider } from "./quick-find.tsx";
+import { SelectionProvider } from "./selection.tsx";
 import { StoreProvider } from "./store-context.tsx";
 import { TaskDialogProvider } from "./task-dialog.tsx";
+import { WeekPaneProvider } from "./week-pane.tsx";
 
 export const createQueryClient = (): QueryClient =>
   new QueryClient({
@@ -53,13 +58,24 @@ export const Root = ({
         <CalendarProvider bridge={calendar}>
           <JournalProvider journal={journal}>
             <AgentProvider bridge={agent}>
-              <NavigationProvider initial={initialView}>
-                <ToastProvider>
-                  <TaskDialogProvider>
-                    <QuickCaptureProvider>{children}</QuickCaptureProvider>
-                  </TaskDialogProvider>
-                </ToastProvider>
-              </NavigationProvider>
+              {/* Navigation clears the selection, so it sits inside it. */}
+              <SelectionProvider>
+                <NavigationProvider initial={initialView}>
+                  <ToastProvider>
+                    <WeekPaneProvider>
+                      <CommandProvider>
+                        <TaskDialogProvider>
+                          <QuickCaptureProvider>
+                            <NewProjectProvider>
+                              <QuickFindProvider>{children}</QuickFindProvider>
+                            </NewProjectProvider>
+                          </QuickCaptureProvider>
+                        </TaskDialogProvider>
+                      </CommandProvider>
+                    </WeekPaneProvider>
+                  </ToastProvider>
+                </NavigationProvider>
+              </SelectionProvider>
             </AgentProvider>
           </JournalProvider>
         </CalendarProvider>

@@ -31,7 +31,9 @@ export const NextAction: Story = {
     tags: (
       <>
         <Tag variant="outline">@Computer</Tag>
-        <Tag tone="accent">11:00 AM</Tag>
+        <Tag size="small" tone="accent">
+          11:00 AM
+        </Tag>
       </>
     ),
   },
@@ -49,7 +51,11 @@ export const Starred: Story = {
 export const Overdue: Story = {
   args: {
     done: false,
-    tags: <Tag tone="red">Oct 21</Tag>,
+    tags: (
+      <Tag size="small" tone="red">
+        Oct 21
+      </Tag>
+    ),
     title: "Send invoice to Acme",
   },
 };
@@ -65,10 +71,10 @@ export const InboxItem: Story = {
         Clarify
       </Button>
     ),
-    leading: <Mail color="#91918E" size={15} />,
+    leading: <Mail size={15} />,
     meta: "Mail · 8:12 AM",
-    onOpen: fn(),
     revealActions: true,
+    size: "medium",
     title: "Book flights for Rome trip",
   },
 };
@@ -115,6 +121,7 @@ const tasks = [
 
 const ListDemo = () => {
   const [done, setDone] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
 
   return (
     <>
@@ -129,6 +136,11 @@ const ListDemo = () => {
               next ? [...ids, task.id] : ids.filter((id) => id !== task.id)
             );
           }}
+          onOpen={fn()}
+          onSelect={() => {
+            setSelected(task.id);
+          }}
+          selected={selected === task.id}
           title={task.title}
         />
       ))}
@@ -136,5 +148,8 @@ const ListDemo = () => {
   );
 };
 
-/** Tick tasks to see the done state. Rows can be dragged onto a WeekCalendar. */
+/**
+ * Tick tasks to see the done state, and click one to select it. Rows can be
+ * dragged onto a WeekCalendar.
+ */
 export const List: Story = { render: () => <ListDemo /> };

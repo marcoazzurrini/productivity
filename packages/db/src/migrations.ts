@@ -22,4 +22,8 @@ export const migrations: readonly Migration[] = [
     name: "20261031152643_agent",
     sql: "CREATE TABLE `agent_changes` (\n\t`change` text NOT NULL,\n\t`id` text PRIMARY KEY\n);\n--> statement-breakpoint\nCREATE TABLE `agent_messages` (\n\t`blocks` text NOT NULL,\n\t`created_at` text NOT NULL,\n\t`hidden` integer DEFAULT false NOT NULL,\n\t`id` text PRIMARY KEY,\n\t`role` text NOT NULL,\n\t`seq` integer NOT NULL UNIQUE\n);\n--> statement-breakpoint\nCREATE TABLE `agent_notes` (\n\t`created_at` text NOT NULL,\n\t`done_at` text,\n\t`id` text PRIMARY KEY,\n\t`kind` text NOT NULL,\n\t`text` text NOT NULL\n);\n--> statement-breakpoint\nCREATE TABLE `agent_proposals` (\n\t`id` text PRIMARY KEY,\n\t`proposal` text NOT NULL\n);\n--> statement-breakpoint\nCREATE TABLE `agent_state` (\n\t`key` text PRIMARY KEY,\n\t`value` text NOT NULL\n);\n",
   },
+  {
+    name: "20261112181419_headings",
+    sql: "CREATE TABLE `headings` (\n\t`id` text PRIMARY KEY,\n\t`position` integer NOT NULL,\n\t`project_id` text NOT NULL,\n\t`title` text NOT NULL,\n\tCONSTRAINT `fk_headings_project_id_projects_id_fk` FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE\n);\n--> statement-breakpoint\nALTER TABLE `projects` ADD `notes` text DEFAULT '' NOT NULL;--> statement-breakpoint\nALTER TABLE `tasks` ADD `heading_id` text REFERENCES headings(id) ON DELETE SET NULL;--> statement-breakpoint\nCREATE INDEX `headings_by_project` ON `headings` (`project_id`);",
+  },
 ];

@@ -75,9 +75,18 @@ export interface InlineEditRequest {
   instruction: string;
 }
 
+/**
+ * How far the line numbers hang into the margin: the gutter's width in
+ * theme.ts. Repeated here because StyleX only reads values from this file.
+ */
+const gutterWidth = 68;
+
 const styles = stylex.create({
   // The numbers hang in the margin, so the text lines up with the page.
-  numbered: { marginInlineStart: -60, width: "calc(100% + 60px)" },
+  numbered: {
+    marginInlineStart: -gutterWidth,
+    width: `calc(100% + ${gutterWidth}px)`,
+  },
   root: { minHeight: 26, position: "relative", width: "100%" },
 });
 

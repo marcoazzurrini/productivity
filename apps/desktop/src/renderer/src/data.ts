@@ -1,6 +1,11 @@
 import type { RemoteCalendar } from "@productivity/calendar";
-import type { LocalDate, RemoteGtdStore } from "@productivity/gtd";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { LocalDate, RemoteGtdStore, Task, Week } from "@productivity/gtd";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { useCalendar } from "./calendar-context.tsx";
 import { useStore } from "./store-context.tsx";
@@ -48,6 +53,26 @@ export const useProject = (projectId: string) =>
 
 export const useWeek = (day: LocalDate) =>
   useRead(["week", day], (store) => store.getWeek(day));
+
+/** Made once, so the list keeps its identity until a week's data changes. */
+const blocksOf = (results: { data: Week | undefined }[]): Task[] =>
+  results.flatMap((result) => result.data?.blocks ?? []);
+
+/**
+ * Tasks placed on the calendar in each of these weeks, named by any of
+ * their days. Weeks still loading add nothing yet.
+ */
+export const useBlocks = (weeks: readonly LocalDate[]): Task[] => {
+  const store = useStore();
+
+  return useQueries({
+    combine: blocksOf,
+    queries: weeks.map((day) => ({
+      queryFn: () => store.getWeek(day),
+      queryKey: ["week", day],
+    })),
+  });
+};
 
 export const useReview = () =>
   useRead(["review"], (store) => store.getReview());

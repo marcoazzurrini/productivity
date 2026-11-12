@@ -21,8 +21,15 @@ import { Page } from "../page.tsx";
 
 const styles = stylex.create({
   failed: { color: color.textPrimary, fontWeight: font.weightMedium },
-  meta: { color: color.textTertiary, fontSize: font.size14 },
+  // The facts sit two spaces either side of each dot, so spaces must count.
+  meta: {
+    color: color.textTertiary,
+    fontSize: font.size14,
+    whiteSpace: "pre",
+  },
 });
+
+const dot = "  ·  ";
 
 const statusLabel: Record<SaveStatus, string> = {
   failed: "Not saved. Trying again…",
@@ -86,10 +93,10 @@ const JournalDay = ({ day, version }: { day: LocalDate; version: number }) => {
 
   const meta =
     text.trim().length === 0 ? (
-      `Week ${weekNumber(day)} · New page`
+      `Week ${weekNumber(day)}${dot}New page`
     ) : (
       <>
-        {`Week ${weekNumber(day)} · ${words} ${words === 1 ? "word" : "words"} · `}
+        {`Week ${weekNumber(day)}${dot}${words} ${words === 1 ? "word" : "words"}${dot}`}
         <output {...stylex.props(status === "failed" && styles.failed)}>
           {statusLabel[status]}
         </output>
@@ -105,6 +112,7 @@ const JournalDay = ({ day, version }: { day: LocalDate; version: number }) => {
       }
     >
       <PageHeader
+        compact
         description={<span {...stylex.props(styles.meta)}>{meta}</span>}
         icon={<NotebookPen color="#1F9C8E" size={30} />}
         title={fullDate(day)}

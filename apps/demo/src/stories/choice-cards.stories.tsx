@@ -16,10 +16,13 @@ const ClarifyQuestion = () => {
     <div style={{ width: 640 }}>
       <ChoiceCards
         choices={[
-          { title: "No, it stands alone", value: "none" },
           {
-            description: "It moves an outcome you already track.",
-            detail: (
+            description: "Goes to Next Actions",
+            title: "No, just this action",
+            value: "none",
+          },
+          {
+            aside: (
               <FilterSelect
                 label="Project"
                 onValueChange={setProject}
@@ -30,11 +33,12 @@ const ClarifyQuestion = () => {
                 value={project}
               />
             ),
+            description: "The project keeps track of what comes next",
             title: "Yes, add it to a project",
             value: "existing",
           },
           {
-            description: "It needs more than one action to finish.",
+            description: "You will name the outcome and its first action",
             title: "Yes, start a new project",
             value: "new",
           },
@@ -48,5 +52,5 @@ const ClarifyQuestion = () => {
   );
 };
 
-/** Press 1, 2 or 3 to choose. The selected card reveals its extra fields. */
+/** Press 1, 2 or 3 to choose. The selected card shows its picker. */
 export const Clarify: Story = { render: () => <ClarifyQuestion /> };

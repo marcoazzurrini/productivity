@@ -160,6 +160,33 @@ describe("the calendar on the database", () => {
     });
   });
 
+  test("colors the sample week by kind, and keeps new events local", () => {
+    store = memoryStore(true);
+
+    const calendar = createCalendar({
+      repository: store.calendarRepository,
+      syncDelayMs: null,
+    });
+
+    const week = calendar.listEvents("2026-10-19", "2026-10-26");
+
+    const colorOf = (title: string) =>
+      week.find((each) => each.title === title)?.color;
+
+    // Meetings, focus time, personal plans and birthdays each have a color.
+    expect(
+      new Set([
+        colorOf("Design review"),
+        colorOf("Deep work: roadmap"),
+        colorOf("Gym"),
+        colorOf("Eve's birthday"),
+      ]).size
+    ).toBe(4);
+    expect(
+      calendar.listCalendars().find((each) => each.isDefault)
+    ).toMatchObject({ id: "local", name: "On this Mac" });
+  });
+
   test("keeps events across reopening", () => {
     store = memoryStore();
 

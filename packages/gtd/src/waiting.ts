@@ -39,6 +39,18 @@ const lowerFirst = (text: string): string =>
     ? `${text[0]?.toLowerCase() ?? ""}${text.slice(1)}`
     : text;
 
+/**
+ * A waiting item's title led by who owes it, for lists that have no room
+ * for a second line: "Olivia: quarterly data export".
+ */
+export const waitingTitle = (task: Task): string => {
+  const [who] = (task.waitingOn ?? "").split(" ");
+
+  return who === undefined || who === ""
+    ? task.title
+    : `${who}: ${lowerFirst(task.title)}`;
+};
+
 export interface FollowUp {
   /** The chase itself, as a next action the user does. */
   actionTitle: string;

@@ -63,6 +63,10 @@ export type { VimModeLineProps } from "./components/markdown-editor/vim-mode-lin
 
 export type { VimMode } from "./components/markdown-editor/vim.ts";
 
+export { Menu } from "./components/menu.tsx";
+
+export type { MenuAction, MenuProps } from "./components/menu.tsx";
+
 export { NavItem, NavSection } from "./components/nav.tsx";
 
 export type { NavItemProps } from "./components/nav.tsx";
@@ -71,13 +75,24 @@ export { PageHeader } from "./components/page-header.tsx";
 
 export type { PageHeaderProps } from "./components/page-header.tsx";
 
-export { ProgressSteps } from "./components/progress-steps.tsx";
+export { Popover } from "./components/popover.tsx";
 
-export type { ProgressStepsProps } from "./components/progress-steps.tsx";
+export type { PopoverProps } from "./components/popover.tsx";
+
+export { ProgressBar, ProgressSteps } from "./components/progress-steps.tsx";
+
+export type {
+  ProgressBarProps,
+  ProgressStepsProps,
+} from "./components/progress-steps.tsx";
 
 export { SectionHeading } from "./components/section-heading.tsx";
 
 export type { SectionHeadingProps } from "./components/section-heading.tsx";
+
+export { SegmentProgress } from "./components/segment-progress.tsx";
+
+export type { SegmentProgressProps } from "./components/segment-progress.tsx";
 
 export { SegmentedControl } from "./components/segmented-control.tsx";
 
@@ -111,5 +126,6 @@ export { WeekCalendar } from "./components/week-calendar.tsx";
 export type {
   CalendarEntry,
   CalendarRange,
+  CalendarView,
   WeekCalendarProps,
 } from "./components/week-calendar.tsx";

@@ -15,9 +15,11 @@ import type {
   CaptureInput,
   ClarifyOutcome,
   GtdStore,
+  Heading,
   NewProject,
   Overview,
   Project,
+  ProjectChanges,
   ProjectSummary,
   ReviewState,
   Task,
@@ -34,6 +36,7 @@ import {
   isNotNull,
   isNull,
   lte,
+  max,
   or,
   sql,
 } from "drizzle-orm";
@@ -49,7 +52,9 @@ import { toProject, toTask, toTaskRow } from "./rows.ts";
 import {
   areas,
   calendarEvents,
+  calendars,
   contexts,
+  headings,
   projects,
   reviewSteps,
   settings,
@@ -99,6 +104,17 @@ const availableNext = (day: string): SQL | undefined =>
 const openIn = (list: Task["list"]): SQL | undefined =>
   and(eq(tasks.list, list), isNull(tasks.completedAt));
 
+/** A heading's title as it is stored: trimmed, and never empty. */
+const headingTitle = (title: string): string => {
+  const trimmed = title.trim();
+
+  if (trimmed.length === 0) {
+    throw new RangeError("A heading needs a title.");
+  }
+
+  return trimmed;
+};
+
 /**
  * Opens (and if needed creates) the GTD database. Everything about SQL, IDs
  * and time stays in here; callers see only the GtdStore interface.
@@ -142,6 +158,7 @@ export const openStore = (options: StoreOptions): Store => {
     deadline: null,
     energy: null,
     followUpOn: null,
+    headingId: null,
     id: newId(),
     list: "inbox",
     minutes: null,
@@ -154,8 +171,47 @@ export const openStore = (options: StoreOptions): Store => {
     waitingOn: null,
   });
 
+  const findProject = (projectId: string): Project => {
+    const row = db
+      .select()
+      .from(projects)
+      .where(eq(projects.id, projectId))
+      .get();
+
+    if (row === undefined) {
+      throw new NotFoundError("project", projectId);
+    }
+
+    return toProject(row);
+  };
+
+  const headingColumns = {
+    id: headings.id,
+    projectId: headings.projectId,
+    title: headings.title,
+  };
+
+  const findHeading = (headingId: string): Heading => {
+    const row = db
+      .select(headingColumns)
+      .from(headings)
+      .where(eq(headings.id, headingId))
+      .get();
+
+    if (row === undefined) {
+      throw new NotFoundError("heading", headingId);
+    }
+
+    return row;
+  };
+
   const insertProject = (project: NewProject): Project => {
-    const created: Project = { ...project, id: newId(), status: "active" };
+    const created: Project = {
+      ...project,
+      id: newId(),
+      notes: "",
+      status: "active",
+    };
 
     db.insert(projects)
       .values({ ...created, createdAt: now() })
@@ -211,16 +267,24 @@ export const openStore = (options: StoreOptions): Store => {
       )
       .run();
 
+    db.insert(headings)
+      .values(
+        sample.headings.map((heading, position) => ({ ...heading, position }))
+      )
+      .run();
+
     db.insert(tasks)
       .values(
         sample.tasks.map((task) =>
           toTaskRow({
             ...blankTask(task.title),
             block: task.block ?? null,
+            completedAt: task.completedAt ?? null,
             contextId: task.contextId ?? null,
             deadline: task.deadline ?? null,
             energy: task.energy ?? null,
             followUpOn: task.followUpOn ?? null,
+            headingId: task.headingId ?? null,
             list: task.list,
             minutes: task.minutes ?? null,
             notes: task.notes ?? "",
@@ -234,15 +298,20 @@ export const openStore = (options: StoreOptions): Store => {
       )
       .run();
 
-    // The migrations created the local calendar these go on.
-    db.insert(calendarEvents)
+    // The sample calendars come after the local one the migrations created,
+    // which stays the calendar new events go on.
+    db.insert(calendars)
       .values(
-        sample.events.map((event) => ({
-          ...event,
-          calendarId: "local",
-          id: newId(),
+        sample.calendars.map((calendar, index) => ({
+          ...calendar,
+          position: index + 1,
+          source: "local" as const,
         }))
       )
+      .run();
+
+    db.insert(calendarEvents)
+      .values(sample.events.map((event) => ({ ...event, id: newId() })))
       .run();
   };
 
@@ -278,6 +347,8 @@ export const openStore = (options: StoreOptions): Store => {
         deadline: when.deadline,
         energy: delegated ? null : when.energy,
         followUpOn: delegated ? owner.followUpOn : null,
+        // Headings belong to a project, and this may be a different one.
+        headingId: null,
         list: delegated ? "waiting" : "next",
         minutes: delegated ? null : when.minutes,
         projectId,
@@ -358,7 +429,35 @@ export const openStore = (options: StoreOptions): Store => {
       client.close();
     },
 
+    createHeading: (projectId, title) => {
+      findProject(projectId);
+
+      const last =
+        db
+          .select({ position: max(headings.position) })
+          .from(headings)
+          .where(eq(headings.projectId, projectId))
+          .get()?.position ?? -1;
+
+      const heading: Heading = {
+        id: newId(),
+        projectId,
+        title: headingTitle(title),
+      };
+
+      db.insert(headings)
+        .values({ ...heading, position: last + 1 })
+        .run();
+
+      return heading;
+    },
+
     createProject: insertProject,
+
+    deleteHeading: (headingId) => {
+      // The foreign key takes the heading off its to-dos.
+      db.delete(headings).where(eq(headings.id, headingId)).run();
+    },
 
     deleteTask: (taskId) => {
       db.delete(tasks).where(eq(tasks.id, taskId)).run();
@@ -424,6 +523,12 @@ export const openStore = (options: StoreOptions): Store => {
 
       return {
         area: area ?? null,
+        headings: db
+          .select(headingColumns)
+          .from(headings)
+          .where(eq(headings.projectId, projectId))
+          .orderBy(asc(headings.position), asc(rowid))
+          .all(),
         project: toProject(row),
         tasks: db
           .select()
@@ -578,6 +683,16 @@ export const openStore = (options: StoreOptions): Store => {
       };
     },
 
+    renameHeading: (headingId, title) => {
+      findHeading(headingId);
+      db.update(headings)
+        .set({ title: headingTitle(title) })
+        .where(eq(headings.id, headingId))
+        .run();
+
+      return findHeading(headingId);
+    },
+
     scheduleBlock: (taskId, block) => {
       findTask(taskId);
       db.update(tasks)
@@ -611,8 +726,40 @@ export const openStore = (options: StoreOptions): Store => {
       return reviewState();
     },
 
+    updateProject: (projectId, changes: ProjectChanges) => {
+      findProject(projectId);
+
+      // Picked by name, like a task's changes: they arrive over IPC.
+      if (changes.notes !== undefined) {
+        db.update(projects)
+          .set({ notes: changes.notes })
+          .where(eq(projects.id, projectId))
+          .run();
+      }
+
+      return findProject(projectId);
+    },
+
     updateTask: (taskId, changes: TaskChanges) => {
-      findTask(taskId);
+      const task = findTask(taskId);
+
+      const projectId =
+        changes.projectId === undefined ? task.projectId : changes.projectId;
+
+      // A heading belongs to one project, so a task that moves to another
+      // project leaves its heading unless the change names a new one.
+      const headingId =
+        changes.headingId === undefined && projectId !== task.projectId
+          ? null
+          : changes.headingId;
+
+      if (
+        headingId !== undefined &&
+        headingId !== null &&
+        findHeading(headingId).projectId !== projectId
+      ) {
+        throw new RangeError("That heading belongs to another project.");
+      }
 
       // Pick the editable fields by name: changes arrive over IPC and may
       // carry anything. Drizzle leaves out fields that are undefined.
@@ -621,6 +768,7 @@ export const openStore = (options: StoreOptions): Store => {
         deadline: changes.deadline,
         energy: changes.energy,
         followUpOn: changes.followUpOn,
+        headingId,
         minutes: changes.minutes,
         notes: changes.notes,
         projectId: changes.projectId,

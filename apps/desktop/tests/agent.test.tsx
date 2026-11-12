@@ -151,7 +151,7 @@ describe("the agent pane", () => {
     const user = userEvent.setup();
 
     await screen.findByRole("textbox", {
-      name: "Journal for Friday, October 23",
+      name: "Journal for Friday, 23 October",
     });
     await user.type(await openAgent(user), "Make these checkboxes{Enter}");
 
@@ -163,7 +163,7 @@ describe("the agent pane", () => {
 
     await waitFor(() => {
       const content = screen.getByRole("textbox", {
-        name: "Journal for Friday, October 23",
+        name: "Journal for Friday, 23 October",
       });
 
       expect(EditorView.findFromDOM(content)?.state.doc.toString()).toBe(
@@ -177,7 +177,7 @@ describe("the agent pane", () => {
 
     await waitFor(() => {
       const content = screen.getByRole("textbox", {
-        name: "Journal for Friday, October 23",
+        name: "Journal for Friday, 23 October",
       });
 
       expect(EditorView.findFromDOM(content)?.state.doc.toString()).toBe(
@@ -237,7 +237,7 @@ describe("⌘K in the journal", () => {
     const user = userEvent.setup();
 
     const content = await screen.findByRole("textbox", {
-      name: "Journal for Friday, October 23",
+      name: "Journal for Friday, 23 October",
     });
 
     const view = EditorView.findFromDOM(content);

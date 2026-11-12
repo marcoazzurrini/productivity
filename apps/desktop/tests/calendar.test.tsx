@@ -26,6 +26,55 @@ describe("the week calendar", () => {
     expect(within(week()).getByText("Draft slide outline")).toBeDefined();
   });
 
+  it("shows the whole month, with the weeks around it", async () => {
+    const user = userEvent.setup();
+
+    renderApp();
+    await within(week()).findByText("Design review");
+
+    await user.click(within(week()).getByRole("button", { name: "Month" }));
+
+    // The sample week is in the middle of the month's grid.
+    await expect(
+      within(week()).findByText("Design review")
+    ).resolves.toBeDefined();
+    expect(within(week()).getByText("Draft slide outline")).toBeDefined();
+    expect(within(week()).queryByText(/^Week \d+$/u)).toBeNull();
+
+    await user.click(
+      within(week()).getByRole("button", { name: "Next month" })
+    );
+
+    await expect(
+      within(week()).findByRole("heading", { name: "November 2026" })
+    ).resolves.toBeDefined();
+    await waitFor(() => {
+      expect(within(week()).queryByText("Design review")).toBeNull();
+    });
+  });
+
+  it("shows one day at a time", async () => {
+    const user = userEvent.setup();
+
+    renderApp();
+    await within(week()).findByText("Design review");
+
+    await user.click(within(week()).getByRole("button", { name: "Day" }));
+
+    // The app's clock says Friday: Monday's review is out of sight.
+    await expect(
+      within(week()).findByText("Team lunch")
+    ).resolves.toBeDefined();
+    expect(within(week()).queryByText("Design review")).toBeNull();
+
+    await user.click(within(week()).getByRole("button", { name: "Next day" }));
+
+    await expect(
+      within(week()).findByText("Farmers market")
+    ).resolves.toBeDefined();
+    expect(within(week()).queryByText("Team lunch")).toBeNull();
+  });
+
   it("renames an event from its dialog", async () => {
     const { calendar } = renderApp();
     const user = userEvent.setup();

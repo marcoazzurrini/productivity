@@ -1,5 +1,9 @@
 import { WeekCalendar } from "@productivity/ui";
-import type { CalendarEntry, CalendarRange } from "@productivity/ui";
+import type {
+  CalendarEntry,
+  CalendarRange,
+  CalendarView,
+} from "@productivity/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
@@ -68,6 +72,7 @@ const initialEntries: CalendarEntry[] = [
 /** A calendar that keeps what the user does, like the app does. */
 const CalendarDemo = () => {
   const [entries, setEntries] = useState(initialEntries);
+  const [view, setView] = useState<CalendarView>("week");
 
   const move = (id: string, range: CalendarRange): Promise<void> => {
     setEntries((current) =>
@@ -101,8 +106,10 @@ const CalendarDemo = () => {
         onPrevious={noop}
         onSelectRange={create}
         onToday={noop}
-        subtitle="Week 43"
+        onViewChange={setView}
+        subtitle={view === "month" ? undefined : "Week 43"}
         title="October 2026"
+        view={view}
       />
     </div>
   );
@@ -118,8 +125,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Events in their calendar's color and a dashed time-blocked task. Click or
- * drag on empty slots to add an event; drag events to move or resize them.
- * Dinner is read-only, like an invitation.
+ * Events tinted in their calendar's color and an outlined time-blocked task.
+ * Click or drag on empty slots to add an event; drag events to move or
+ * resize them. Dinner is read-only, like an invitation. Day, Week and Month
+ * switch how much time shows.
  */
 export const Week: Story = { render: () => <CalendarDemo /> };

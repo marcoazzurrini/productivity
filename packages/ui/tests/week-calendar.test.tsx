@@ -120,6 +120,46 @@ describe("WeekCalendar", () => {
     expect(onToday).toHaveBeenCalledTimes(1);
   });
 
+  test("labels the hours and the time zone", () => {
+    render(calendar());
+
+    expect(screen.getByText("1 AM")).toBeDefined();
+    expect(screen.getByText("12 PM")).toBeDefined();
+    expect(screen.getByText("11 PM")).toBeDefined();
+    expect(screen.getByText(/^GMT(?:[+-]\d{1,2}(?::\d{2})?)?$/u)).toBeDefined();
+  });
+
+  test("switches between day, week and month", async () => {
+    const onViewChange = mock();
+
+    const { rerender } = render(calendar({ onViewChange }));
+
+    await userEvent.click(screen.getByRole("button", { name: "Month" }));
+
+    expect(onViewChange).toHaveBeenCalledWith("month");
+
+    rerender(calendar({ onViewChange, view: "month" }));
+
+    // The month shows days from the weeks around it, and no hours:
+    // September 28 opens the grid and October 28 is in it.
+    expect(screen.getAllByText("28")).toHaveLength(2);
+    expect(screen.queryByText("1 AM")).toBeNull();
+    expect(screen.getByText("Q4 planning")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Next month" })).toBeDefined();
+
+    rerender(calendar({ onViewChange, view: "day" }));
+
+    expect(screen.getByText("Fri")).toBeDefined();
+    expect(screen.queryByText("Mon")).toBeNull();
+    expect(screen.getByRole("button", { name: "Next day" })).toBeDefined();
+  });
+
+  test("hides the view switch when the view cannot change", () => {
+    render(calendar());
+
+    expect(screen.queryByRole("button", { name: "Month" })).toBeNull();
+  });
+
   test("opens an entry when it is clicked", async () => {
     const onEntryOpen = mock();
 

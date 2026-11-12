@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   dayLabel,
   durationLabel,
+  fullDate,
+  recentDay,
   weekNumber,
   wordCount,
 } from "../src/renderer/src/format.ts";
@@ -31,6 +33,20 @@ describe("labels", () => {
 
   it("formats a day without a comma", () => {
     expect(dayLabel("2026-10-24")).toBe("Sat Oct 24");
+  });
+
+  it("titles a journal page with the day before the month", () => {
+    expect(fullDate("2026-10-24")).toBe("Saturday, 24 October");
+  });
+
+  it("says how long ago a recent day was", () => {
+    const today = "2026-10-23";
+
+    expect(
+      ["2026-10-23", "2026-10-22", "2026-10-19", "2026-10-16"].map((day) =>
+        recentDay(day, today)
+      )
+    ).toStrictEqual(["", "Yesterday", "Mon", "Oct 16"]);
   });
 });
 

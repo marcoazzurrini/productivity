@@ -20,6 +20,8 @@ const themed = (light: string, darkValue: string) => ({
 export const color = stylex.defineVars({
   accent: themed("#0070E0", "#1F6FD6"),
   accentHover: themed("#0064C8", "#2C7BE0"),
+  /** A lighter accent, for the step in progress on a progress bar. */
+  accentMuted: themed("#A9D0FF", "#2C5A91"),
   accentPressed: themed("#0058B0", "#1A62C0"),
   accentSubtle: themed("#E9F3FE", "#1B2A3D"),
   accentSubtleHover: themed("#DCEBFD", "#21344B"),
@@ -31,11 +33,15 @@ export const color = stylex.defineVars({
   bgRaised: themed("#FFFFFF", "#454543"),
   bgSidebar: themed("#F8F8F7", "#202020"),
   bgToday: themed("#F5F9FF", "#1C2128"),
+  /** The edge of an empty checkbox: stronger than a divider, so it reads as a control. */
+  borderControl: themed("#C9C9C6", "#5A5A57"),
   borderDefault: themed("#E9E9E7", "#2F2F2E"),
   borderFocus: themed("#2383E2", "#3D8FF0"),
   borderStrong: themed("#D3D3D0", "#434341"),
   /** Drawn icons at rest, such as a project's progress pie. */
   iconMuted: themed("#A5A5A2", "#6E6E6B"),
+  /** The Weekly Review's violet, for its icon and progress bar. */
+  illustrationViolet: themed("#A46EE0", "#B285EA"),
   /** Toasts: dark on a light page, light on a dark one. */
   inverse: themed("#191918", "#EBEBEA"),
   inverseHover: themed("rgba(255, 255, 255, 0.08)", "rgba(0, 0, 0, 0.06)"),
@@ -111,6 +117,7 @@ export const font = stylex.defineVars({
   size13: "13px",
   size14: "14px",
   size15: "15px",
+  size18: "18px",
   size20: "20px",
   size32: "32px",
   weightBold: "700",
@@ -128,6 +135,11 @@ export const shadow = stylex.defineVars({
   card: themed(
     "0 0 0 1px rgba(15, 15, 15, 0.04), 0 1px 2px rgba(15, 15, 15, 0.06)",
     "0 0 0 1px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4)"
+  ),
+  /** A dialog floating over the dimmed window. */
+  dialog: themed(
+    "0 0 0 1px rgba(15, 15, 15, 0.08), 0 12px 32px rgba(15, 15, 15, 0.15), 0 40px 80px rgba(15, 15, 15, 0.12)",
+    "0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 32px rgba(0, 0, 0, 0.45), 0 40px 80px rgba(0, 0, 0, 0.4)"
   ),
   focus: themed(
     "0 0 0 2px rgba(35, 131, 226, 0.45)",

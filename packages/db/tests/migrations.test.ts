@@ -125,6 +125,36 @@ describe("migrations", () => {
     store.close();
   });
 
+  test("projects and to-dos made before headings keep their data", () => {
+    const file = tempFile();
+    const old = new DatabaseSync(file);
+
+    migrate(old, migrations.slice(0, 3));
+    old.exec(
+      `insert into projects (id, name, created_at, outcome)
+       values ('talk', 'Prepare Presentation', '2026-10-20T09:00', 'Deck shared')`
+    );
+    old.exec(
+      `insert into tasks (id, title, list, captured_at, project_id)
+       values ('outline', 'Draft slide outline', 'next', '2026-10-20T09:00', 'talk')`
+    );
+    old.close();
+
+    const store = openStore({ clock: () => fixedNow, path: file });
+    const heading = store.createHeading("talk", "Slides and notes");
+
+    expect(store.getProject("talk")).toMatchObject({
+      headings: [heading],
+      project: { notes: "", outcome: "Deck shared" },
+      tasks: [{ headingId: null, id: "outline" }],
+    });
+    expect(
+      store.updateTask("outline", { headingId: heading.id }).headingId
+    ).toBe(heading.id);
+
+    store.close();
+  });
+
   test("events move onto the local calendar, timed ones in UTC", () => {
     const file = tempFile();
     const legacy = new DatabaseSync(file);

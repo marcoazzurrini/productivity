@@ -1,5 +1,5 @@
 import { SegmentedControl } from "@productivity/ui";
-import { color, font, space } from "@productivity/ui/tokens.stylex";
+import { color, font } from "@productivity/ui/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 import { Monitor, Moon, Sun, SunMoon } from "lucide-react";
 
@@ -17,8 +17,7 @@ const styles = stylex.create({
     fontSize: font.size14,
     gap: 10,
     height: 30,
-    paddingInlineEnd: space.s1,
-    paddingInlineStart: 10,
+    paddingInline: 10,
   },
 });
 

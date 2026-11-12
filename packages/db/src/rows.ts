@@ -28,6 +28,7 @@ export const toProject = (row: typeof projects.$inferSelect): Project => ({
   deadline: row.deadline,
   id: row.id,
   name: row.name,
+  notes: row.notes,
   outcome: row.outcome,
   status: row.status,
 });

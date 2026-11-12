@@ -1,10 +1,4 @@
-import {
-  CountBadge,
-  IconButton,
-  NavItem,
-  NavSection,
-  Tag,
-} from "@productivity/ui";
+import { IconButton, NavItem, NavSection, Tag } from "@productivity/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Archive,
@@ -14,6 +8,7 @@ import {
   ListChecks,
   Plus,
   RefreshCcw,
+  Search,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -66,10 +61,12 @@ const SidebarDemo = () => {
       <div
         style={{
           display: "flex",
+          gap: 6,
           justifyContent: "flex-end",
           padding: "4px 8px 12px",
         }}
       >
+        <IconButton icon={<Search size={16} />} label="Quick find" />
         <IconButton icon={<Plus size={18} />} label="New to-do" tone="accent" />
       </div>
       <NavItem
@@ -90,7 +87,6 @@ const SidebarDemo = () => {
         {...item("Upcoming")}
       />
       <NavItem
-        badge={<CountBadge count={2} label="2 to follow up" />}
         count={5}
         icon={<Hourglass color="#D9730D" size={16} />}
         label="Waiting For"
@@ -119,6 +115,11 @@ const SidebarDemo = () => {
         icon={<RefreshCcw color="#A46EE0" size={16} />}
         label="Weekly Review"
         {...item("Weekly Review")}
+      />
+      <NavItem
+        emphasis="action"
+        icon={<Plus size={16} />}
+        label="New Project"
       />
     </nav>
   );

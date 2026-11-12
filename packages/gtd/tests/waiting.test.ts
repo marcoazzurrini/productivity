@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { groupWaiting, planFollowUp } from "../src/index.ts";
+import { groupWaiting, planFollowUp, waitingTitle } from "../src/index.ts";
 import { makeTask } from "./fixtures.ts";
 
 const today = "2026-10-23";
@@ -44,5 +44,16 @@ describe("waiting for", () => {
         today
       ).actionTitle
     ).toBe("Follow up with Ana about PDF of the contract");
+  });
+
+  test("leads a one-line title with who owes it", () => {
+    expect(
+      waitingTitle(
+        makeTask({ title: "Quarterly data export", waitingOn: "Olivia Grant" })
+      )
+    ).toBe("Olivia: quarterly data export");
+    expect(waitingTitle(makeTask({ title: "Signed contract" }))).toBe(
+      "Signed contract"
+    );
   });
 });

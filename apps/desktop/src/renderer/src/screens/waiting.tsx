@@ -20,6 +20,7 @@ import { useOverview, useStoreAction, useWaiting } from "../data.ts";
 import { dayLabel, shortDate } from "../format.ts";
 import { useLookups } from "../lookups.ts";
 import { Hint, Page, Section } from "../page.tsx";
+import { useSelection } from "../selection.tsx";
 import { useTaskDialog } from "../task-dialog.tsx";
 
 const avatarTones: Tone[] = [
@@ -44,6 +45,7 @@ export const WaitingScreen = () => {
   const toast = useToast();
   const lookups = useLookups();
   const openTask = useTaskDialog();
+  const { selectedId, select } = useSelection();
   const today = useOverview().data?.today ?? "";
   const tasks = useWaiting().data ?? [];
   const [person, setPerson] = useState(everyone);
@@ -87,6 +89,8 @@ export const WaitingScreen = () => {
             onClick={() => {
               followUp.mutate(task, {
                 onSuccess: (action) => {
+                  const context = lookups.context(action.contextId);
+
                   toast({
                     action: {
                       label: "Undo",
@@ -97,7 +101,9 @@ export const WaitingScreen = () => {
                         });
                       },
                     },
-                    title: `Added "${action.title}" to Next Actions`,
+                    title: `Added “${action.title}” to Next Actions${
+                      context === undefined ? "" : ` · ${context.name}`
+                    }`,
                   });
                 },
               });
@@ -123,6 +129,10 @@ export const WaitingScreen = () => {
       onOpen={() => {
         openTask(task);
       }}
+      onSelect={() => {
+        select(task.id);
+      }}
+      selected={selectedId === task.id}
       subtitle={[
         task.waitingOn,
         `asked ${shortDate(datePart(task.capturedAt))}`,
@@ -134,7 +144,7 @@ export const WaitingScreen = () => {
         task.followUpOn === null ? undefined : (
           <Tag
             icon={<Bell aria-hidden size={12} />}
-            tone={due ? "red" : "gray"}
+            tone={due ? "red" : "neutral"}
           >
             {due ? shortDate(task.followUpOn) : dayLabel(task.followUpOn)}
           </Tag>
@@ -147,7 +157,7 @@ export const WaitingScreen = () => {
   return (
     <Page>
       <PageHeader
-        description="Things you handed off or expect from someone else. Each has a follow-up date, so nothing slips. Tick an item when it arrives."
+        description="Things you have handed off or are expecting from someone else. Each one has a follow-up date so nothing slips."
         icon={<Hourglass color="#D9730D" size={30} />}
         title="Waiting For"
       >
@@ -172,14 +182,14 @@ export const WaitingScreen = () => {
           icon={<Hourglass size={32} />}
           title="Not waiting on anyone"
         >
-          Items land here when you choose “Someone else” while clarifying.
+          Items land here when you choose “Delegate” while clarifying.
         </EmptyState>
       ) : (
         <>
           {groups.due.length === 0 ? null : (
             <Section label="Follow up now">
               <SectionHeading count={groups.due.length} title="Follow up now" />
-              <TaskList label="Follow up now">
+              <TaskList label="Follow up now" tight>
                 {groups.due.map((task) => row(task, true))}
               </TaskList>
             </Section>
@@ -187,13 +197,13 @@ export const WaitingScreen = () => {
           {groups.later.length === 0 ? null : (
             <Section label="Waiting">
               <SectionHeading count={groups.later.length} title="Waiting" />
-              <TaskList label="Waiting">
+              <TaskList label="Waiting" tight>
                 {groups.later.map((task) => row(task, false))}
               </TaskList>
             </Section>
           )}
           <Hint icon={<UserRoundPlus aria-hidden size={14} />}>
-            Items land here when you choose “Someone else” while clarifying.
+            Items land here when you choose “Delegate” while clarifying
           </Hint>
         </>
       )}

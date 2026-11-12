@@ -10,6 +10,8 @@ export interface TagProps {
   tone?: Tone;
   /** Outline tags carry less weight, for secondary facts like a context. */
   variant?: "soft" | "outline";
+  /** "small" is the chip at the end of a task row. */
+  size?: "default" | "small";
   icon?: ReactNode;
 }
 
@@ -22,7 +24,7 @@ const styles = stylex.create({
     fontFamily: font.family,
     fontSize: font.size12,
     fontWeight: font.weightMedium,
-    gap: space.s1,
+    gap: 5,
     height: 22,
     lineHeight: 1,
     paddingInline: 7,
@@ -37,18 +39,22 @@ const styles = stylex.create({
     color: color.textTertiary,
     fontWeight: font.weightRegular,
     height: 20,
+    paddingInline: space.s2,
   },
+  small: { height: 20, paddingInline: 6 },
 });
 
 export const Tag = ({
   children,
   tone = "gray",
   variant = "soft",
+  size = "default",
   icon,
 }: TagProps) => (
   <span
     {...stylex.props(
       styles.base,
+      size === "small" && styles.small,
       variant === "soft" ? toneStyles[tone] : styles.outline
     )}
   >

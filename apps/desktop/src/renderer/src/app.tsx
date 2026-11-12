@@ -15,6 +15,7 @@ import { SomedayScreen } from "./screens/someday.tsx";
 import { UpcomingScreen } from "./screens/upcoming.tsx";
 import { WaitingScreen } from "./screens/waiting.tsx";
 import { Sidebar } from "./sidebar.tsx";
+import { useWeekPane } from "./week-pane.tsx";
 
 const styles = stylex.create({
   // The agent is as wide as the page beside it.
@@ -26,6 +27,8 @@ const styles = stylex.create({
     flexShrink: 1,
     minWidth: 360,
   },
+  // With the week put away, the agent takes the rest of the window.
+  agentAlone: { borderInlineEndWidth: 0, flexGrow: 1 },
   calendar: {
     flexBasis: 0,
     flexGrow: 1,
@@ -42,6 +45,14 @@ const styles = stylex.create({
     flexDirection: "column",
     flexShrink: 0,
     minWidth: 0,
+    // Toasts place themselves inside this pane.
+    position: "relative",
+  },
+  // Without the week beside it, the list takes the free width and its
+  // reading column centers there.
+  mainAlone: {
+    borderInlineEndWidth: 0,
+    flexGrow: 1,
   },
   shell: {
     backgroundColor: color.bgPage,
@@ -95,28 +106,36 @@ const CurrentScreen = () => {
 
 /**
  * Lists on the left, the chosen list in the middle, the week on the right.
- * With the agent open, it sits beside the page and the week shrinks to today.
+ * The week can be put away from any page's top bar. With the agent open,
+ * it sits beside the page and the week shrinks to today.
  */
 export const App = () => {
+  const weekPane = useWeekPane();
   const { open, generation } = useAgentContext();
+  const alone = !weekPane.shown && !open;
 
   return (
     <div {...stylex.props(styles.shell)}>
       <Sidebar />
-      <main {...stylex.props(styles.main)}>
+      <main {...stylex.props(styles.main, alone && styles.mainAlone)}>
         <CurrentScreen />
       </main>
       {open ? (
-        <aside aria-label="Agent" {...stylex.props(styles.agent)}>
+        <aside
+          aria-label="Agent"
+          {...stylex.props(styles.agent, !weekPane.shown && styles.agentAlone)}
+        >
           <AgentPane key={generation} />
         </aside>
       ) : null}
-      <aside
-        aria-label={open ? "Day" : "Week"}
-        {...stylex.props(styles.calendar)}
-      >
-        <CalendarPane days={open ? 1 : 7} />
-      </aside>
+      {weekPane.shown ? (
+        <aside
+          aria-label={open ? "Day" : "Week"}
+          {...stylex.props(styles.calendar)}
+        >
+          <CalendarPane days={open ? 1 : 7} />
+        </aside>
+      ) : null}
     </div>
   );
 };

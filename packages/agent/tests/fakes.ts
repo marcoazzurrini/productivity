@@ -13,6 +13,7 @@ const task = (id: string, title: string, list: Task["list"]): Task => ({
   deadline: null,
   energy: null,
   followUpOn: null,
+  headingId: null,
   id,
   list,
   minutes: null,
@@ -83,7 +84,9 @@ export const fakeGtd = () => {
         });
       }
     },
+    createHeading: unused,
     createProject: unused,
+    deleteHeading: unused,
     deleteTask: (taskId) => {
       tasks.delete(taskId);
     },
@@ -101,6 +104,7 @@ export const fakeGtd = () => {
     listUpcoming: () => [],
     listWaiting: () => open("waiting"),
     overview: unused,
+    renameHeading: unused,
     scheduleBlock: unused,
     setCompleted: (taskId, completed) => {
       const item = find(taskId);
@@ -115,6 +119,7 @@ export const fakeGtd = () => {
       return updated;
     },
     setReviewStep: unused,
+    updateProject: unused,
     updateTask: (taskId, changes) => {
       const updated = { ...find(taskId), ...changes };
 

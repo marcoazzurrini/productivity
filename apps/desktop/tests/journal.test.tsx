@@ -45,7 +45,7 @@ describe("journal", () => {
     await user.click(todayButton());
 
     await expect(
-      screen.findByRole("heading", { level: 1, name: "Friday, October 23" })
+      screen.findByRole("heading", { level: 1, name: "Friday, 23 October" })
     ).resolves.toBeDefined();
     expect(screen.getByText(/New page/u)).toBeDefined();
     expect(todayButton()).toHaveProperty("disabled", true);
@@ -63,7 +63,7 @@ describe("journal", () => {
     );
 
     await expect(
-      screen.findByRole("heading", { level: 1, name: "Thursday, October 22" })
+      screen.findByRole("heading", { level: 1, name: "Thursday, 22 October" })
     ).resolves.toBeDefined();
   });
 
@@ -75,14 +75,14 @@ describe("journal", () => {
     await user.keyboard("{Meta>}j{/Meta}");
 
     await expect(
-      screen.findByRole("heading", { level: 1, name: "Friday, October 23" })
+      screen.findByRole("heading", { level: 1, name: "Friday, 23 October" })
     ).resolves.toBeDefined();
   });
 
   it("saves what you write once you pause", async () => {
     const { store } = renderApp({ day: today, kind: "journal" });
 
-    typeInto(await editorFor("Friday, October 23"), "Slept well");
+    typeInto(await editorFor("Friday, 23 October"), "Slept well");
 
     await waitFor(() => {
       expect(store.journal.read(today).markdown).toBe("Slept well");
@@ -95,7 +95,7 @@ describe("journal", () => {
     const { store } = renderApp({ day: today, kind: "journal" });
     const user = userEvent.setup();
 
-    typeInto(await editorFor("Friday, October 23"), "Left at once");
+    typeInto(await editorFor("Friday, 23 October"), "Left at once");
     await user.click(within(sidebar()).getByRole("button", { name: /Inbox/u }));
 
     await waitFor(() => {
@@ -104,7 +104,7 @@ describe("journal", () => {
 
     await user.click(todayButton());
 
-    const view = await editorFor("Friday, October 23");
+    const view = await editorFor("Friday, 23 October");
 
     expect(view.state.doc.toString()).toBe("Left at once");
   });
@@ -114,7 +114,7 @@ describe("journal", () => {
       store.journal.write(today, "## Morning\n\nSlept well");
     });
 
-    const view = await editorFor("Friday, October 23");
+    const view = await editorFor("Friday, 23 October");
 
     expect(view.state.doc.toString()).toBe("## Morning\n\nSlept well");
     expect(screen.getByText(/3 words/u)).toBeDefined();
@@ -124,13 +124,13 @@ describe("journal", () => {
     const { store } = renderApp({ day: today, kind: "journal" });
     const user = userEvent.setup();
 
-    typeInto(await editorFor("Friday, October 23"), "Friday");
+    typeInto(await editorFor("Friday, 23 October"), "Friday");
     await user.click(
       within(screen.getByRole("main")).getByRole("button", {
         name: "Previous day",
       })
     );
-    typeInto(await editorFor("Thursday, October 22"), "Thursday");
+    typeInto(await editorFor("Thursday, 22 October"), "Thursday");
     await user.click(todayButton());
 
     await waitFor(() => {
@@ -138,7 +138,7 @@ describe("journal", () => {
     });
     expect(store.journal.read(today).markdown).toBe("Friday");
 
-    const back = await editorFor("Friday, October 23");
+    const back = await editorFor("Friday, 23 October");
 
     expect(back.state.doc.toString()).toBe("Friday");
   });
@@ -151,7 +151,7 @@ describe("journal", () => {
 
     const user = userEvent.setup();
 
-    await editorFor("Friday, October 23");
+    await editorFor("Friday, 23 October");
     await user.click(screen.getByRole("checkbox", { name: "To do" }));
 
     await waitFor(() => {
