@@ -225,7 +225,6 @@ const styles = stylex.create({
     "--week-calendar-page": color.bgPage,
     "--week-calendar-text": color.textPrimary,
     "--week-calendar-text-tertiary": color.textTertiary,
-    "--week-calendar-today": color.bgToday,
     flexGrow: 1,
     fontFamily: font.family,
     fontSize: font.size12,

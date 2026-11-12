@@ -15,11 +15,16 @@
 .week-calendar {
   /* How much of an entry's color tints its background. */
   --week-calendar-tint: 12%;
+  /* Today's tint as a see-through wash: the column lies over the hour
+     lines, so a solid color would hide them. Over the page it gives the
+     bgToday token's color. */
+  --week-calendar-today-wash: rgb(5 130 255 / 4%);
 }
 
 @media (prefers-color-scheme: dark) {
   .week-calendar {
     --week-calendar-tint: 16%;
+    --week-calendar-today-wash: rgb(75 140 240 / 7%);
   }
 }
 
@@ -91,7 +96,7 @@
 
 /* Today's column. */
 .week-calendar-today {
-  background-color: var(--week-calendar-today);
+  background-color: var(--week-calendar-today-wash);
 }
 
 /* A timed entry: a tint of its color, and a bar of it at the start. Entries
